@@ -1,0 +1,82 @@
+{%- assign name_collection = section.settings.collection -%}
+{%- if name_collection == blank -%}{%- assign name_collection = "all" -%}{%- endif -%}
+{%- assign collection = collections[name_collection] -%}
+
+<div class="container{% unless section.settings.topoffset %} offset-0{% endunless %}" data-sectionname="index11_products">
+  <div class="row offset-15">
+    <div class="content-layout-product">
+      <div class="grid">
+        {% for product in collection.products limit:section.settings.limit %}
+        <div class="element-item{% cycle '', '', ' double-size', ' double-size', '', '', '', '', '', '' %}">
+          {% include "product-grid-item" %}
+        </div>
+        {% endfor %}
+      </div>
+      {% if section.settings.showbtn %}
+      <div class="text-center offset-10">
+        <a href="collections/{{ collection.handle }}" class="btn">{{ section.settings.btnname }}</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Products Index 11",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": false
+    },
+    {
+      "label": "Collection",
+      "id": "collection",
+      "type": "collection"
+    },
+	{
+	  "type": "select",
+	  "id": "limit",
+	  "label": "Show Products",
+	  "default": "10",
+	  "options": [
+		{
+		  "value": "10",
+		  "label": "10"
+		},
+		{
+		  "value": "20",
+		  "label": "20"
+		},
+		{
+		  "value": "30",
+		  "label": "30"
+		}
+	  ]
+	},
+    {
+      "type": "checkbox",
+      "id": "showbtn",
+      "label": "Show Button",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SEE ALL"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products Index 11",
+      "category": "Products",
+      "settings": {
+      }
+    }
+  ]
+}
+{% endschema %}

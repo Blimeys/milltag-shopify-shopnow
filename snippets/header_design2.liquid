@@ -1,0 +1,49 @@
+<!-- desktop-header -->
+<div class="desktop-header header-02">
+  <div class="container">
+    <div class="pull-left">
+      {% include "menu-language" %}
+    </div>
+    <div class="pull-right">
+      {% include "menu-minimenu" class_inline:' mini-menu-inline' %}
+      {% include "menu-customer" %}
+      {% include "menu-currency" %}
+    </div>
+  </div>
+  <div class="top-line">
+    <div class="container">
+      <div class="pull-left">
+        <!-- logo -->
+        <div class="logo" itemscope itemtype="http://schema.org/Organization">
+          <a href="/" itemprop="url">
+            {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+            {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}" itemprop="logo"/>
+            {% endif %}
+          </a>
+        </div>
+        <!-- /logo -->
+      </div>
+      <div class="pull-right">
+        <!-- box-info -->
+        <div class="box-info">{{ header_slogan }}</div>
+        <!-- /box-info -->
+        <div class="main-parent-cart">
+          {% include "menu-cart" %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="fill-bg-base">
+    <div class="container">
+      <div class="pull-left">
+        <div class="menu-parent-box">
+          {% include "main-menu" %}
+        </div>
+      </div>
+      <div class="pull-right">
+        {% include "menu-search" %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /desktop-header -->

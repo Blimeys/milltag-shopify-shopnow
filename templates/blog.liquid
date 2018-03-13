@@ -1,0 +1,13 @@
+{%- assign count = settings.blog_post_count | plus: 0 -%}
+{%- paginate blog.articles by count -%}
+
+<div class="container offset-18">
+  {%- unless current_tags %}<h1 class="block-title large">{{ 'blogs.general.title_main' | t }}</h1>{%- else -%}<h1 class="block-title large">{{ 'blogs.general.title_result' | t }} {{ current_tags.first | replace: '-', ' ' }}</h1>{%- endunless -%}
+  {%- case settings.blog_grid -%}
+  {%- when 'blog2' -%}{%- include 'blog_2' -%}
+  {%- when 'blog3' -%}{%- include 'blog_3' -%}
+  {% else %}{% include 'blog_1' %}
+  {% endcase %}
+</div>
+
+{%- endpaginate -%}

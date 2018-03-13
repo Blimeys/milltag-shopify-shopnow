@@ -1,0 +1,219 @@
+<div class="container{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    <div class="{% if section.settings.mobile_carousel %}carousel-products-mobile{% endif %} custom-layout">
+      {% for block in section.blocks %}{%- assign item = block.settings -%}
+      <div class="col-sm-6" {{ block.shopify_attributes }}>
+        <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-07"{% if item.show_border %} style="border: 1px solid {{ item.border_color }}" data-borc="{{ item.border_color }}" data-aborc="{{ item.aborder_color }}"{% endif %} data-hovercolors>
+          {% if item.image == blank %}
+          	{% if item.showdescription %}<img src="{{ 'banner_bg.png' | asset_url }}" alt="Banner">
+          	{% else %}{% include "get_svg" type:'image' size:'600x600' %}
+          	{% endif %}
+          {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          {% if item.showdescription %}
+          <div class="description">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% if item.title != '' %}<div class="title" style="color:{{ item.color_title }}">{{ item.title }}</div>{% endif %}
+                {% if item.content != '' %}<p style="color:{{ item.color_title2 }}">{{ item.content }}</p>{% endif %}
+                {% if item.showbutton %}<span class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>{% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Layout 07 Border Banners",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+		  "info": "600x600px"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_border",
+          "label": "Show Border",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text 1",
+          "default": "Resposive/Retina<br>Ready."
+        },
+        {
+          "type": "textarea",
+          "id": "content",
+          "label": "Text 2",
+          "default": "The highest responsiveness level. Your website will look crisp and amazing on any device. No matter what kind of display you are using. Test it."
+        },
+        {
+          "type": "header",
+          "content": "Button"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbutton",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text 1 Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_title2",
+          "label": "Text 2 Color",
+          "default": "#777777"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtnbg",
+          "label": "Background Color",
+          "default": "#5fd179"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtnbg",
+          "label": "Active Background Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Border Colors"
+        },
+        {
+          "type": "color",
+          "id": "border_color",
+          "label": "Border Color",
+          "default": "#e9e9e9"
+        },
+        {
+          "type": "color",
+          "id": "aborder_color",
+          "label": "Active Border Color",
+          "default": "#5fd179"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layout 07 Border Banners",
+      "category": "Banner",
+      "settings": {
+      },
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+			"showdescription": false
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "show_border": true,
+            "title": "Resposive\/Retina<br>Ready.",
+            "content": "The highest responsiveness level. Your website will look crisp and amazing on any device. No matter what kind of display you are using. Test it."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "show_border": true,
+            "title": "Bootstrap.",
+            "content": "SASS html5 version. Preprocessors. The most popular latest HTML, CSS, and JS framework and technology. Designed for everyone, everywhere."
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "showdescription": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

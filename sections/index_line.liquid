@@ -1,0 +1,47 @@
+<div class="container hidden-mobile{% if section.settings.small_line == 'gap1' %} hr_smallgap{% endif %}">
+  <hr>
+</div>
+
+{% schema %}
+{
+  "name": "Line",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "radio",
+      "id": "small_line",
+      "label": "Correct Gap",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "gap1",
+          "label": "Different Gap"
+        }
+      ],
+      "default": "none"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Line",
+      "category": "Design",
+      "settings": {
+      }
+    }
+  ]
+}
+{% endschema %}
+{% stylesheet %}
+.hr_smallgap{
+  position: relative;
+  margin-top:44px;
+}
+@media (max-width:1024px){
+  .hr_smallgap{
+	margin-top:35px;
+  }
+}
+{% endstylesheet %}

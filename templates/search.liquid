@@ -1,0 +1,37 @@
+{% if search.performed %}
+{% if search.results_count == 0 %}
+<div class="container offset-80">
+  <div class="on-duty-box">
+    <img src="{{ 'empty-search-icon.png' | asset_url }}" alt="Empty Search">
+    <h1 class="block-title large">{{ 'general.search.no_results_title_html' | t }}</h1>
+    <div class="description">{{ 'general.search.no_results_html' | t: search: search.terms }}</div>
+  </div>
+</div>
+{% else %}
+<div class="container offset-18">
+  <!-- title -->
+  <div class="title-box">
+    <h2 class="text-center text-uppercase title-under">{{ 'general.search.results_title' | t }} "{{ search.terms }}"</h2>
+  </div>
+  <!-- /title -->
+  <div class="col-md-12 col-lg-12 col-xl-12">
+    {% paginate search.results by 12 %}
+    <!-- /filters row -->
+    <div class="product-listing row">
+      {% for item in search.results %}{% assign product = item %}
+      <div class="col-sm-4 col-md-3">{% include "product-grid-item" hoverzoom: "true" %}</div>
+      {% endfor %}
+    </div>
+    {% if paginate.pages > 1 %}<br><br><div class="text-center">{% include 'pagination' %}</div>{% endif %}
+    {% endpaginate %}
+  </div>
+</div>
+{% endif %}
+{% else %}
+<div class="container offset-80">
+  <div class="on-duty-box">
+    <img src="{{ 'empty-search-icon.png' | asset_url }}" alt="Empty Search">
+    <h1 class="block-title large">{{ 'general.search.no_results_title_html' | t }}</h1>
+  </div>
+</div>
+{% endif %}

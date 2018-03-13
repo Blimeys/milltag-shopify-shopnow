@@ -1,0 +1,18 @@
+{% assign firstitem = linklists[linklist_minimenu].links | first %}
+{% if firstitem.title == "social_icons" %}
+<div class="social-icon">
+  <ul>
+    {% for link in linklists[linklist_minimenu].links offset: 1 %}
+    <li><a href="{{ link.url }}"><span class="icon fa fa-{{ link.title }}"></span></a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% else %}
+<div class="mini-menu{{ class_inline }}">
+  <ul>
+    {% for link in linklists[linklist_minimenu].links %}
+    <li{% if link.active %} class="active"{% endif %}><a href="{{ link.url }}">{{ link.title }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
+{% endif %}

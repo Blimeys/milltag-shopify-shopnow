@@ -1,0 +1,33 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="subscribe-box-01">
+      <div class="container">
+        <div class="row mobile-collapse">
+          {% if settings.mailchimp_form_action != "" %}
+          <h4 class="mobile-collapse_title visible-xs">{{ subscribe_form.settings.text1 }}</h4>
+          <div class="mobile-collapse_content">
+            <div class="col-md-12 col-lg-7">
+              <div class="title hidden-xs">{{ subscribe_form.settings.text1 }}</div>
+              <p>{{ subscribe_form.settings.text2 }}</p>
+            </div>
+            <div class="col-md-12 col-lg-5">
+              <form action="{{ settings.mailchimp_form_action }}" method="post" name="mc-embedded-subscribe-form" target="_blank" class="form-inline">
+                <span class="addon-icon">
+                  <span class="icon icon-email"></span>
+                </span>
+                <input type="email" name="EMAIL" class="form-control addon-icon" id="email" placeholder="{{ subscribe_form.settings.text4 }}">
+                <button class="btn">{{ subscribe_form.settings.text3 }}</button>
+              </form>
+            </div>
+          </div>
+          {% else %}
+          <strong><u><a href="{{ shop.url }}/admin/themes" style="color: black;">
+            Add newsletter redirect link in:<br>
+            Customize Theme / General Settings / Newsletter / MailChimp form action URL
+            </a></u></strong>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

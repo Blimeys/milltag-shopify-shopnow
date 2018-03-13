@@ -1,0 +1,18 @@
+<div class="account dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown">
+    <span class="icon icon-person "></span>
+    <span class="dropdown-label hidden-sm hidden-xs">{{ "layout.header.my_account" | t }}</span>
+  </a>
+  <ul class="dropdown-menu">
+    {% if shop.customer_accounts_enabled %}<li><a href="/account"><span class="icon icon-person"></span>{{ "layout.customer.account" | t }}</a></li>{% endif %}
+
+    <li><a href="/checkout"><span class="icon icon-check"></span>{{ "layout.customer.checkout" | t }}</a></li>
+
+    {% if shop.customer_accounts_enabled %}
+    {% if customer %}<li><a href="/account/logout"><span class="icon icon-lock_outline"></span>{{ "layout.customer.log_out" | t }}</a></li>
+    {% else %}<li><a href="/account/login"><span class="icon icon-lock_outline"></span>{{ "layout.customer.sign_in" | t }}</a></li>
+    {% if shop.customer_accounts_optional %}<li><a href="/account/register"><span class="icon icon-person_add"></span>{{ "layout.customer.register" | t }}</a></li>{% endif %}
+    {% endif %}
+    {% endif %}
+  </ul>
+</div>

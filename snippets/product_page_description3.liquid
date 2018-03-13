@@ -1,0 +1,190 @@
+<div class="container offset-0 product-page">
+  <div class="row airSticky_stop-block">
+    <div class="col-sm-6">
+      <div class="product-images-static hidden-xs">
+        <ul data-scrollzoom="{{ settings.productpage_scrollzoom }}"{% unless settings.productpage_zoomenable %} class="no-zoom"{% endunless %}>
+          {% for image in product.images %}
+          <li>
+            <img class="zoom-product" src="{{ image.src | product_img_url: '1024x1024' }}" zoom-image="{{ image.src | product_img_url: '2048x2048' }}" alt="{{ image.alt }}" data-target="{{ image.id }}">
+          </li>
+          {% endfor %}
+          {% include 'product-page-gallery-video' tagopen:'<li>' tagclose:'</li>' %}
+        </ul>
+      </div>
+
+      <div class="visible-xs">
+        <div class="clearfix"></div>
+        <ul class="mobileGallery-product">
+          {% for image in product.images %}
+          <li>
+            <img src='{{ image.src | product_img_url: '1024x1024' }}' alt="{{ image.alt }}" data-target="{{ image.id }}">
+          </li>
+          {% endfor %}
+          {% include 'product-page-gallery-video' tagopen:'<li>' tagclose:'</li>' %}
+        </ul>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="airSticky">
+        <div class="product-info product-info3">
+          {% unless product_meta.countdown == blank %}
+          <div class="countdown-promo">
+            <div class="countdown" data-date="{{ product_meta.countdown }}"></div>
+          </div>
+          {% endunless %}
+
+          {% if settings.show_product_sku or settings.show_product_quantity %}
+          {% if product_meta.countdown != blank and product.available %}<div class="wrapper">{% endif %}
+          <div class="add-info">
+            {% if settings.show_product_sku %}
+            <div class="sku pull-left">
+              <span class="font-weight-medium color-defaulttext2">{{ 'products.product.sku' | t }}</span> <span>{{ product.selected_or_first_available_variant.sku }}</span>
+            </div>
+            {% endif %}
+            {% if settings.show_product_quantity %}
+            <div class="availability pull-left">
+              <span class="font-weight-medium color-defaulttext2">{{ 'products.product.availability' | t }}</span> 
+              {% if product.available %}
+              <span class="color-base stock_quantity hide"></span> <span class="color-base in_stock hide">{{ 'products.product.in_stock' | t }}</span> <span class="color-base many_in_stock hide">{{ 'products.product.many_in_stock' | t }}</span> <span class="color-red sold_out hide">{{ "products.product.sold_out" | t }}</span>
+              {% else %}
+              <span class="color-red sold_out">{{ "products.product.sold_out" | t }}</span>
+              {% endif %}
+            </div>
+            {% endif %}
+          </div>
+          {% if product_meta.countdown != blank and product.available %}</div>{% endif %}
+          {% endif %}
+
+          <h1 class="title" itemprop="name">{{ product.title }}</h1>
+          
+          {% unless settings.catalogue_mode %}
+          <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+            <meta itemprop="priceCurrency" content="{{ shop.currency }}">
+            <link itemprop="availability" href="http://schema.org/{% if product.available %}InStock{% else %}OutOfStock{% endif %}">
+            {% if sale_on %}
+            <div class="price" itemprop="price" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.00 }}"><span class="new-price">{{ product.selected_or_first_available_variant.price | money }}</span><span class="old-price">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></div>
+            {% else %}
+            <div class="price" itemprop="price" content="{{ product.selected_or_first_available_variant.price | divided_by: 100.00 }}"><span>{{ product.selected_or_first_available_variant.price | money }}</span><span class="old-price hide"></span></div>
+            {% endif %}
+          </div>
+          {% endunless %}
+
+          {% if settings.show_product_vendor or settings.show_product_type or settings.show_product_barcode %}
+          <div class="add-info">
+            <ul class="productvendorsmallinfo">
+              {% if settings.show_product_vendor %}<li><span itemprop="brand">{{ "products.product.vendor" | t }}</span> {{ product.vendor }}</li>{% endif %}
+              {% if settings.show_product_type and product.type != '' %}<li><span>{{ "products.product.type" | t }}</span> {{ product.type }}</li>{% endif %}
+              {% if settings.show_product_barcode %}<li><span>{{ "products.product.barcode" | t }}</span> <span class="barcode"></span></li>{% endif %}
+            </ul>
+          </div>
+          {% endif %}
+
+          {% unless settings.catalogue_mode %}
+          {% if settings.show_product_rating %}
+          <div class="review">
+            <div class="rating">
+              <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+            </div>
+          </div>
+          {% endif %}
+          {% endunless %}
+
+          {% unless product_meta.custom_html == blank %}
+          <div class="description">
+            <div class="text">{{ product_meta.custom_html }}</div>
+          </div>
+          {% endunless %}
+
+          <div class="swatches-container"></div>
+
+          {% unless settings.catalogue_mode %}
+          {% if product.available %}
+          <div class="wrapper">
+            <div class="pull-left"><label class="qty-label">{{ 'products.product.quantity' | t }}</label></div>
+            <div class="pull-left">
+              <div class="style-2 input-counter">
+                <span class="minus-btn"></span>
+                <input type="text" value="1" size="5"/>
+                <span class="plus-btn"></span>
+              </div>
+            </div>
+          </div>
+          <div class="wrapper">
+            <div class="pull-left">
+              <a href="#" class="btn btn-lg btn-addtocart addtocart-js">{{ "products.general.add_to_cart_html" | t }}</a>
+            </div>
+          </div>
+          {% else %}
+          <div class="wrapper">
+            <div class="pull-left">
+              <a href="#" class="btn btn-lg disable">{{ "products.general.unavailable" | t }}</a>
+            </div>
+          </div>
+          {% endif %}
+          {% endunless %}
+
+          {% if settings.show_trust_badge %}
+          <div class="wrapper">
+            <div class="tt-promo-brand">
+              <img src="{{ 'trust_badge.png' | asset_url }}" alt="Trust Badge">
+            </div>
+          </div>
+          {% endif %}
+          
+          {% if settings.show_sharingtool %}<div class="wrapper">{% include 'addthis' %}</div>{% endif %}
+        </div>
+        
+        <div class="product-box-info">
+          <div class="offset-70">
+            {% include 'product-page-tabs' %}
+          </div>
+          {% include 'product-page-upsellcollection-design3' %}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(function() {
+    function productPageJsonLoaded(json_data) {
+      var view = Boolean({{ settings.variant_combobox }}) ? 'viewSelect' : 'viewButtons';
+      var group1 = new SwatchesConstructor(json_data, {contentParent: '.swatches-container', viewDesign:view, enableHistoryState: true, callback: productPageVariant, externalImagesObject: texture_obj, externalColors: colors_value, colorWithBorder: color_with_border });
+      json_data = null;
+      group1 = null;
+    };
+
+    function productPageVariant(variant, product){
+      var _parent = $('.product-page .product-info');
+      var _swatch = _parent.find('.swatches-container');
+      swatchVariantHandler(_parent, variant);
+
+      var img_id = variant.featured_image ? variant.featured_image.id : 'none';
+      var target = img_id == 'none' ? $("[data-slick-index=0]").children() : $("[data-target="+img_id+"]");
+      var num = target.last().parent().attr('data-slick-index');
+
+      var $container = $('.mobileGallery-product');
+      if(num && $container.length) {
+        $container.slick('slickGoTo', num, true);
+      }
+
+      addToCartHandler.initFormAddToCartButton(variant.id, _parent, _swatch);
+    }
+    function setDefaultSlider(num, $container, target){
+      if(!(num && $container.length)) return false;
+      $container.slick('slickGoTo', num, true);
+      $container.find('.zoomGalleryActive').removeClass('zoomGalleryActive');
+      target.addClass('zoomGalleryActive');
+
+      $(".zoom-product").attr('src', target.attr('data-image')).attr('data-zoom-image', target.attr('data-zoom-image'));
+
+      !elevateZoomWidget.checkNoZoom() && elevateZoomWidget.configureZoomImage();
+    }
+    function setScrollSlider(num, $container){
+      if(!(num && $container.length)) return false;
+      $container.slick('slickGoTo', num, true);
+    }
+    Shopify.getProduct('{{ product.handle }}', productPageJsonLoaded);
+  });
+</script>

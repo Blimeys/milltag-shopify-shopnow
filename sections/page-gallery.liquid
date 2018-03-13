@@ -1,0 +1,147 @@
+{% assign main = section.settings %}
+
+<div class="container-fluid offset-18">
+  <h1 class="block-title large">{{ main.title }}</h1>
+  <div class="row">
+    <div class="gallery-masonry">
+      {% if main.filtres != '' %}
+      {% assign filtres = main.filtres | split: ',' %}
+      <div class="filter-nav">
+        <div class="button current" data-filter="*">{{ main.allfilter }}</div>
+        {% for f in filtres %}
+        <div class="button" data-filter=".{{ f | strip | downcase | handle }}">{{ f | strip }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="grid-gallery-masonry effect-1 gallery-content grid-gallery-masonry-col-{{ main.imagesinrow }}">
+        {% for block in section.blocks %}
+        {% assign bs = block.settings %}
+        <div class="element-item {{ bs.filter | downcase | strip | replace: ' ', '-' | replace: ',-', ' ' | replace: ',', ' ' }}" {{ block.shopify_attributes }}>
+          <figure>
+            {% if bs.image == blank %}{% include "get_svg" type:'image' size:'1024x1024px' %}
+            {% else %}<img src="{{ bs.image | img_url: '1024x' }}" alt="{{ bs.image.alt }}" />
+            {% endif %}
+            {% if bs.tag != '' or bs.title != '' or bs.text2 != '' or bs.imagebig != blank %}
+            <figcaption>
+              <div class="block-table">
+                <div class="block-table-cell">
+                  {% if bs.tag != '' %}<a href="{{ bs.tagurl }}" class="tag">{{ bs.tag }}</a>{% endif %}
+                  {% if bs.title != '' %}<h6 class="title"><a href="{{ bs.titleurl }}">{{ bs.title }}</a></h6>{% endif %}
+                  {% if bs.text2 != '' %}{{ bs.text2 }}{% endif %}
+                  {% unless bs.imagebig == blank %}
+                  <div class="btn-icon">
+                    <a href="{{ bs.imagebig | img_url: '2048x' }}" class="zomm-gallery"  title="{{ bs.title }}"></a>
+                  </div>
+                  {% endunless %}
+                </div>
+              </div>
+            </figcaption>
+            {% endif %}
+          </figure>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Page Settings",
+    "settings": [
+      {
+        "type": "select",
+        "id": "imagesinrow",
+        "label": "Images in Row",
+        "options": [
+          {
+            "value": "2",
+            "label": "2"
+          },
+          {
+            "value": "3",
+            "label": "3"
+          }
+        ],
+        "default": "2"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "GALLERY"
+      },
+      {
+        "type": "text",
+        "id": "allfilter",
+        "label": "All Filter Name",
+        "default": "SHOW ALL"
+      },
+      {
+        "type": "textarea",
+        "id": "filtres",
+        "label": "Filtres",
+        "default": "WOMAN, MAN"
+      }
+	],
+    "blocks": [
+      {
+        "type": "item",
+        "name": "Image",
+        "settings": [
+          {
+            "type": "text",
+            "id": "filter",
+            "label": "Filter Categories",
+			"info": "Example: all woman",
+			"default": "woman"
+          },
+          {
+            "type": "header",
+			"content": "Item Info"
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "imagebig",
+            "label": "Big Image"
+          },
+          {
+            "type": "text",
+            "id": "tag",
+            "label": "Tag",
+			"default": "Fashion"
+          },
+          {
+            "type": "url",
+            "id": "tagurl",
+            "label": "Tag Url",
+            "info": "Optional"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+			"default": "Resposive Retina Ready"
+          },
+          {
+            "type": "url",
+            "id": "titleurl",
+            "label": "Title Url",
+            "info": "Optional"
+          },
+          {
+            "type": "richtext",
+            "id": "text2",
+            "label": "Text",
+			"default": "<p>Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut.<\/p>"
+          }
+        ]
+      }
+	]
+  }
+{% endschema %}

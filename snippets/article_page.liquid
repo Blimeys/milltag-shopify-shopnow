@@ -1,0 +1,123 @@
+<div class="title-block title-block-center">
+  <div class="post-title">
+    <h2>{{ article.title }}</h2>
+  </div>
+  <div class="post-meta">
+    <span class="post__meta__item">
+      <span class="autor">{{ "blogs.general.author_by_html" | t: author: article.author }}</span>
+      <span class="time">{{ "blogs.general.on" | t }} <span>{{ article.created_at | date: '%B' }}</span> <b>{{ article.created_at | date: '%d, %Y' }}</b></span>      
+    </span>
+  </div>
+</div>
+{{ article.content }}
+
+<div class="post-meta">
+  {% if blog.comments_enabled? %}<span class="item">
+  <a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a>
+  </span>{% endif %}
+  {% if article.tags.size > 0 %}<span class="item">
+  {{ "blogs.general.tag" | t }} {% for tag in article.tags %}{{ tag | link_to_tag: tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+  </span>{% endif %}
+</div>
+{% if settings.article_show_social %}
+<div class="post-social-icon">
+  <div class="social-icon">
+    {% include 'addthis' %}
+  </div>
+</div>
+{% endif %}
+<hr>
+{% for a in blog.articles %}{% if article.url == a.url %}{% assign index = forloop.index0 %}{% endif %}{% endfor %}
+<div class="nav-single-post">
+  {% if index > 0 %}{% assign index2 = index | minus: 1 %}{% assign art = blog.articles[index2] %}
+  <a href="{{ art.url }}" class="next">{{ art.title }}</a>
+  {% endif %}
+  {% assign index2 = index | plus: 1 %}{% assign size2 = blog.articles.size | minus: 1 %}{% if index < size2 %}{% assign art = blog.articles[index2] %}
+  <a href="{{ art.url }}" class="prev">{{ art.title }}</a>
+  {% endif %}
+</div>
+<hr>
+
+{% if blog.comments_enabled? %}
+<div style="position: relative;"><div id="{% if article.comments.size > 0 %}comments{% else %}addcomment{% endif %}" style="position: absolute; top: -120px;"></div></div>
+{% if article.comments.size > 0 or comment and comment.created_at and comment.status != 'unapproved' %}
+<h3 class="title-post">{{ 'blogs.article.comments_title' | t: article_title: article.title, comments_count: article.comments.size }}</h3>
+{% paginate article.comments by 100 %}
+{% if comment and comment.created_at and comment.status != 'unapproved' %}
+<div id="comment-{{ comment.id }}" class="comments-box">
+  <div class="media comments">
+    <a class="media-img" href="#"></a>
+    <div class="media-body">
+      <div class="media-title">
+        <span class="username">{{ comment.author }}</span>
+        <div class="time">{{ comment.created_at | date: '%B %d, %Y' }} {{ "blogs.general.at" | t }} {{ comment.created_at | date: '%R' }}</div>
+      </div>
+      <div class="media-content">
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% assign new_comment_id = comment.id %}
+{% endif %}
+
+{% for comment in article.comments %}
+{% if new_comment_id != comment.id %}
+<div id="comment-{{ comment.id }}" class="comments-box">
+  <div class="media comments">
+    <a class="media-img" href="#"></a>
+    <div class="media-body">
+      <div class="media-title">
+        <span class="username">{{ comment.author }}</span>
+        <div class="time">{{ comment.created_at | date: '%B %d, %Y' }} {{ "blogs.general.at" | t }} {{ comment.created_at | date: '%R' }}</div>
+      </div>
+      <div class="media-content">
+        <p>{{ comment.content }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}{% endfor %}{% endpaginate %}<hr>{% endif %}
+
+<h4 class="text-uppercase">{{ 'blogs.comments.form_title' | t }}</h4>
+{% form "new_comment", article %}
+
+{% if form.posted_successfully? %}
+{% if blog.moderated? %}
+<p class="success">{{ 'blogs.comments.success_moderated' | t }}</p>
+{% else %}
+<p class="success">{{ 'blogs.comments.success' | t }}</p>
+{% endif %}
+<br>
+{% endif %}
+
+{% if form.errors %}
+<p class="error">{{ 'blogs.comments.error' | t }}</p>
+<br>
+{% endif %}
+
+<div class="form-group">
+  <label for="inputName" class="col-sm-3 control-label">{{ 'blogs.comments.name' | t }}</label>
+  <div class="col-sm-9">
+    <input name="comment[author]" type="text" class="form-control" id="inputName" placeholder="{{ 'blogs.placeholder.name' | t }}">
+  </div>
+</div>
+<div class="form-group">
+  <label for="inputEmail" class="col-sm-3 control-label">{{ 'blogs.comments.email' | t }}</label>
+  <div class="col-sm-9">
+    <input name="comment[email]" type="email" class="form-control" id="inputEmail" placeholder="{{ 'blogs.placeholder.email' | t }}">
+  </div>
+</div>
+<div class="form-group">
+  <label for="textarea" class="col-sm-3 control-label">{{ 'blogs.comments.message' | t }}</label>
+  <div class="col-sm-9">
+    <textarea name="comment[body]" class="form-control"  id="textarea" placeholder="{{ 'blogs.placeholder.message' | t }}" rows="8"></textarea>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-offset-3 col-sm-10">
+    <button type="submit" class="btn">{{ 'blogs.comments.post' | t }}</button>
+  </div>
+</div>
+{% endform %}
+{% endif %}

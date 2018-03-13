@@ -1,0 +1,23 @@
+<div class="container-fluid offset-0">
+  <div class="row">
+    <!-- bigGallery -->
+    <div class="hidden-xs clearfix indent-col-none">
+      <div class="bigGallery box-baners{% unless settings.productpage_zoomenable %} no-zoom{% endunless %}" data-scrollzoom="{{ settings.productpage_scrollzoom }}">
+        {% for image in product.images %}
+        <div>
+          <img class="zoom-product" src="{{ image.src | product_img_url: '1024x1024' }}" zoom-image="{{ image.src | product_img_url: '2048x2048' }}" alt="{{ image.alt }}" data-target="{{ image.id }}">
+        </div>
+        {% endfor %}
+        {% include 'product-page-gallery-video' tagopen:'<div>' tagclose:'</div>' %}
+      </div>
+    </div>
+    <!-- /bigGallery -->
+    <div class="visible-xs">
+      <div class="clearfix"></div>
+      <ul class="mobileGallery-product-big">
+        {% for image in product.images %}<li><img src="{{ image.src | product_img_url: '1024x1024' }}" alt="{{ image.alt }}"></li>{% endfor %}
+        {% include 'product-page-gallery-video' tagopen:'<li>' tagclose:'</li>' %}
+      </ul>
+    </div>
+  </div>
+</div>

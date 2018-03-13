@@ -1,0 +1,86 @@
+{% assign blogs_name = settings.sidebar_blogs | split: ',' %}
+{% capture blogslinks %}{% include "blog-page-sidebar-tabblogs" %}{% endcapture %}
+{% if blogs_name.size > 0 and settings.sidebar_show_blogs and blogslinks != '' %}
+<div class="block-aside">
+  <h3 class="title">{{ settings.sidebar_blogs_title }}</h3>
+  <div class="categories-list">
+    <ul class="list-simple">
+      {{ blogslinks }}
+    </ul>
+  </div>
+</div>
+{% endif %}
+
+
+{% if settings.blog_sidebar_customhtml1_show %}<div class="block-aside">
+  <h3 class="title">{{ settings.blog_sidebar_customhtml1_title }}</h3>
+  <div class="block-aside-info">
+    <a class="img" href="{{ settings.blog_sidebar_customhtml1_link }}">
+      <img src="{{ 'blog_sidebar_customhtml1_image.jpg' | asset_url }}" alt="about">
+    </a>
+    <p>{{ settings.blog_sidebar_customhtml1_content }}</p>
+    <a href="{{ settings.blog_sidebar_customhtml1_link }}" class="btn">{{ settings.blog_sidebar_customhtml1_btn }}</a>
+  </div>
+</div>{% endif %}
+
+
+{% if settings.sidebar_show_recent_blog %}{% assign name_collection = settings.sidebar_recent_blog_name %}{% assign length = settings.sidebar_recent_blog_count | plus: 0 %}
+{% if name_collection == blank %}{% assign name_collection = "all" %}{% endif %}{% assign selected_blog = blogs[name_collection] %}
+{% if template == "article" %}{% assign count = 0 %}{% assign _length = length %}{% assign length = length | plus: 1 %}{% endif %}
+<div class="block-aside">
+  <h3 class="title">{{ settings.sidebar_recent_blog_title }}</h3>
+  <div class="featured-post">
+    {% for f_article in selected_blog.articles limit: length %}
+    {% if f_article.comments.size > 0 %}{% assign comment_url = f_article.url | append: '#comments' %}{% else %}{% assign comment_url = f_article.url | append: '#addcomment' %}{% endif %}
+    <div class="item">
+      {% if f_article.image != blank %}<a href="{{ f_article.url }}" class="img">
+        <img src="{{ f_article.image.src | img_url: '600x600' }}" alt="{{ f_article.image.alt }}">
+      </a>{% endif %}
+      <h4><a href="{{ f_article.url }}">{{ f_article.title }}</a></h4>
+      {% if settings.blog_show_author_recent or settings.blog_show_date_recent %}<div class="description">
+        {% if settings.blog_show_author_recent %}{{ "blogs.general.author_by_html" | t: author: f_article.author }}{% endif %}{% if settings.blog_show_date_recent %} {{ "blogs.general.on" | t }} <span>{{ f_article.created_at | date: '%B %d, %Y' }}</span>{% endif %}
+      </div>{% endif %}
+      <p>{% if f_article.excerpt.size > 0 %}
+        {% if settings.truncate_excerpt %}{{ f_article.content | strip_html | truncatewords: settings.truncate_recent, settings.truncate_last_symbols_recent }}
+        {% else %}{{ f_article.excerpt }}
+        {% endif %}
+        {% else %}{{ f_article.content | strip_html | truncatewords: settings.truncate_recent, settings.truncate_last_symbols_recent }}{% endif %}</p>
+      {% if selected_blog.comments_enabled? and settings.show_comments_recent %}<a class="comment" href="{{ comment_url }}">{{ f_article.comments.size }} {{ "blogs.general.comment" | t }}</a>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+{% if blog.all_tags.size > 0 and settings.sidebar_show_tags %}
+<div class="block-aside">
+  <h3 class="title">{{ settings.sidebar_tags_title }}</h3>
+  <ul class="options options-large">
+  {% for tag in blog.all_tags %}
+    {% assign blog_tags = settings.blog_tags %}
+    {% assign string = tag %}
+    {% if blog_tags != '' %}
+      {% assign _tag = '||' | append: tag | strip | downcase | append: '__' %}
+      {% assign blog_tags = blog_tags | split: ',' %}
+      {% for bt in blog_tags %}
+    	  {% assign _bt = bt | strip | downcase %}
+          {% assign _bt = '||' | append: _bt %}
+          {% if _bt contains _tag %}
+              {% assign string = bt | split: '__' | last %}
+              {% break %}
+          {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    <li>{{ string | capitalize | replace: '-', ' ' | link_to_tag: tag }}</li>
+  {% endfor %}
+  </ul>
+</div>
+{% endif %}
+
+{% if settings.blog_sidebar_customhtml2_show %}<div class="block-aside">
+  <h3 class="title">{{ settings.blog_sidebar_customhtml2_title }}</h3>
+  <div class="recent-comments">
+    {{ settings.blog_sidebar_customhtml2_content }}
+  </div>
+</div>{% endif %}

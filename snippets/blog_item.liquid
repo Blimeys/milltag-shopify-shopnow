@@ -1,0 +1,45 @@
+<div class="post{{ noline }}">
+  <div class="title-block">
+    {% if designtype == 'type2' %}{% unless article.image == blank %}
+    <div class="post-img">
+      <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt="{{ article.image.alt }}"></a>
+    </div>
+    {% endunless %}{% endif %}
+    <div class="post-title"><h2><a href="{{ article.url }}">{{ article.title }}</a></h2></div>
+    {% if settings.blog_show_author or settings.blog_show_date %}<div class="post-meta">
+    <span class="post__meta__item">
+      {% if settings.blog_show_author %}<span class="autor">{{ "blogs.general.author_by_html" | t: author: article.author }}</span>{% endif %}
+      {% if settings.blog_show_date %}<span class="time">{{ "blogs.general.on" | t }} <span>{{ article.created_at | date: '%B' }}</span> <b>{{ article.created_at | date: '%d, %Y' }}</b></span>{% endif %}
+    </span>
+    </div>{% endif %}
+    {% if designtype != 'type2' %}{% unless article.image == blank %}
+    <div class="post-img">
+      <a href="{{ article.url }}"><img src="{{ article.image.src | img_url: '1024x1024' }}" alt="{{ article.image.alt }}"></a>
+    </div>
+    {% endunless %}{% endif %}
+  </div>
+  <div class="description">{% if article.excerpt.size > 0 %}{{ article.excerpt }}{% else %}{{ article.content | strip_html | truncatewords: settings.truncate, settings.truncate_last_symbols }}{% endif %}</div>
+
+  {% if article.comments_enabled? and settings.show_comments or article.tags.size > 0 and settings.blog_show_tags %}
+  <div class="post-meta">
+    {% if article.comments_enabled? and settings.show_comments %}<span class="item">
+    <a href="{{ comment_url }}">{{ article.comments.size }} {{ "blogs.general.comment" | t }}</a>
+    </span>{% endif %}
+    {% if article.tags.size > 0 and settings.blog_show_tags %}
+    <span class="item">
+      Tag: {% for tag in article.tags %}{{ tag | link_to_tag: tag }}{% unless forloop.last %}, {% endunless %}{% endfor %}
+    </span>{% endif %}
+  </div>{% endif %}
+
+  {% if settings.blog_show_social or settings.blog_show_button %}
+  <div class="optional-block">
+    {% if settings.blog_show_button %}<div class="post-link-more">
+    <a href="{{ article.url }}" class="btn btn-underline">{{ 'blogs.general.read_more' | t }}</a>
+    </div>{% endif %}
+    {% if settings.blog_show_social %}<div class="post-social-icon">
+    <div class="social-icon">
+      {% include 'addthis' %}
+    </div>
+    </div>{% endif %}
+  </div>{% endif %}
+</div>

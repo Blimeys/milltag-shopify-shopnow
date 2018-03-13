@@ -1,0 +1,18 @@
+{% if settings.show_menu_language %}
+<!-- language -->
+<div class="main-parent-language">
+  <div class="language dropdown select-change">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      <span class="dropdown-label hidden-sm hidden-xs">{{ settings.title_language }}</span>
+      <span class="title-value">{{ settings.default_language }}</span>
+      <span class="caret"></span>
+    </a>
+    <ul class="dropdown-menu">
+      {% for link in linklists[settings.linklist_language].links %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+<!-- /language -->
+{% endif %}

@@ -1,0 +1,40 @@
+{% if contactform != '' %}
+{% capture textalign %}titlecenter{% endcapture %}
+<h2 class="block-title big{% unless titlecenter == 'true' %} text-left{% endunless %} text-capitalize">{{ 'contact.form.title' | t }}</h2>
+{% form 'contact' %}
+{% if form.posted_successfully? %}
+<div class="successForm feedback">
+  <p>{{ 'contact.form.post_success' | t }}</p>
+</div>
+<br>
+{% endif %}
+
+{% if form.errors %}
+<div class="errorForm feedback">
+  <p>{{ 'contact.form.post_error' | t }}</p>
+  {% for field in form.errors %}
+  <p>{{ 'contact.form.post_field_error_html' | t: field: field, error: form.errors.messages[field] }}</p>
+  {% endfor %}
+</div>
+<br>
+{% endif %}
+
+{% if contactform.settings.show_field1 %}<div class="form-group">
+  <label for="inputName">{{ 'contact.form.name_html' | t }}</label>
+  <input name="contact[name]" type="text" class="form-control" id="inputName" placeholder="{{ 'contact.placeholder.name' | t }}">
+</div>{% endif %}
+<div class="form-group">
+  <label for="inputEmail">{{ 'contact.form.email_html' | t }}</label>
+  <input name="contact[email]" type="email" class="form-control" id="inputEmail" placeholder="{{ 'contact.placeholder.email' | t }}">
+</div>
+{% if contactform.settings.show_field3 %}<div class="form-group">
+  <label for="inputEmail">{{ 'contact.form.phone_html' | t }}</label>
+  <input name="contact[phone]" type="tel" class="form-control" id="inputEmail" placeholder="{{ 'contact.placeholder.phone' | t }}">
+</div>{% endif %}
+<div class="form-group">
+  <label for="inputName">{{ 'contact.form.message_html' | t }}</label>
+  <textarea name="contact[body]" class="form-control" rows="8" placeholder="{{ 'contact.placeholder.message' | t }}" id="textareaMessage"></textarea>
+</div>
+<button class="btn" type="submit">{{ 'contact.form.send' | t }}</button>
+{% endform %}
+{% endif %}

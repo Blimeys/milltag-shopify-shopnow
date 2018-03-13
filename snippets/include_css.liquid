@@ -1,0 +1,16 @@
+{{ 'bootstrap.css' | asset_url | stylesheet_tag }}
+{{ 'fontstyle.css' | asset_url | stylesheet_tag }}
+{{ 'slick.min.css' | asset_url | stylesheet_tag }}
+
+{% if content_for_layout contains 'revolution' %}
+{{ 'settings.min.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{% if template contains 'gallery' %}
+{{ 'magnific-popup.css' | asset_url | stylesheet_tag }}
+{% endif %}
+
+{{ 'style.scss.css' | asset_url | stylesheet_tag }}
+{% if settings.enable_rtl %}
+{{ 'stylertl.css' | asset_url | stylesheet_tag }}
+{% endif %}

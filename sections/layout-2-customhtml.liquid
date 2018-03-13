@@ -1,0 +1,62 @@
+{% if section.settings.show_block %}
+<div class="box-aside visible-lg visible-md">
+  <hr>
+</div>
+<div class="box-aside offset-56">
+  <h3 class="title-aside">{{ section.settings.title }}</h3>
+  <div class="text-center-sm">
+    <div class="facebook-box">
+      {% unless section.settings.show_customhtml %}
+      <iframe src="//facebook.com/plugins/likebox.php?id={{ section.settings.facebook_id }}&amp;width=270px&amp;connections=9&amp;stream=false&amp;header=false&amp;height=216" style="border:none; overflow:hidden; width:270px; height:216px;"></iframe>
+      {% else %}{{ section.settings.customhtml }}
+      {% endunless %}
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Facebook",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_block",
+      "label": "Show Widget",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+	  "default": "FACEBOOK"
+    },
+    {
+      "type": "text",
+      "id": "facebook_id",
+      "label": "Facebook ID",
+	  "default": "134612429900944",
+	  "info": "[Find Your ID](http:\/\/findmyfbid.com\/)"
+    },
+    {
+      "type": "header",
+      "content": "Or use custom html"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_customhtml",
+      "label": "Show Custom Code",
+      "default": false
+    },
+    {
+      "type": "paragraph",
+      "content": "[Facebook Plugins](https:\/\/developers.facebook.com\/docs\/plugins/page-plugin)"
+    },
+    {
+      "type": "textarea",
+      "id": "customhtml",
+      "label": "Custom Code"
+    }
+  ]
+}
+{% endschema %}

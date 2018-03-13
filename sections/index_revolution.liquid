@@ -1,0 +1,350 @@
+<div class="container-fluid{% unless section.settings.top_indent %} offset-0{% endunless %}" data-sectionname="index_revolution">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    <div class="slider-revolution{% unless settings.header_position %} revolution-default{% endunless %}" data-speed="{{ section.settings.delay_time }}">
+      <div class="tp-banner-container">
+        <div class="tp-banner revolution">
+          <ul>
+            {% for block in section.blocks %}
+            {% if block.settings.image != blank %}{% assign img_url = block.settings.image | img_url: 'x1024' %}
+            {% else %}{% assign img_url = 'template_slider.png' | asset_url %}
+            {% endif %}
+            <li data-thumb="{{ img_url }}" data-transition="fade" data-slotamount="1" data-masterspeed="1000" data-saveperformance="off"  data-title="Slide"{% if block.settings.show_item_button != 'yes' and block.settings.banner_link != blank %} data-link="{{ block.settings.banner_link }}"{% endif %}>
+              {% if block.settings.show_customhtml == 'no' %}
+              
+              {% if block.settings.show_video == "yes" %}
+              <div class="tp-caption tp-fade fadeout fullscreenvideo"
+                   data-x="0"
+                   data-y="0"
+                   data-speed="600"
+                   data-start="0"
+                   data-easing="Power4.easeOut"
+                   data-endspeed="1500"
+                   data-endeasing="Power4.easeIn"
+                   data-autoplay="true"
+                   data-autoplayonlyfirsttime="false"
+                   data-nextslideatend="true"
+                   data-forceCover="1"
+                   data-dottedoverlay="twoxtwo"
+                   data-aspectratio="16:9"
+                   data-forcerewind="on"
+                   style="z-index: 2">
+                <video class="video-js vjs-default-skin" preload="none" poster='{{ img_url }}' data-setup="{}">
+                  <source src='{{ block.settings.video_url | replace: "http:", "" | replace: "https:", ""  }}' />
+                </video>
+              </div>
+              <div class="tp-caption  tp-fade"
+                   data-x="right"
+                   data-y="bottom"
+                   data-voffset="-60"
+                   data-hoffset="-90"
+                   data-speed="600"
+                   data-start="900"
+                   data-easing="Power4.easeOut"
+                   data-endeasing="Power4.easeIn"
+                   data-responsive_offset="off"
+                   style="z-index: 7;">
+                <div class="video-play">
+                  <a class="icon icon-play_circle_filled btn-play" href="#"></a>
+                  <a class="icon icon-pause_circle_filled btn-pause" href="#"></a>
+                </div>
+              </div>
+              {% else %}
+              <img src="{{ img_url }}" alt="{{ block.settings.image.alt }}" data-bgposition="center {{ block.settings.position }}" data-bgfit="cover" data-bgrepeat="no-repeat" >
+              {% endif %}
+              
+              {% capture infoposition %}{% if block.settings.infoposition == "value" %}{{ block.settings.info_point }}{% else %}{{ block.settings.infoposition }}{% endif %}{% endcapture %}
+              {% capture ani %}{% if block.settings.infoposition == "value" %}lfl{% elsif block.settings.infoposition == "right" %}lfr{% else %}lfb{% endif %}{% endcapture %}
+              {% capture offset %}{% if block.settings.infoposition == "value" %}0{% elsif block.settings.infoposition == "right" %}-{{ block.settings.info_point }}{% else %}0{% endif %}{% endcapture %}
+              {% if block.settings.show_infoblock == 'yes' %}
+              <div class="tp-caption tp-resizeme {{ ani }} stb text-{{ infoposition }}"
+                   data-x="{{ infoposition }}"
+                   data-y="center"
+                   data-hoffset="{{ offset }}"
+                   data-voffset="-20"
+                   data-speed="600"
+                   data-start="900"
+                   data-easing="Power4.easeOut"
+                   data-endeasing="Power4.easeIn"
+                   data-responsive_offset="on"
+                   style="z-index: 2;">
+                {% if block.settings.text1 != '' %}<div class="tp-caption1-wd-1" style="color:{{ block.settings.color_text1 }}">{{ block.settings.text1 }}</div>{% endif %}
+                {% if block.settings.text2 != '' %}<div class="tp-caption1-wd-2" style="color:{{ block.settings.color_text2 }}">{{ block.settings.text2 }}</div>{% endif %}
+                {% if block.settings.show_item_button == 'yes' %}
+                <div class="tp-caption1-wd-3"><a href="{{ block.settings.banner_link }}" class="btn btn-lg" style="color:{{ block.settings.color_textbase }}; background:{{ block.settings.color_bgbase }};" data-c="{{ block.settings.color_textbase }}" data-ac="{{ block.settings.color_textactive }}" data-bgc="{{ block.settings.color_bgbase }}" data-abgc="{{ block.settings.color_bgactive }}" data-hovercolors>{{ section.settings.button_title }}</a></div>
+                {% endif %}
+              </div>
+              {% endif %}
+              
+              {% else %}{{ block.settings.code }}
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+{
+  "name": "Revolution Slider",
+  "class": "index-section",
+  "max_blocks": 12,
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "[Slider Documantation](http:\/\/www.orbis-ingenieria.com\/code\/documentation\/documentation.html)"
+    },
+    {
+      "type": "checkbox",
+      "id": "top_indent",
+      "label": "Top Indent",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "button_title",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    },
+    {
+      "type": "header",
+      "content": "Slider Settings"
+    },
+    {
+      "type": "select",
+      "id": "delay_time",
+      "label": "Change slides every",
+      "options": [
+        { "value": "10000", "label": "10 seconds" },
+        { "value": "12000", "label": "12 seconds" },
+        { "value": "14000", "label": "14 seconds" },
+        { "value": "16000", "label": "16 seconds" },
+        { "value": "18000", "label": "18 seconds" },
+        { "value": "20000", "label": "20 seconds" },
+        { "value": "22000", "label": "22 seconds" },
+        { "value": "24000", "label": "24 seconds" },
+        { "value": "26000", "label": "26 seconds" },
+        { "value": "28000", "label": "28 seconds" },
+        { "value": "30000", "label": "30 seconds" }
+      ],
+      "default": "16000"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slider_list",
+      "name": "Slide",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "banner_link",
+          "label": "Link",
+          "info": "Optional. If button hide and link set = image is link"
+        },
+        {
+          "type": "radio",
+          "id": "position",
+          "label": "Image Position",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "center", "label": "Center" },
+			{ "value": "right", "label": "Right" }
+          ],
+          "default": "center"
+        },
+        {
+          "type": "header",
+          "content": "Video"
+        },
+        {
+          "type": "select",
+          "id": "show_video",
+          "label": "Show Video?",
+          "default": "no",
+          "options": [
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "yes",
+              "label": "Yes"
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "id": "video_url",
+          "label": "Paste Video Url",
+		  "default": "//cdn.shopify.com/s/files/1/1408/4802/files/video.mp4?6895779187944542187",
+		  "info": "Video type \"mp4\""
+        },
+        {
+          "type": "header",
+          "content": "Info"
+        },
+        {
+          "type": "select",
+          "id": "show_infoblock",
+          "label": "Show Info?",
+          "default": "yes",
+          "options": [
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "yes",
+              "label": "Yes"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "show_item_button",
+          "label": "Show Button?",
+          "default": "yes",
+          "options": [
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "yes",
+              "label": "Yes"
+            }
+          ]
+        },
+        {
+          "type": "radio",
+          "id": "infoposition",
+          "label": "Info Position",
+          "options": [
+			{ "value": "value", "label": "Left" },
+            { "value": "center", "label": "Center" },
+			{ "value": "right", "label": "Right" }
+          ],
+          "default": "value"
+        },
+        {
+          "type": "text",
+          "id": "info_point",
+          "label": "Left and Rigth Offset, integer",
+		  "default": "205"
+        },
+        {
+          "type": "header",
+          "content": "Texts"
+        },
+        {
+          "type": "textarea",
+          "id": "text1",
+          "label": "Text 1",
+		  "default": "Our Experience Gives us the Ability to",
+		  "info": "Empty field delete text"
+        },
+        {
+          "type": "textarea",
+          "id": "text2",
+          "label": "Text 2",
+		  "default": "Create Stunning<br>Webstore",
+		  "info": "<br> = new string. Empty field delete text"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_text1",
+          "label": "Text 1 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_text2",
+          "label": "Text 2 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "paragraph",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_textbase",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_bgbase",
+          "label": "Background Color",
+          "default": "#5fd179"
+        },
+        {
+          "type": "color",
+          "id": "color_textactive",
+          "label": "Text Active Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_bgactive",
+          "label": "Background Active Color",
+          "default": "#333333"
+        },
+        {
+          "type": "header",
+          "content": "Custom Html"
+        },
+        {
+          "type": "paragraph",
+          "content": "Edit variables and content by [Documentation: 02 Slider items](http:\/\/www.orbis-ingenieria.com\/code\/documentation\/documentation.html#!\/layout). Create your custom information."
+        },
+        {
+          "type": "select",
+          "id": "show_customhtml",
+          "label": "Use Custom Html?",
+          "default": "no",
+          "options": [
+            {
+              "value": "no",
+              "label": "No"
+            },
+            {
+              "value": "yes",
+              "label": "Yes"
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "id": "code",
+          "label": "Custom Html",
+          "info": "[Documentation: 02 Slider items](http:\/\/www.orbis-ingenieria.com\/code\/documentation\/documentation.html#!\/layout)",
+		  "default": "<div class='tp-caption lfl stb' data-x='205' data-y='center' data-voffset='0' data-speed='600' data-start='900' data-easing='Power4.easeOut' data-endeasing='Power4.easeIn' style='z-index: 2;'><div>CONTENT<\/div><a href='#' class='link-button button--border-thick'>SHOP NOW!</a><\/div>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Revolution Slider",
+      "category": "Sliders"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,45 @@
+<!-- desktop-header -->
+<div class="desktop-header header-07">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4">
+        {% include "menu-language" %}
+        {% include "menu-currency" %}
+      </div>
+      <div class="col-md-4 text-center">
+        {% include "menu-minimenu" %}
+      </div>
+      <div class="col-md-4 text-right">
+        {% include "menu-search" %}
+        {% include "menu-customer" %}
+        <!-- cart -->
+        <div class="main-parent-cart">
+          {% include "menu-cart" %}
+        </div>
+        <!-- /cart -->
+      </div>
+    </div>
+  </div>
+  <div class="top-line">
+    <div class="container">
+      <div class="row text-center">
+        <!-- logo -->
+        <div class="logo" itemscope itemtype="http://schema.org/Organization">
+          <a href="/" itemprop="url">
+            {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+            {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}" itemprop="logo"/>
+            {% endif %}
+          </a>
+        </div>
+        <!-- /logo -->
+      </div>
+    </div>
+    <div class="container">
+      <div class="row text-center">
+        <div class="menu-parent-box">
+          {% include "main-menu" %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

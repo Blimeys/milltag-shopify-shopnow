@@ -1,0 +1,97 @@
+<div class="container-fluid offset-14" data-sectionname="lookbook">
+  <h1 class="block-title large">{{ section.settings.title }}</h1>
+  <div class="row">
+    <div class="carousel-look-book slick-arrow-1">
+      {% for block in section.blocks %}
+      {% assign item = block.settings %}
+      {% if item.show_content %}
+      {%- assign name_collection = item.collection -%}
+      {%- if name_collection == blank -%}{%- assign name_collection = "all" -%}{%- endif -%}
+      {%- assign collection = collections[name_collection] -%}
+      {%- assign _lenght = item.limit | plus: 0 -%}
+      <div {{ block.shopify_attributes }}>
+        <div class="lookbook">
+          <img src="{{ item.image | img_url: '600x' }}" alt="{{ item.image.alt }}">
+          <div class="hint-content">
+            {% for product in collection.products limit: _lenght %}
+            <div class="hint">
+              <a href="{{ product.url }}" data-hovercolors>
+                <span class="hint-title" style="color:{{ item.color_title }};" data-c="{{ item.color_title }}" data-ac="{{ item.color_hover }}">{{ product.title }}</span>
+                <span class="hint-price" style="color:{{ item.color_price }};" data-c="{{ item.color_price }}" data-ac="{{ item.color_hover }}">{{ product.price | money }}</span>
+              </a>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Page Settings",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "LOOKBOOK"
+      }
+	],
+    "blocks": [
+      {
+        "type": "item",
+        "name": "Item",
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Item",
+            "default": true
+          },
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image Item"
+          },
+          {
+            "label": "Collection",
+            "id": "collection",
+            "type": "collection"
+          },
+          {
+            "type": "text",
+            "id": "limit",
+            "label": "Items Length. Integer",
+            "default": "4"
+          },
+          {
+            "type": "header",
+            "content": "Colors"
+          },
+          {
+            "type": "color",
+            "id": "color_title",
+            "label": "Title Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_price",
+            "label": "Price Color",
+            "default": "#5fd179"
+          },
+          {
+            "type": "color",
+            "id": "color_hover",
+            "label": "Texts Hover Color",
+            "default": "#5fd179"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

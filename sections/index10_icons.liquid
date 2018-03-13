@@ -1,0 +1,147 @@
+<div class="container{% unless section.settings.top_indent %} offset-0{% endunless %}" data-section-id="{{ section.id }}">
+  <div class="row">
+    <div class="menu-content">
+      {% if section.blocks.size > 0 %}
+      <ul>
+        {% for block in section.blocks %}
+        <li {{ block.shopify_attributes }}>
+          <a href="{{ block.settings.link }}" data-hovercolors>
+            {% if block.settings.image == blank %}<img src="{{ 'admin_icon.png' | asset_url }}">
+            {% else %}<img src="{{ block.settings.image | img_url: '130x' }}" alt="{{ block.settings.image.alt }}">
+            {% endif %}
+            <span class="title" style="color:{{ section.settings.color_title }}" data-c="{{ section.settings.color_title }}" data-ac="{{ section.settings.color_hover }}">{{ block.settings.item_title }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Layout 10 Icons list",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "top_indent",
+      "label": "Top Indent",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Text Color",
+      "default": "#5fd179"
+    },
+    {
+      "type": "color",
+      "id": "color_hover",
+      "label": "Text Hover Color",
+      "default": "#333333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icons_block",
+      "name": "Item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+	      "info": "129x115px"
+        },
+        {
+          "type": "text",
+          "id": "item_title",
+          "label": "Title",
+          "default": "Title"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layout 10 Icons list",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        },
+        {
+          "type": "icons_block",
+          "settings": {
+		  }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

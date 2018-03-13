@@ -1,0 +1,75 @@
+{% assign group_data = 'filtergroup' | append: index %}
+{% assign group_key = 'show_' | append: group_data %}
+
+{% if settings[group_key] %}
+{% assign group_title = 'title_' | append: group_data %}
+{% assign group_design = 'design_' | append: group_data %}
+{% assign group_open = 'open_' | append: group_data %}
+
+{% assign tags = settings[group_data] | split: ',' %}{% assign array = '' %}{% assign tag_lang = '' %}{% for tag in tags %}{% if tag contains '__' %}{% assign value = tag | split: '__' | first %}{% assign array = array | append: ',' | append: value %}{% assign value = tag | split: '__' | last | strip %}{% assign tag_lang = tag_lang | append: ',' | append: value %}{% else %}{% assign array = array | append: ',' | append: tag %}{% assign tag_lang = tag_lang | append: ',' | append: '_empty_' %}{% endif %}{% endfor %}{% assign tags = array | split: ',' %}{% assign tag_lang = tag_lang | split: ',' %}
+{% assign open = '' %}{% if settings[group_open] %}{% assign open = 'open' %}{% endif %}
+
+{% capture data %}
+{% assign tag_size = 0 %}
+{% for t in tags %}
+{% assign tag = t | strip | downcase %}
+{% assign all_tags = collection.all_tags | downcase %}
+{% assign checktag = '"' | append: tag | append: '"' %}
+{% if all_tags contains checktag %}
+{% assign cur_tags = current_tags | downcase | replace: 'amp;', '' %}
+{% unless cur_tags contains checktag %}{% assign tag_size = tag_size | plus: 1 %}
+	<li>
+    {% capture string %}{% if tag_lang[forloop.index0] != '_empty_' %}{{ tag_lang[forloop.index0] }}{% else %}{{ t | strip }}{% endif %}{% endcapture %}
+    {% assign oldtitle = 'Show products matching tag ' | append: tag %}
+    {% assign newtitle = settings[group_title] | append: ': ' | append: string %}
+    
+    {% capture texture %}{% include 'get_swatch_texture' with texture_name: string %}{% endcapture %}
+    {% capture texture_style %}{% if texture != '' %}{{ texture | asset_url }}{% endif %}{% endcapture %}
+    
+    {% if settings[group_design] == 'color' %}
+    {% assign color = tag | handle %}
+    
+    {% capture tagborder %}{% if string == settings.shopby_color_filter_border %} border{% endif %}{% endcapture %}
+
+    {% comment %}
+    {% assign html = '<span class="swatch-label bg-' | append: color | append: tagborder | append: '"' | append: texture_style | append: '></span>' %}
+    {{ html | link_to_tag: tag | replace: oldtitle, newtitle }}
+    {% endcomment %}
+    
+    {% assign colors = ',' | append: settings.product_colors | strip_newlines | downcase | append: ',' %}
+    {% assign _tag = tag | downcase | strip %}
+    {% assign _tag = ',' | append: _tag | append: ':' %}
+    {% capture curcol %}{% if colors contains _tag %}{{ colors | split: _tag | last | split: ',' | first | strip }}{% else %}{% endif %}{% endcapture %}
+
+    {% capture c %}{{ string | link_to_tag: tag | replace: oldtitle, newtitle }}{% endcapture %}
+    {% if texture_style != '' %}{% assign s = '<a class="options-color' | append: tagborder | append: '" style="background: url(' | append: texture_style | append: ')" ' %}{% assign c = c | replace: '<a', s %}
+    {% elsif curcol != '' %}{% assign s = '<a class="options-color' | append: tagborder | append: '" style="background:' | append: curcol | append: '" ' %}{% assign c = c | replace: '<a', s %}
+    {% endif %}
+    {{ c }}
+
+    {% elsif settings[group_design] == 'button' %}
+      {% capture c %}{{ string | link_to_tag: tag | replace: oldtitle, newtitle }}{% endcapture %}
+      {% if texture_style != '' %}{% assign s = '<a class="options-color' | append: tagborder | append: '" style="background: url(' | append: texture_style | append: ')" ' %}{% assign c = c | replace: '<a', s %}
+	  {% endif %}
+      {{ c }}
+    {% else %}
+      {{ string | link_to_tag: tag | replace: oldtitle, newtitle }}
+	{% endif %}
+  	</li>
+{% endunless %}{% endif %}{% endfor %}{% endcapture %}
+{% assign data = data | strip %}
+
+{% capture design %}{% case settings[group_design] %}
+{% when 'button' %}options options-large
+{% when 'color' %}options options-large
+{% else %}list-simple
+{% endcase %}{% endcapture %}
+
+<div class="collapse-block {{ open }}{% if data == '' %} hide{% endif %}{{ sidebars_toright }}">
+  <h3 class="collapse-block_title">{{ settings[group_title] }}</h3>
+  <div class="collapse-block_content">
+    <ul class="{{ design | strip }} filtres-js">{{ data }}</ul>
+  </div>
+</div>
+
+{% endif %}

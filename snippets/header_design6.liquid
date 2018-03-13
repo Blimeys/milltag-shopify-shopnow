@@ -1,0 +1,71 @@
+<div class="desktop-header header-04">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-4">
+        {% if show_minimenu and linklist_minimenu != blank %}
+        {% assign firstitem = linklists[linklist_minimenu].links | first %}
+        {% unless firstitem.title == "social_icons" %}
+        <!-- toggle-menu -->
+        <div class="toggle-menu dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="dropdown-menu">
+            <ul>
+              {% for link in linklists[linklist_minimenu].links %}
+              <li{% if link.active %} class="active"{% endif %}><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- /toggle-menu -->
+        {% else %}{% include "menu-minimenu" %}
+        {% endunless %}
+        {% endif %}
+      </div>
+      <div class="col-md-4 text-center">
+        <!-- logo -->
+        <div class="text-center">
+          <div class="logo" itemscope itemtype="http://schema.org/Organization">
+            <a href="/" itemprop="url">
+              {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+              {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}" itemprop="logo"/>
+              {% endif %}
+            </a>
+          </div>
+        </div>
+        <!-- /logo -->
+      </div>
+      <div class="col-md-4 text-right">
+        <div class="pull-right">
+          <!-- cart -->
+          <div class="main-parent-cart">
+            {% include "menu-cart" %}
+          </div>
+          <!-- /cart -->
+        </div>
+        <div class="pull-right">
+          {% include "menu-customer" %}
+        </div>
+        <div class="pull-right">
+          {% include "menu-search" %}
+        </div>
+        <div class="pull-right">
+          {% include "menu-currency" %}
+        </div>
+        <div class="pull-right">
+          {% include "menu-language" %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row text-center">
+      <div class="menu-parent-box">
+        {% include "main-menu" %}
+      </div>
+    </div>
+  </div>
+</div>

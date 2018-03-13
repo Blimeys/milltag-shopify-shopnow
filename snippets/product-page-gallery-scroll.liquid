@@ -1,0 +1,10 @@
+<div class="product-scroll-image">
+  <div class="slider-scroll-product">
+    {% for image in product.images %}
+    <div>
+      <img src='{{ image.src | product_img_url: '1024x1024' }}' alt="{{ image.alt }}" data-target="{{ image.id }}">
+    </div>
+    {% endfor %}
+    {% include 'product-page-gallery-video' tagopen:'<div>' tagclose:'</div>' %}
+  </div>
+</div>

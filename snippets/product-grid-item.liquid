@@ -1,0 +1,229 @@
+{% assign url_images_size = '1024x1024' %}
+{% assign product_meta = product.metafields.description %}
+{% comment %} Price to show. {% endcomment %}
+{% assign sale_on = false %}
+{% assign shownewicon = false %}
+{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+	{% assign sale_on = true %}
+{% endif %}
+
+{% comment %} Main Image URL. {% endcomment %}
+{% assign main_url_image = product.featured_image %}
+{% assign hover_url_image = "" %}
+{% if product.images[1] %}{% if product.images[1].src contains "hover" or product_meta.hover == 'true' %}
+	{% assign hover_url_image = product.images[1].src %}
+	{% assign hover_url_image_alt = product.images[1].alt %}
+{% endif %}{% endif %}
+
+{% comment %}
+date_difference = 60 * 60 * 24 * day counter, this is new product period in seconds
+{% endcomment %}
+  {% assign date_now = 'now' | date: "%s" %}
+  {% assign date_published = product.published_at | date: "%s" %}
+  {% assign date_difference = date_now | minus: date_published %}
+  {% assign date_limit = 86400 | times: settings.new_product_period %}
+  {% assign pr_variant = product.selected_or_first_available_variant %}
+
+<div class="product{% unless settings.product_hover %} no-hover{% endunless %}">
+  <div class="product_inside">
+    <div class="image-box">
+      <a href="{{ product.url | within: collection }}">
+        <img src="{{ main_url_image | product_img_url: url_images_size }}" alt="{{ product.featured_image.alt | escape }}"/>
+        {% if hover_url_image != '' %}<img class="roll-over-img"  src="{{ hover_url_image | product_img_url: url_images_size }}" alt="{{ hover_url_image_alt }}">{% endif %}
+        
+        {% if product_meta.icon_new != 'disable' %}{% if date_difference < date_limit or product_meta.icon_new == 'always' %}<div class="label-new">{{ 'products.general.new' | t }}</div>{% assign shownewicon = true %}{% endif %}{% endif %}
+        {% unless settings.catalogue_mode %}
+        {% if sale_on and product_meta.icon_sale != 'disable' %}
+        {% assign mc = product.selected_or_first_available_variant.compare_at_price | money_without_currency | replace: ',', '' %}
+        {% assign mo = product.selected_or_first_available_variant.price | money_without_currency | replace: ',', '' %}        
+        {% assign percent = mc | minus: mo | times: 100.0 | divided_by: mc | remove: '.0' | append: '%' %}
+        <div class="label-sale{% unless shownewicon %} left{% endunless %}">{{ 'products.general.sale_html' | t: percent:percent }}</div>
+        {% endif %}
+        {% unless product.available %}<div class="not-item"><div>{{ 'products.general.unavailable_html' | t }}</div></div>{% endunless %}
+        {% endunless %}
+      </a>
+      {% unless settings.catalogue_mode %}
+      {% if product.available %}{% if settings.product_item_show_quickview %}<a href="#" data-toggle="modal" data-target="#ModalquickView" class="quick-view" data-value="{{ product.url | within: collection }}"><span><span class="icon icon-visibility"></span>{{ 'products.general.quick_view' | t }}</span></a>{% endif %}{% endif %}
+      {% endunless %}
+      
+      {% if product_meta.countdown != blank and settings.show_product_countdown %}
+      <div class="countdown_box">
+        <div class="countdown_inner">
+          <div class="countdown" data-date="{{ product_meta.countdown }}"></div>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    <h2 class="title"><a href="{{ product.url | within: collection }}">{{ product.title }}</a></h2>
+
+    {% unless settings.catalogue_mode %}
+    {% if sale_on %}
+    <div class="price"><span class="new-price">{{ product.selected_or_first_available_variant.price | money }}</span><span class="old-price">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></div>
+    {% else %}
+    <div class="price"><span>{{ product.selected_or_first_available_variant.price | money }}</span><span class="old-price hide"></span></div>
+    {% endif %}
+    {% endunless %}
+
+    <div class="description">{%- if product_meta.small_description != blank -%}{{ product_meta.small_description }}{%- else -%}{{ product.description | strip | strip_html | truncatewords: settings.truncate_product_description, settings.truncate_product_description_last_symbols }}{%- endif -%}</div>
+
+    <div class="product_inside_hover">
+      <div class="product_inside_info">
+        {% if settings.show_product_options and product.options.size < 4 %}{% unless product.options[0] contains 'Title' %}
+        <div class="option-block">
+          {% assign option1 = -1 %}
+          {% assign option2 = -1 %}
+          {% assign option3 = -1 %}
+        
+          {% for option in product.options %}
+            {% assign downcased_option = option | downcase %}
+          	{% if option1 == -1 %}{% assign option1 = forloop.index0 %}
+        	{% elsif option2 == -1 %}{% assign option2 = forloop.index0 %}
+        	{% elsif option3 == -1 %}{% assign option3 = forloop.index0 %}
+            {% endif %}
+          	{% if downcased_option contains 'color' or downcased_option contains 'colour' %}{% assign colorindex = forloop.index0 %}
+          	{% endif %}
+          {% endfor %}
+          
+          {% if colorindex > -1 %}
+			{% if colorindex != option1 %}
+              {% assign s = option1 %}
+              {% assign option1 = colorindex %}
+          
+              {% if colorindex == option2 %}
+                {% assign option2 = s %}
+          	  {% elsif colorindex == option3 %}
+          		{% assign option3 = s %}
+              {% endif %}
+          
+          	{% endif %}
+          {% endif %}
+
+          {% assign images_color = '' %}{% for i in (1..100) %}{% assign key = 'filter_color' | append: forloop.index %}{% assign value = '__' | append: settings[key] | handle | downcase | strip | append: '__' | append: forloop.index %}{% assign images_color = images_color | append: value | append: ';' %}{% endfor %}
+          {% assign colors = ',' | append: settings.product_colors | strip_newlines | downcase | append: ',' %}
+          
+          {% if option1 > -1 %}
+            {% assign checkstr = '' %}
+
+          	<ul class="options productitem-option1-js">
+              {% for variant in product.variants %}
+              {% unless variant.available %}{% continue %}{% endunless %}
+
+              {% assign tag = variant.options[option1] | strip %}
+              {% unless checkstr contains tag %}
+              {% assign checkstr = checkstr | append: tag | append: '|' %}
+
+              {% assign _tag = tag | downcase %}
+              {% capture texture %}{% include 'get_swatch_texture' with texture_name: tag %}{% endcapture %}
+              {% capture texture_style %}{% if texture != '' %}{{ texture | asset_url }}{% endif %}{% endcapture %}
+              {% capture tagborder %}{% if tag == settings.shopby_color_filter_border %} border{% endif %}{% endcapture %}
+
+              {% assign _handle = tag | replace: ' ', '' %}
+              
+              {% assign _tag = ',' | append: _tag | append: ':' %}
+              {% capture curcol %}{% if colors contains _tag %}{{ colors | split: _tag | last | split: ',' | first | strip }}{% else %}{% endif %}{% endcapture %}
+              <li>
+              {% if texture_style != '' %}<a href="#" data-tag="{{ _handle }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-pr_id="{{ pr_variant.id }}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background: url({{ texture_style }})" title="{{ tag }}"></a>
+			  {% elsif curcol == '' %}<a href="#" data-tag="{{ _handle }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-pr_id="{{ pr_variant.id }}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" title="{{ tag }}">{{ tag }}</a>
+              {% else %}<a href="#" data-tag="{{ _handle }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-pr_id="{{ pr_variant.id }}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background:{{ curcol }}" title="{{ tag }}"></a>
+              {% endif %}
+              </li>
+              {% endunless %}
+              {% endfor %}
+            </ul>
+          {% endif %}
+          
+          {% if option2 > -1 %}
+        	<ul class="options productitem-option2-js"{% if option1 > -1 %} style="display:none;"{% endif %}>
+              {% assign checkstr = '' %}
+              {% for variant in product.variants %}
+              {% unless variant.available %}{% continue %}{% endunless %}
+              {% if option1 > -1 %}
+              	{% assign color = variant.options[option1] | replace: ' ', '' %}
+              {% endif %}
+
+              {% assign tag = variant.options[option2] | strip %}
+              {% assign _tag = '%' | append: tag | append:color | append:'%' %}
+              {% if checkstr contains _tag %}{% continue %}{% endif %}
+              {% assign checkstr = checkstr | append: _tag | append: '|' %}
+
+              {% assign _handle = color | append: tag | replace: ' ', '' %}
+              
+              {% assign _tag = tag | downcase %}
+              {% capture texture %}{% include 'get_swatch_texture' with texture_name: tag %}{% endcapture %}
+              {% capture texture_style %}{% if texture != '' %}{{ texture | asset_url }}{% endif %}{% endcapture %}
+              {% capture tagborder %}{% if tag == settings.shopby_color_filter_border %} border{% endif %}{% endcapture %}
+              
+              {% assign _tag = ',' | append: _tag | append: ':' %}
+              {% capture curcol %}{% if colors contains _tag %}{{ colors | split: _tag | last | split: ',' | first | strip }}{% else %}{% endif %}{% endcapture %}
+              <li class="{{ color }}-js"{% if option1 > -1 %} style="display:none;"{% endif %}>
+                {% if texture_style != '' %}<a href="#" data-tag="{{ _handle }}" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background: url({{ texture_style }})" title="{{ tag }}">{{ tag }}</a>
+                {% elsif curcol == '' %}<a href="#" data-tag="{{ _handle }}" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" title="{{ tag }}">{{ tag }}</a>
+                {% else %}<a href="#" data-tag="{{ _handle }}" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background:{{ curcol }}" title="{{ tag }}"></a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+          
+          {% if option3 > -1 %}
+        	<ul class="options productitem-option3-js"{% if option1 > -1 or option2 > -1 %} style="display:none;"{% endif %}>
+              {% assign checkstr = '' %}
+              {% for variant in product.variants %}
+              {% unless variant.available %}{% continue %}{% endunless %}
+              {% if option1 > -1 %}
+              	{% assign color = variant.options[option1] | replace: ' ', '' %}
+              {% endif %}
+              {% if option2 > -1 %}
+              	{% assign _option2 = variant.options[option2] | replace: ' ', '' %}
+              {% endif %}
+
+              {% assign tag = variant.options[option3] | strip %}
+              {% assign _handle = color | append: _option2 %}
+
+              {% assign _tag = tag | downcase %}
+              {% capture texture %}{% include 'get_swatch_texture' with texture_name: tag %}{% endcapture %}
+              {% capture texture_style %}{% if texture != '' %}{{ texture | asset_url }}{% endif %}{% endcapture %}
+              {% capture tagborder %}{% if tag == settings.shopby_color_filter_border %} border{% endif %}{% endcapture %}
+              
+              {% assign _tag = ',' | append: _tag | append: ':' %}
+              {% capture curcol %}{% if colors contains _tag %}{{ colors | split: _tag | last | split: ',' | first | strip }}{% else %}{% endif %}{% endcapture %}
+              <li class="{{ _handle }}-js"{% if option1 > -1 or option2 > -1 %} style="display:none;"{% endif %}>
+                {% if texture_style != '' %}<a href="#" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background: url({{ texture_style }})" title="{{ tag }}">{{ tag }}</a>
+                {% elsif curcol == '' %}<a href="#" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" title="{{ tag }}">{{ tag }}</a>
+                {% else %}<a href="#" data-pr_id="{{ pr_variant.id }}" data-img="{% if variant.image %}{{ variant.image.src | product_img_url: url_images_size }}{% else %}{% endif %}" data-var_id="{{ variant.id }}" data-price="{{ variant.price }}" data-compprice="{{ variant.compare_at_price }}" class="options-color{{ tagborder }}" style="background:{{ curcol }}" title="{{ tag }}"></a>
+                {% endif %}
+              </li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+
+      	</div>
+        {% endunless %}{% endif %}
+
+        {% unless settings.catalogue_mode %}
+        
+        {% if settings.product_item_show_rating %}
+        <div class="rating">
+          <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+        </div>
+        {% endif %}
+        {% if product.available %}
+          {% if settings.product_item_show_cart %}
+          <a href="/cart/add.js?quantity=1&id={{ product.selected_or_first_available_variant.id }}" class="btn btn-product_addtocart addtocart-item-js">{{ 'products.general.add_to_cart_html' | t }}</a>{% endif %}
+          {% if settings.product_item_show_quickview %}
+          <a href="#" data-toggle="modal" data-target="#ModalquickView" class="quick-view btn" data-value="{{ product.url | within: collection }}"><span><span class="icon icon-visibility"></span>{{ 'products.general.quick_view' | t }}</span></a> 
+
+          <ul class="product_inside_info_link">
+            <li>
+              <a href="#" data-toggle="modal" data-target="#ModalquickView" class="quick-view" data-value="{{ product.url | within: collection }}">
+                <span class="icon icon-visibility"></span>
+              </a>
+            </li>
+          </ul>
+        {% endif %}{% endif %}
+        
+        {% endunless %}
+      </div>
+    </div>
+  </div>
+</div>

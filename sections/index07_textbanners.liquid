@@ -1,0 +1,155 @@
+<div class="container{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    <div class="custom-layout{% if section.settings.mobile_carousel %} carousel-products-mobile-md{% endif %}">
+      {% for block in section.blocks %}{%- assign item = block.settings -%}
+      <div class="col-xs-6 col-sm-6 col-md-4 col-lg-4" {{ block.shopify_attributes }}>
+        <a href="{{ item.link }}" class="services-block-border height-md" style="border-color: {{ section.settings.color_border }}; background: {{ section.settings.color_bg }};" data-borc="{{ section.settings.color_border }}" data-aborc="{{ section.settings.color_active }}" data-hovercolors>
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if item.showicon %}<span class="icon icon-{{ item.icon }}" style="color:{{ section.settings.color_icon }};"></span>{% endif %}
+              {% if item.text1 != '' %}<div class="title" style="color:{{ section.settings.color_title }};" data-c="{{ section.settings.color_title }}" data-ac="{{ section.settings.color_active }}">{{ item.text1 }}</div>{% endif %}
+              {% if item.text2 != '' %}<p style="color:{{ section.settings.color_text }};">{{ item.text2 }}</p>{% endif %}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Layout 07 Text Banners",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_bg",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "color_border",
+      "label": "Border Color",
+      "default": "#e9e9e9"
+    },
+    {
+      "type": "color",
+      "id": "color_icon",
+      "label": "Icon Color",
+      "default": "#5fd179"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Title Color",
+      "default": "#333333"
+    },
+    {
+      "type": "color",
+      "id": "color_text",
+      "label": "Text Color",
+      "default": "#777777"
+    },
+    {
+      "type": "color",
+      "id": "color_active",
+      "label": "Active Color",
+      "default": "#5fd179"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showicon",
+          "label": "Show Icon",
+          "default": true
+        },
+        {
+          "type": "text",
+          "id": "icon",
+          "label": "Material Icon",
+          "default": "airplanemode_active",
+		  "info": "[Material Icons](https:\/\/material.io\/icons\/#ic_desktop_mac)"
+        },
+        {
+          "type": "text",
+          "id": "text1",
+          "label": "Title",
+          "default": "Free Shipping"
+        },
+        {
+          "type": "textarea",
+          "id": "text2",
+          "label": "Content",
+		  "default": "Free on all products"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layout 07 Text Banners",
+      "category": "Banner",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "icon": "airplanemode_active",
+            "text1": "Free Shipping",
+            "text2": "Free on all products"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "security",
+            "text1": "Secured Shopping",
+            "text2": "We use the best security features"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "icon": "headset_mic",
+            "text1": "Support",
+            "text2": "Effectiveand Friendly Support"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

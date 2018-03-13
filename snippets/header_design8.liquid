@@ -1,0 +1,63 @@
+<!-- desktop-header -->
+<div class="desktop-header header-09">
+  <div class="container">
+    <div class="pull-left">
+      <!-- logo -->
+      <div class="text-center">
+        <div class="logo" itemscope itemtype="http://schema.org/Organization">
+          <a href="/" itemprop="url">
+            {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+            {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}" itemprop="logo"/>
+            {% endif %}
+          </a>
+        </div>
+      </div>
+      <!-- /logo -->
+    </div>
+    <div class="pull-right">
+      {% if show_minimenu and linklist_minimenu != blank %}
+      {% assign firstitem = linklists[linklist_minimenu].links | first %}
+        {% unless firstitem.title == "social_icons" %}
+        <!-- toggle-menu -->
+        <div class="toggle-menu dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <div class="dropdown-menu">
+            <ul>
+              {% for link in linklists[linklist_minimenu].links %}
+              <li{% if link.active %} class="active"{% endif %}><a href="{{ link.url }}">{{ link.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+        <!-- /toggle-menu -->
+      {% else %}{% include "menu-minimenu" %}
+      {% endunless %}
+      {% endif %}
+      {% include "menu-language" %}
+      {% include "menu-currency" %}
+      {% include "menu-customer" %}
+      <!-- cart -->
+      <div class="main-parent-cart">
+        {% include "menu-cart" %}
+      </div>
+      <!-- /cart -->
+    </div>
+  </div>
+  <div class="container">
+    <div class="pull-left">
+      <div class="menu-parent-box">
+        <!-- header-menu -->
+        {% include "main-menu" %}
+        <!-- /header-menu -->
+      </div>
+    </div>
+    <div class="pull-right">
+      {% include "menu-search" %}
+    </div>
+  </div>
+</div>
+<!-- /desktop-header -->

@@ -1,0 +1,93 @@
+{% if section.settings.design == 'design1' %}
+<div class="container {% unless section.settings.top_indent %} offset-0{% endunless %}" data-sectionname="index_instagram">
+  <h2 class="block-title{% unless section.settings.center_title %} text-left{% endunless %}">{{ section.settings.title }}</h2>
+  <div id="instafeed-{{ section.id }}" class="instafeed" data-userid="{{ section.settings.userid }}" data-clientid="{{ section.settings.clientid }}" data-accesstoken="{{ section.settings.accesstoken }}" data-count="{{ section.settings.count }}"></div>
+</div>
+{% else %}
+<div class="container-fluid" data-sectionname="index_instagram">
+  <div class="row">
+    <div class="instafeed-fluid-indent-0">
+      <div id="instafeed-{{ section.id }}" class="instafeed-fluid" data-userid="{{ section.settings.userid }}" data-clientid="{{ section.settings.clientid }}" data-accesstoken="{{ section.settings.accesstoken }}" data-count="{{ section.settings.count }}"></div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Instagram",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "top_indent",
+      "label": "Top Indent",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "center_title",
+      "label": "Center Title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "userid",
+      "label": "User Id",
+      "default": "5479786510",
+	  "info": "[Get a Instagram Client_ID key](http:\/\/darkwhispering.com\/how-to\/get-a-instagram-client_id-key)"
+    },
+    {
+      "type": "text",
+      "id": "clientid",
+      "label": "Client Id",
+      "default": "ede82b534d604f089beffd75353ff44f",
+	  "info": "[Get Instagram User Id](http:\/\/www.ershad7.com\/InstagramUserID)"
+    },
+    {
+      "type": "text",
+      "id": "accesstoken",
+      "label": "Access Token",
+      "default": "5479786510.ede82b5.32885449218644e59b3d9655846d6d3b",
+	  "info": "[Instagram access token generator](https:\/\/elfsight.com\/service\/generate-instagram-access-token)"
+    },
+    {
+      "type": "paragraph",
+      "content": "[Instagram access token](https:\/\/elfsight.com\/blog\/2016\/05\/how-to-get-instagram-access-token/)"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "text",
+      "id": "count",
+      "label": "Images Count",
+      "default": "6",
+	  "info": "Integer"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "FOLLOW US INSTAGRAM<span>#MYSHOP<\/span>"
+    },
+    {
+      "type": "select",
+      "id": "design",
+      "label": "Design",
+      "options": [
+        { "value": "design1", "label": "Design 1" },
+        { "value": "design2", "label": "Design 2. Without Title" }
+	  ],
+      "default": "design1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Instagram",
+      "category": "Instagram"
+    }
+  ]
+}
+{% endschema %}

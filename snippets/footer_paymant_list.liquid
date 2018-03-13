@@ -1,0 +1,14 @@
+{%- if pay_icons != '' and pay_icons.settings.show_content -%}
+<div class="payment-list{{ class }}">
+  <ul>
+    {%- for i in (1..8) -%}
+    {%- assign img = 'pay_icon_' | append: forloop.index -%}
+    {%- assign img = pay_icons.settings[img] -%}
+    {%- assign url = 'pay_url_' | append: forloop.index -%}
+    {%- assign url = pay_icons.settings[url] -%}
+    {%- if img != blank -%}
+    <li><a href="{% if url == blank %}#{% else %}{{ url }}{% endif %}"><img src="{{ img | img_url: '50x' }}" alt="{{ img.alt }}"></a></li>
+    {%- endif -%}{%- endfor -%}
+  </ul>
+</div>
+{%- endif -%}

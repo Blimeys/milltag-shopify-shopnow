@@ -1,0 +1,127 @@
+{% if settings.listing_page_design != "disable-sidebar" %}{% assign enable_sidebar = true %}{% endif %}
+{% if settings.listing_page_design == "left-sidebar" %}{% assign left_sidebar = true %}{% endif %}
+{% if settings.listing_page_design == "right-sidebar" %}{% assign right_sidebar = true %}{% endif %}
+{% if settings.listing_page_design == "left-right-sidebar" %}{% assign leftright_sidebar = true %}{% endif %}
+{% if settings.listing_page_design == "closed-sidebar" %}{% assign closed_sidebar = true %}{% endif %}
+{% assign products_in_column = settings.products_in_column %}
+
+{% assign pagination_limit_const = settings.pagination_limit | times: 1 %}{% assign supercollection = collection.products %}
+{% capture product_grid %}{% case products_in_column %}{% when 'two' %}col-sm-6 col-md-6 col-lg-one-two{% when 'three' %}col-sm-4 col-md-4 col-lg-one-three{% when 'four' %}col-sm-4 col-md-3 col-lg-one-fourth{% when 'six' %}col-sm-4 col-md-3 col-lg-one-six{% else %}{% endcase %}{% endcapture %}
+{% if left_sidebar or right_sidebar %}
+	{% if products_in_column == 'four' or products_in_column == 'six' %}{% assign product_grid = 'col-sm-4 col-md-4 col-lg-one-fourth' %}{% endif %}
+{% elsif leftright_sidebar %}
+	{% if products_in_column == 'four' or products_in_column == 'six' %}{% assign product_grid = 'col-sm-4 col-md-4 col-lg-one-three' %}{% endif %}
+{% endif %}
+
+<div class="container offset-0">
+  <div class="row">
+    
+    {% if enable_sidebar %}
+    <div class="slide-column-close{% if closed_sidebar %} slide-column-close-mobile{% endif %}">
+      <a href="#"><span class="icon icon-close"></span>{{ 'collections.sidebar.back' | t }}</a>
+    </div>
+    
+    <div class="{%- if right_sidebar -%}col-md-4 col-md-push-8 col-lg-3 col-lg-push-9 aside leftColumn rightColumn
+                {%- elsif closed_sidebar -%}col-md-4 col-lg-3 col-xl-3 aside leftColumn leftColumn-mobile
+                {%- else -%}col-md-4 col-lg-3 col-xl-3 aside leftColumn
+                {%- endif -%}">
+      {%- include "collection-page-sidebar-left" -%}
+    </div>
+    {% endif %}
+    
+    <div class="{%- if left_sidebar -%}col-md-8 col-lg-9 col-xl-9
+                {%- elsif right_sidebar -%}col-md-8 col-md-pull-4 col-lg-9 col-lg-pull-3
+                {%- elsif leftright_sidebar -%}col-md-8 col-lg-6 col-xl-6
+                {%- else -%}col-md-12 col-lg-12 col-xl-12
+                {%- endif -%}">
+      {% paginate collection.products by current_pagination_limit %}
+      
+      <div class="content offset-0">
+        {% if settings.show_collection_title %}<div class="number-of-products pull-right">{{ paginate.items }} {{ 'collections.toolbar.items' | t }}</div>
+        <h1 class="block-title text-left text-uppercase">{{ collection.title }}</h1>{% endif %}
+        
+        {% if settings.show_collection_description %}
+        {% assign content = collection.description %}
+        {% if content != '' %}
+          {% assign content = content | replace: '[menu_handle', '||[menu_handle' | replace: '"]', '"]||' | split: '||' %}
+          {% assign firstloop = 0 %}
+          {% for _content in content %}
+        	{% if _content contains '[menu_handle' %}
+        	  {% capture linklistsname %}{% include 'get_property' data:_content name:'[' property:'menu_handle' default:'' %}{% endcapture %}
+        	  {% capture thumbsize %}{% include 'get_property' data:_content name:'[' property:'size' default:'' %}{% endcapture %}
+        	  {% capture thumbsize %}{% if thumbsize == 'small' %}3{% else %}4{% endif %}{% endcapture %}
+              {% if firstloop > 0 %}<div class="content offset-60"><hr></div>{% endif %}
+              <div {% if firstloop > 0 %}class="content offset-18"{% else %}
+                   {% if settings.show_collection_title %}style="margin-top: -14px;"
+                   {% else %}style="margin-top: -36px;"{% endif %}{% endif %}>
+                <div class="row">
+                  {% for link in linklists[linklistsname].links %}
+                  {% unless link.url == collection.url %}
+                  <div class="col-xs-6 col-sm-{{ thumbsize }} col-md-{{ thumbsize }} col-lg-{{ thumbsize }}">
+                    <a href="{{ link.url }}" class="subcategory-item zoom-in">
+                      {% if link.type == 'collection_link' %}{% if link.object.image %}
+                      <span>
+                        <img src="{{ link.object.image | img_url: 'large' }}" alt="{{ link.object.image.alt }}">
+                      </span>
+                      {% endif %}{% endif %}
+                      <span class="title">{{ link.title }}</span>
+                    </a>
+                  </div>
+                  {% endunless %}
+                  {% endfor %}
+                </div>
+              </div>
+        	{% elsif _content != '' %}
+              <div class="offset-21">{{ _content }}</div>
+            {% endif %}
+        	{% if _content != '' %}{% assign firstloop = 1 %}{% endif %}
+          {% endfor %}
+        {% endif %}{% endif %}
+      </div>
+      {% if settings.show_collection_title or settings.show_collection_description %}
+      <div class="content">
+        <hr>
+      </div>
+      {% endif %}
+      
+      {% include "collection-tollbar" current_grid: current_pagination_limit %}
+      <div class="product-listing row">
+        {% if collection.products.size == 0 %}
+        <h2 class="block-title text-center offset-40">{{ settings.no_products }}</h2>
+        {% else %}
+        {% for product in collection.products %}
+        <div class="col-xs-6 {{ product_grid }}">{% include "product-grid-item" hoverzoom: "true" %}</div>
+        {% endfor %}
+        {% endif %}
+      </div>
+      {% if settings.enable_infinite_scroll == 'btnpagination' %}
+      <div class="product-pagintion">
+        {% if paginate.pages > 1 %}<div class="content"><hr></div>
+        <div class="content offset-40">{% include "pagination" %}</div>
+        {% endif %}
+      </div>
+      {% else %}
+      <div class="infinitybutton offset-60 text-center{% if settings.enable_infinite_scroll == 'autoscroll' %} autoscroll_yes{% endif %}">
+        {% if paginate.next %}
+        <div class="show-more">
+          <a href="{{ paginate.next.url }}" class="btn btn-lg{% if settings.enable_infinite_scroll == 'autoscroll' %} autoscroll hide{% endif %}">{{ 'collections.toolbar.button_show_more' | t }}</a>
+        </div>
+        {% else %}
+        {% if paginate.previous %}
+        <div class="show-more" >
+          <a href="#" class="btn btn-lg disable">{{ 'collections.toolbar.button_show_more_disabled' | t }}</a>
+        </div>
+        {% endif %}
+        {% endif %}
+      </div>
+      {% endif %}
+      {% endpaginate %}
+    </div>
+    
+    {% if leftright_sidebar %}
+    <div class="col-md-4 col-lg-3 col-xl-3 hidden-md hidden-sm hidden-xs aside rightColumn">
+    </div>
+    {% endif %}
+    
+  </div>
+</div>

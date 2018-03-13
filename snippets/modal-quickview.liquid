@@ -1,0 +1,75 @@
+<div class="modal fade" id="ModalquickView" tabindex="-1" role="dialog" aria-label="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content ">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><span class="icon icon-clear"></span></button>
+      </div>
+      <form>
+        <div class="modal-body">
+          <!--modal-quick-view-->
+          <div class="modal-quick-view">
+            <div class="row">
+              <div class="col-sm-5 col-lg-6">
+                <div class="product-main-image">
+                  <!--<img src='images/product/product-big-1.jpg' alt="" />-->
+                </div>
+              </div>
+              <div class="col-sm-7 col-lg-6">
+                <div class="product-info">
+                  {% if settings.quickview_sku or settings.quickview_availability %}<div class="add-info">
+                    {% if settings.quickview_sku %}<div class="sku pull-left">
+                      <span class="font-weight-medium color-defaulttext2">{{ 'popup_quick_view.general.sku' | t }}</span> <span>mtk012c</span>
+                    </div>{% endif %}
+                    {% if settings.quickview_availability %}<div class="availability pull-left">
+                      <span class="font-weight-medium color-defaulttext2">{{ 'popup_quick_view.general.availability' | t }}</span> <span class="color-base stock_quantity hide"></span> <span class="color-base in_stock hide">{{ 'products.product.in_stock' | t }}</span> <span class="color-base many_in_stock hide">{{ 'products.product.many_in_stock' | t }}</span> <span class="color-red sold_out hide">{{ "products.product.sold_out" | t }}</span>
+                    </div>{% endif %}
+                  </div>{% endif %}
+                  <h1 class="title"></h1>
+                  <div class="price"><span></span><span class="old-price hide"></span></div>
+                  
+                  {% if settings.quickview_vendor or settings.quickview_type or settings.quickview_barcode %}
+                  <div class="add-info">
+                    <ul class="productvendorsmallinfo">
+                      {% if settings.quickview_vendor %}<li><span>{{ "products.product.vendor" | t }}</span> <span class="qv_vendor"></span></li>{% endif %}
+                      {% if settings.quickview_type %}<li><span>{{ "products.product.type" | t }}</span> <span class="qv_type"></span></li>{% endif %}
+                      {% if settings.quickview_barcode %}<li><span>{{ "products.product.barcode" | t }}</span> <span class="barcode"></span></li>{% endif %}
+                    </ul>
+                  </div>
+                  {% endif %}
+                  
+                  
+                  {% if settings.quickview_desc_show %}
+                    <div class="description hidden-xs">
+                      <!--<div class="text"></div>-->
+                    </div>
+                  {% endif %}
+
+                  <div class="quickview-swatches-container" data-swatches-design="{{ settings.quickview_variant_combobox }}"></div>
+                  
+                  <div class="wrapper">
+                    <div class="pull-left"><label class="qty-label">{{ 'products.product.quantity' | t }}</label></div>
+                    <div class="pull-left">
+                      <div class="style-2 input-counter">
+                        <span class="minus-btn"></span>
+                        <input type="text" value="1" size="5"/>
+                        <span class="plus-btn"></span>
+                      </div>
+                    </div>
+                    <div class="pull-left">
+                      <a href="#" class="btn btn-addtocart addtocart-js"></a>
+                    </div>
+                  </div>
+
+                  <div class="wrapper">
+                    <a href="#" class="viewfullinfo">{{ 'popup_quick_view.general.view_full_info' | t }}</a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--/modal-quick-view-->
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

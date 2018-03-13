@@ -1,0 +1,48 @@
+{% assign item = section.settings %}
+{% if item.fullwidth %}
+<div class="container-fluid{% unless item.topoffset %} no-margin{% endunless %}">
+  <div class="row">
+    {{ item.data }}
+  </div>
+</div>
+{% else %}
+<div class="container{% unless item.topoffset %} offset-0{% endunless %}">
+  <div class="row">
+    {{ item.data }}
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Custom Html",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "fullwidth",
+      "label": "Fullwidth Container",
+      "default": false
+    },
+    {
+      "type": "textarea",
+      "id": "data",
+      "label": "Content"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Html",
+      "category": "Design",
+      "settings": {
+      }
+    }
+  ]
+}
+{% endschema %}

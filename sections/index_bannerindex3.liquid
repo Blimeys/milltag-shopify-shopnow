@@ -1,0 +1,181 @@
+<div class="container{% if section.settings.topoffset %}{% if section.settings.topoffsetsmall %} offset-44{% endif %}{% else %} offset-0{% endif %}">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    <div class="custom-layout{% if section.settings.mobile_carousel %} carousel-products-mobile{% endif %}">
+      {% for block in section.blocks %}{%- assign item = block.settings -%}
+      <div class="col-xs-{{ section.settings.items }}" {{ block.shopify_attributes }}>
+        <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-01" data-hovercolors>
+          {% if item.image == blank %}{% include "get_svg" type:'image' size:'600x600px' %}
+          {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          {% if item.showdescription %}
+          <div class="description">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% if item.title %}<div class="title" style="color:{{ item.color_title }}">{{ item.title }}</div>{% endif %}
+                {% if item.showbtn %}<span class="btn btn-sm btn-underline" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtntext }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtntext }}" data-aborc="{{ item.acbtntext }}">{{ section.settings.btnname }}</span>{% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Banners Index 3",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "topoffsetsmall",
+      "label": "Top Offset Small",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "items",
+      "label": "Items In Line",
+      "default": "4",
+      "options": [
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "3",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+		  "info": "600x600px"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "Built<br>with Love"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banners Index 3",
+      "category": "Banner",
+      "blocks": [
+        {
+          "type": "item",
+          "settings": {
+            "title": "Built<br>with Love"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "title": "Attention to<br>the Details"
+          }
+        },
+        {
+          "type": "item",
+          "settings": {
+            "title": "Pixel Perfect<br>Design",
+            "color_title": "#333333",
+            "cbtntext": "#5fd179",
+            "acbtntext": "#5fd179"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,81 @@
+<!-- desktop-header -->
+<div class="desktop-header header-01">
+  <div class="container">
+    <div class="pull-right">
+      <!-- box-info -->
+      <div class="box-info">{{ header_slogan }}</div>
+      <!-- /box-info -->
+      {% include "menu-language" %}
+      {% include "menu-currency" %}
+    </div>
+    <div class="pull-left">
+      {% include "menu-minimenu" %}
+    </div>
+  </div>
+  <div class="top-line">
+    <div class="container">
+      <div class="row">
+        {% if social_icons == '' or social_icons.settings.show_content or social_icons.settings.logo_left == false %}
+        <div class="col-md-4">
+          {% if social_icons != '' and social_icons.settings.show_content %}
+          <!-- social-icon -->
+          <div class="social-icon">
+            <ul>
+              {% if social_icons.settings.show_icon1 %}<li><a class="icon fa fa-facebook" href="{{ social_icons.settings.url_icon1 }}"></a></li>{% endif %}
+              {% if social_icons.settings.show_icon2 %}<li><a class="icon fa fa-twitter" href="{{ social_icons.settings.url_icon2 }}"></a></li>{% endif %}
+              {% if social_icons.settings.show_icon3 %}<li><a class="icon fa fa-google-plus" href="{{ social_icons.settings.url_icon3 }}"></a></li>{% endif %}
+              {% if social_icons.settings.show_icon4 %}<li><a class="icon fa fa-instagram" href="{{ social_icons.settings.url_icon4 }}"></a></li>{% endif %}
+            </ul>
+          </div>
+          <!-- /social-icon -->
+          {% endif %}
+        </div>
+        <div class="col-md-4 text-center">
+          <!-- logo -->
+          <div class="logo" itemscope itemtype="http://schema.org/Organization">
+            <a href="/" itemprop="url">
+              {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+              {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}" itemprop="logo"/>
+              {% endif %}
+            </a>
+          </div>
+          <!-- /logo -->
+        </div>
+        {% else %}
+        <div class="col-md-8">
+          <!-- logo -->
+          <div class="logo">
+            <a href="/">
+              {% if headerlogo contains "title_" %}<h2>{{ headerlogo | split:"title_" | last }}</h2>
+              {% else %}<img src="{{ headerlogo }}" alt="{{ headerlogoalt }}"/>
+              {% endif %}
+            </a>
+          </div>
+          <!-- /logo -->
+        </div>
+        {% endif %}
+        <div class="col-md-4 text-right">
+          {% include "menu-customer" %}
+          <!-- cart -->
+          <div class="main-parent-cart">
+            {% include "menu-cart" %}
+          </div>
+          <!-- /cart -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="top-line">
+    <div class="container">
+      <div class="pull-left">
+        <div class="menu-parent-box">
+          {% include "main-menu" %}
+        </div>
+      </div>
+      <div class="pull-right">
+        {% include "menu-search" %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- /desktop-header -->

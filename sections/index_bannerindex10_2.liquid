@@ -1,0 +1,276 @@
+{% for block in section.blocks limit:6 %}
+{% assign item = block.settings %}
+{% if forloop.index == 1 %}{% capture ban_1 %}{% include "index_bannerindex10_2_1" %}{% endcapture %}{% endif %}
+{% if forloop.index == 2 %}{% capture ban_2 %}{% include "index_bannerindex10_2_1" %}{% endcapture %}{% endif %}
+{% if forloop.index == 3 %}{% capture ban_3 %}{% include "index_bannerindex10_2_2" %}{% endcapture %}{% endif %}
+{% if forloop.index == 4 %}{% capture ban_4 %}{% include "index_bannerindex10_2_2" %}{% endcapture %}{% endif %}
+{% if forloop.index == 5 %}{% capture ban_5 %}{% include "index_bannerindex10_2_1" %}{% endcapture %}{% endif %}
+{% if forloop.index == 6 %}{% capture ban_6 %}{% include "index_bannerindex10_2_1" %}{% endcapture %}{% endif %}
+{% endfor %}
+<div class="container-fluid{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row indent-col-none custom-layout">
+    <div class="col-sm-6">
+      <div class="row indent-col-none">
+        <div class="col-xs-6 col-md-6">{{ ban_1 }}</div>
+        <div class="col-xs-6 col-md-6">{{ ban_2 }}</div>
+      </div>
+      <div class="row">{{ ban_3 }}</div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">{{ ban_4 }}</div>
+      <div class="row indent-col-none">
+        <div class="col-xs-6 col-md-6">{{ ban_5 }}</div>
+        <div class="col-xs-6 col-md-6">{{ ban_6 }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Banners Index 10_2",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "select",
+          "id": "align",
+          "label": "Description Align",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "textdesign",
+          "label": "Big Banner Text Size",
+          "default": "9",
+          "options": [
+            {
+              "value": "9",
+              "label": "Big"
+            },
+            {
+              "value": "6",
+              "label": "Small"
+            }
+          ]
+        },
+        {
+        "type": "textarea",
+          "id": "content",
+          "label": "Text 1",
+          "default": "MyShop is Dedicated"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text 2",
+          "default": "Women's"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "buttondesign",
+          "label": "Button Design",
+          "default": "default",
+          "options": [
+            {
+              "value": "default",
+              "label": "Default"
+            },
+            {
+              "value": "border",
+              "label": "Border"
+            },
+            {
+              "value": "underline",
+              "label": "Underline"
+            }
+          ]
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text 1 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_title2",
+          "label": "Text 2 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtnbg",
+          "label": "Background Color",
+          "default": "#5fd179"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtnbg",
+          "label": "Active Background Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banners Index 10_2",
+      "category": "Banner",
+      "blocks": [
+        {
+          "type": "item",
+		  "settings": {
+            "title": "Women's",
+            "buttondesign": "underline",
+            "color_title": "#333333",
+            "color_title2": "#333333",
+            "cbtnbg": "#5fd179",
+            "cbtntext": "#5fd179",
+            "acbtnbg": "#5fd179",
+            "acbtntext": "#5fd179"
+		  }
+        },
+        {
+          "type": "item",
+		  "settings": {
+            "title": "Men’s",
+            "buttondesign": "underline",
+            "color_title": "#333333",
+            "color_title2": "#333333",
+            "cbtnbg": "#5fd179",
+            "cbtntext": "#5fd179",
+            "acbtnbg": "#5fd179",
+            "acbtntext": "#5fd179"
+		  }
+        },
+        {
+          "type": "item",
+		  "settings": {
+			"content": "Grow your Business",
+            "title": "With MyShop",
+            "buttondesign": "default",
+            "cbtnbg": "#fe4135"
+		  }
+        },
+        {
+          "type": "item",
+		  "settings": {
+			"textdesign": "6",
+			"content": "MyShop is Dedicated",
+            "title": "Ecommerce Theme with<br>Increadible Features",
+            "buttondesign": "border",
+            "cbtnbg": "#ffffff"
+		  }
+        },
+        {
+          "type": "item",
+		  "settings": {
+            "title": "Shoes",
+            "buttondesign": "underline",
+            "color_title": "#333333",
+            "color_title2": "#333333",
+            "cbtnbg": "#5fd179",
+            "cbtntext": "#5fd179",
+            "acbtnbg": "#5fd179",
+            "acbtntext": "#5fd179"
+		  }
+        },
+        {
+          "type": "item",
+		  "settings": {
+            "title": "Sunglasses",
+            "buttondesign": "underline",
+            "color_title": "#333333",
+            "color_title2": "#333333",
+            "cbtnbg": "#5fd179",
+            "cbtntext": "#5fd179",
+            "acbtnbg": "#5fd179",
+            "acbtntext": "#5fd179"
+		  }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,162 @@
+{%- capture info_image_size -%}960x900px{%- endcapture -%}
+<div class="container-fluid{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row indent-col-none custom-layout">
+    {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}{%- assign item = block.settings -%}
+    <div class="col-sm-6" {{ block.shopify_attributes }}>
+      <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-08" data-hovercolors>
+        {% if item.image == blank %}{% include "get_svg" type:'image' size:info_image_size %}
+        {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+        {% endif %}
+        {% if item.showdescription %}
+        <div class="description">
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if item.content != '' %}<p style="color:{{ item.color_title }}">{{ item.content }}</p>{% endif %}
+              {% if item.title != '' %}<div class="title" style="color:{{ item.color_title2 }}">{{ item.title }}</div>{% endif %}
+              {% if item.showbtn %}<span class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+        {% endif %}
+      </a>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Banners Index 10_1",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+        "type": "textarea",
+          "id": "content",
+          "label": "Text 1",
+          "default": "Get Ready for Website Creation Unlike"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Text 2",
+          "default": "Anything You Have Ever Seen"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text 1 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_title2",
+          "label": "Text 2 Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtnbg",
+          "label": "Background Color",
+          "default": "#5fd179"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtnbg",
+          "label": "Active Background Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Banners Index 10_1",
+      "category": "Banner",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item",
+          "settings": {
+            "content": "Our Experience Gives us the Ability to",
+            "title": "Create Stunning Webstore",
+            "cbtnbg": "#fe4135"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

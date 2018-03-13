@@ -1,0 +1,377 @@
+{% assign social_icons = '' %}
+{% assign listinformation = '' %}
+{% assign contactform = '' %}
+{% assign map = '' %}
+
+{% for block in section.blocks %}
+{% if block.type == 'social_icons' and block.settings.show_content %}{% assign social_icons = block %}{% endif %}
+{% if block.type == 'listinformation' and block.settings.show_content %}{% assign listinformation = block %}{% endif %}
+{% if block.type == 'contact_form' and block.settings.show_content %}{% assign contactform = block %}{% endif %}
+{% if block.type == 'map' and block.settings.show_content %}{% assign map = block.settings %}{% endif %}
+{% endfor %}
+
+{% capture grid1 %}{%- if contactform != '' -%}5{%- else -%}12{%- endif -%}{% endcapture %}
+{% capture grid2 %}{%- if listinformation != '' or social_icons != '' -%}7{%- else -%}12{%- endif -%}{% endcapture %}
+
+{% if section.settings.design == 'design1' %}
+<div class="container offset-18">
+  <h1 class="block-title large">{{ section.settings.title }}</h1>
+  {% if section.settings.slogan != '' %}<div class="information-block">{{ section.settings.slogan }}</div>{% endif %}
+  <div class="row">
+    {% if listinformation != '' or social_icons != '' %}
+    <div class="col-sm-{{ grid1 }} offset-98">
+      <h2 class="block-title big text-left text-capitalize">{{ section.settings.title2 }}</h2>
+      <div class="contact-layout-02">
+        {% include "contact_listinformation" %}
+        {% include "footer_socialicons" %}
+      </div>
+    </div>
+    {% endif %}
+    {% if contactform != '' %}
+    <div class="col-sm-{{ grid2 }} offset-98">
+      {% include 'contact_form' %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% else %}
+<div class="container  text-center offset-14">
+  <h1 class="block-title large">{{ section.settings.title }}</h1>
+  <div class="contact-layout-01">
+    <div class="information-block-01">{{ section.settings.slogan }}</div>
+    {% if listinformation != '' and listinformation.settings.show_content %}
+    <ul class="list-information-center">
+      {% if listinformation.settings.show_field1 %}<li>{{ listinformation.settings.text1 }}</li>{% endif %}
+      {% if listinformation.settings.show_field2 %}<li>{{ listinformation.settings.text2 }}</li>{% endif %}
+      {% if listinformation.settings.show_field3 %}<li>{{ listinformation.settings.text3 }}</li>{% endif %}
+      {% if listinformation.settings.show_field4 %}<li>{{ listinformation.settings.text4 }} <a href="mailto:{{ listinformation.settings.email }}">{{ listinformation.settings.email }}</a></li>{% endif %}
+      {% if listinformation.settings.show_field5 %}<li>{{ listinformation.settings.text5 }}</li>{% endif %}
+    </ul>
+    {% endif %}
+    {% include "footer_socialicons" %}
+  </div>
+</div>
+{% if contactform != '' %}
+<div class="container offset-90">
+  {% include 'contact_form' titlecenter:"true" %}
+</div>
+{% endif %}
+{% endif %}
+
+{% if map != '' and map.show_content %}
+<div class="container-fluid">
+  <div class="row{% if map.bigmap %} contact-map{% endif %}">
+    <div id="map"></div>
+  </div>
+</div>
+<div class="clear-gap"></div>
+
+{% comment %}
+
+API
+
+https://developers.google.com/maps/documentation/geocoding/get-api-key
+https://developers.google.com/maps/documentation/javascript/get-api-key
+
+{% endcomment %}
+{% capture api %}{% if map.api != '' %}&key={{ map.api }}{% endif %}{% endcapture %}
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?sensor=false{{ api }}"></script>
+
+<script>
+  // When the window has finished loading create our google map below
+  google.maps.event.addDomListener(window, 'load', init);
+
+  var x = ('{{ map.textx }}');
+  var y = ('{{ map.texty }}');
+
+  function init() {
+    // Basic options for a simple Google Map
+    // For more options see: https://developers.google.com/maps/documentation/javascript/reference#MapOptions
+    var mapOptions = {
+      // How zoomed in you want the map to start at (always required)
+      zoom: {{ map.zoom }},
+
+      // The latitude and longitude to center the map (always required)
+      center: new google.maps.LatLng(x, y), // New York
+
+      scrollwheel:  false,
+
+      // How you would like to style the map. 
+      // This is where you would paste any style found on Snazzy Maps.
+      styles: [{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#abd0fa"}]},{"featureType":"transit","stylers":[{"color":"#808080"},{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#e1d9c6"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#eee9da"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"000"},{"weight":1.8}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"color":"#d7d7d7"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ebebeb"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#eee9da"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#fffbf8"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#fffbf8"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#fbf7ee"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#d6d6d6"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"visibility":"on"},{"color":"#3c3424"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#d6d6d6"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#aee9c6"}]}]
+    };
+
+    // Get the HTML DOM element that will contain your map 
+    // We are using a div with id="map" seen below in the <body>
+    var mapElement = document.getElementById('map');
+
+    // Create the Google Map using our element and options defined above
+    var map = new google.maps.Map(mapElement, mapOptions);
+
+    var image = "{{ 'beachflag.png' | asset_url }}";
+
+    var marker = new google.maps.Marker({
+      position: new google.maps.LatLng(x, y),
+      map: map,           
+      icon : image,
+      title: '{{ map.text2 }}'
+    });
+  }
+</script>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Page Settings",
+    "settings": [
+      {
+        "type": "select",
+        "id": "design",
+        "label": "Select Header Design",
+        "options": [
+          {
+            "value": "design1",
+            "label": "Design Left"
+          },
+          {
+            "value": "design2",
+            "label": "Design Center"
+          }
+        ],
+        "default": "design1"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "Get in Touch"
+      },
+      {
+        "type": "textarea",
+        "id": "slogan",
+        "label": "Slogan",
+        "default": "Contact us for any further questions, possible projects and business partnerships."
+      },
+      {
+        "type": "text",
+        "id": "title2",
+        "label": "Title Contacts",
+        "default": "Contacts"
+      }
+	],
+    "blocks": [
+      {
+        "type": "map",
+        "name": "Google Map",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "api",
+            "label": "API",
+			"info": "[Get Api Key](https://developers.google.com/maps/documentation/javascript/get-api-key)"
+          },
+          {
+            "type": "checkbox",
+            "id": "bigmap",
+            "label": "Big Size Map",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "textx",
+            "label": "Coordinate X",
+			"default": "40.6700",
+			"info": "Integer"
+          },
+          {
+            "type": "text",
+            "id": "texty",
+            "label": "Coordinate Y",
+			"default": "-73.9400",
+			"info": "Integer"
+          },
+          {
+            "type": "text",
+            "id": "zoom",
+            "label": "Zoom",
+			"default": "11",
+			"info": "Integer"
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Map Text",
+			"default": "New York"
+          }
+        ]
+      },
+      {
+        "type": "listinformation",
+        "name": "Contacts Information",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field1",
+            "label": "Show Address",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "text1",
+            "label": "Address",
+			"default": "Address : 7563 St. Vicent Place, Glasgow"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field2",
+            "label": "Show Phone",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "text2",
+            "label": "Phone",
+			"default": "Phone: +777 2345 7885; +777 2345 7886"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field3",
+            "label": "Show Time",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "text3",
+            "label": "Time",
+			"default": "Hours: 7 Days a week from 10:00 am to 6:00 pm"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field4",
+            "label": "Show Email",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "text4",
+            "label": "Email Title",
+			"default": "E-mail: "
+          },
+          {
+            "type": "text",
+            "id": "email",
+            "label": "Email",
+			"default": "info@mydomain.com"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field5",
+            "label": "Show Custom Html",
+            "default": false
+          },
+          {
+            "type": "textarea",
+            "id": "text5",
+            "label": "Custom Html"
+          }
+        ]
+      },
+      {
+        "type": "contact_form",
+        "name": "Contact Form",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field1",
+            "label": "Show Name",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_field3",
+            "label": "Show Telephone",
+            "default": true
+          }
+		]
+	  },
+      {
+        "type": "social_icons",
+        "name": "Social Icons",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon1",
+            "label": "Show Facebook",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon1",
+            "label": "Facebook Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon2",
+            "label": "Show Twitter",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon2",
+            "label": "Twitter Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon3",
+            "label": "Show Gmail",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon3",
+            "label": "Gmail Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon4",
+            "label": "Show Instagram",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon4",
+            "label": "Instagram Link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

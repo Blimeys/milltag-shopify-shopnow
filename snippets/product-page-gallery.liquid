@@ -1,0 +1,19 @@
+{% if type == "default" %}
+
+{% if settings.product_header_type == 'bullets' %}
+{% include 'product-page-gallery-scroll' %}
+{% else %}
+{% include 'product-page-gallery-default' %}
+{% endif %}
+
+{% else %}
+
+<div class="visible-xs">
+  <div class="clearfix"></div>
+  <ul class="mobileGallery-product">
+    {% for image in product.images %}<li><img src="{{ image.src | product_img_url: '1024x1024' }}" alt="{{ image.alt }}" /></li>{% endfor %}
+    {% include 'product-page-gallery-video' tagopen:'<li>' tagclose:'</li>' %}
+  </ul>
+</div>
+
+{% endif %}

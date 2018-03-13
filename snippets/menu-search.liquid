@@ -1,0 +1,15 @@
+<!-- search -->
+<div class="search">
+  <a href="#" class="search-open"><span class="icon icon-search"></span></a>
+  <div class="search-dropdown">
+    <form action="/search" method="get">
+      <div class="input-outer">
+        <input type="hidden" name="type" value="product" />
+        <input type="text" name="q" value="" maxlength="128" placeholder="{{ 'general.search.place_holder' | t }}">
+        <button type="submit" class="btn-search"><span>{{ 'layout.header.search' | t }}</span></button>
+      </div>
+      <a href="#" class="search-close"><span class="icon icon-close"></span></a>
+    </form>
+  </div>
+</div>
+<!-- /search -->

@@ -1,0 +1,620 @@
+{% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+{% capture footerlogo %}{% if section.settings.logo != blank %}{{ section.settings.logo | img_url: image_size }}{% else %}title_{{ section.settings.logo_text }}{% endif %}{% endcapture %}
+{% assign footerlogoalt = section.settings.logo.alt %}
+
+{% assign footer_address = section.settings.footer_address %}
+{% assign pay_icons = '' %}
+{% assign footer_design = '' %}
+{% assign subscribe_form = '' %}
+{% assign social_icons = '' %}
+{% assign info_block = '' %}
+
+{% for block in section.blocks %}
+{% if block.type == 'pay_icons' %}{% assign pay_icons = block %}{% endif %}
+{% if block.type == 'subscribe_form' %}{% assign subscribe_form = block %}{% endif %}
+{% if block.type == 'social_icons' %}{% assign social_icons = block %}{% endif %}
+{% if block.type == 'info_block' %}{% assign info_block = block %}{% endif %}
+{% if block.type contains 'footer_design' and footer_design == '' %}{% assign footer_design = block %}{% endif %}
+{% endfor %}
+
+<footer{% if section.settings.show_line %} class="top-line"{% endif %}{% if section.settings.top_main_gap and template == 'index' %} data-nomargin{% endif %}>
+  {% if subscribe_form != '' %}{% include 'footer_subscribe' %}{% endif %}
+  {% if footer_design != '' %}{% include footer_design.type %}{% endif %}
+  
+  {% unless footer_design.settings.position == 'position3' %}{% include 'footer_copyright' %}{% endunless %}
+  <a href="#" class="back-to-top">
+    <span class="icon icon-keyboard_arrow_up"></span>
+    <span class="text">{{ 'general.to_top_button.back_to_top' | t }}</span>
+  </a>
+</footer>
+{% stylesheet %}
+[data-nomargin]{
+margin: 0 !important;
+}
+{% endstylesheet %}
+{% schema %}
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "top_main_gap",
+        "label": "Disable Footer Top Gap",
+        "default": false,
+		"info": "Only for index page"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_line",
+        "label": "Show Footer Top Line",
+        "default": false
+      },
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo Text",
+        "default": "MyShop",
+		"info": "Work when logo image is empty."
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Main",
+		"info": "210x66px"
+      },
+      {
+        "type": "text",
+        "id": "logo_max_width",
+        "label": "Logo Main width (in pixels)",
+        "default": "210"
+      },
+      {
+        "type": "header",
+        "content": "Footer Address Field"
+      },
+      {
+        "type": "checkbox",
+        "id": "center_footer_address",
+        "label": "Center Copyright",
+        "default": false,
+		"info": "Payment Icons will be hide(Block Payment Icons)"
+      },
+      {
+        "type": "textarea",
+        "id": "footer_address",
+        "label": "Copyright",
+		"default": "<a href='\/'>MyShop<\/a> &copy; 2017. <span>All Rights Reserved.<\/span>"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_payment_icons",
+        "label": "Show Payment Icons",
+        "default": true
+      }
+	],
+    "blocks": [
+      {
+        "type": "subscribe_form",
+        "name": "Subscribe Form",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "text1",
+            "label": "Title",
+            "default": "GET THE LATEST NEWS DELIVERED DAILY!"
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Content",
+            "default": "Give us your email and you will be daily updated with the latest events, in detail!"
+          },
+          {
+            "type": "text",
+            "id": "text3",
+            "label": "Button",
+            "default": "SUBSCRIBE"
+          },
+          {
+            "type": "textarea",
+            "id": "text4",
+            "label": "Form Message",
+            "default": "Enter please your e-mail"
+          }
+        ]
+      },
+      {
+        "type": "footer_design1",
+        "name": "Footer Design 1",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_logoblock",
+            "label": "Show Logo Block",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Footer Links"
+          },
+          {
+            "type": "text",
+            "id": "linklist_t1",
+			"label": "Title 1",
+            "default": "Title 1"
+          },
+          {
+            "type": "link_list",
+            "id": "linklist1",
+            "label": "Navigation Link List 1"
+          },
+          {
+            "type": "checkbox",
+            "id": "linklist_showhtml1",
+            "label": "Block 1 Custom Html",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "linklist_html1",
+            "label": "Block 1 Custom Html"
+          },
+          {
+            "type": "text",
+            "id": "linklist_t2",
+			"label": "Title 2",
+            "default": "Title 2"
+          },
+          {
+            "type": "link_list",
+            "id": "linklist2",
+            "label": "Navigation Link List 2"
+          },
+          {
+            "type": "checkbox",
+            "id": "linklist_showhtml2",
+            "label": "Block 2 Custom Html",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "linklist_html2",
+            "label": "Block 2 Custom Html"
+          },
+          {
+            "type": "text",
+            "id": "linklist_t3",
+			"label": "Title 3",
+            "default": "Title 3"
+          },
+          {
+            "type": "link_list",
+            "id": "linklist3",
+            "label": "Navigation Link List 3"
+          },
+          {
+            "type": "checkbox",
+            "id": "linklist_showhtml3",
+            "label": "Block 3 Custom Html",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "linklist_html3",
+            "label": "Block 3 Custom Html"
+          },
+          {
+            "type": "text",
+            "id": "linklist_t4",
+			"label": "Title 4",
+            "default": "Title 4"
+          },
+          {
+            "type": "link_list",
+            "id": "linklist4",
+            "label": "Navigation Link List 4"
+          },
+          {
+            "type": "checkbox",
+            "id": "linklist_showhtml4",
+            "label": "Block 4 Custom Html",
+            "default": true
+          },
+          {
+            "type": "textarea",
+            "id": "linklist_html4",
+            "label": "Block 4 Custom Html",
+			"default": "<div class=\"list-info\">\n\t<ul>\n\t\t<li>Address: 7563 St. Vicent Place, Glasgow<\/li>\n\t\t<li>Phone: +777 2345 7885<\/li>\n\t\t<li>Fax: +777 2345 7886<\/li>\n\t\t<li>Hours: 7 Days a week from 10:00 am<\/li>\n\t\t<li>E-mail: <a href=\"mailto:info@mydomain.com\">info@mydomain.com<\/a>\n<\/li>\n\t<\/ul>\n<\/div>"
+          }
+        ]
+      },
+      {
+        "type": "footer_design2",
+        "name": "Footer Design 2",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "select",
+            "id": "position",
+            "label": "Elements Position",
+            "options": [
+              {
+                "value": "position1",
+                "label": "Position 1"
+              },
+              {
+                "value": "position2",
+                "label": "Position 2"
+              },
+              {
+                "value": "position3",
+                "label": "Position 3"
+              }
+            ],
+            "default": "position1"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_logo",
+            "label": "Show Logo",
+            "default": true
+          },
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Main Menu"
+          },
+          {
+            "type": "header",
+            "content": "Custom Html"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_customhtml",
+            "label": "Show Custom Html",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "customhtml_title",
+            "label": "Tilte",
+			"default": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "customhtml",
+            "label": "Custom Html",
+			"default": "<ul>\r\n<li>Address: 7563 St. Vicent Place, Glasgow<\/li>\r\n<li>Phone: +777 2345 7885<\/li>\r\n<li>Fax: +777 2345 7886<\/li>\r\n<li>Hours: 7 Days a week from 10:00 am<\/li>\r\n<li>E-mail: <a href=\"mailto:info@mydomain.com\">info@mydomain.com<\/a>\r\n<\/li>\r\n<\/ul>"
+          }
+        ]
+      },
+      {
+        "type": "pay_icons",
+        "name": "Payment Icons",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_1",
+            "label": "Payment Icon 1",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_1",
+            "label": "Payment Link 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_2",
+            "label": "Payment Icon 2",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_2",
+            "label": "Payment Link 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_3",
+            "label": "Payment Icon 3",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_3",
+            "label": "Payment Link 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_4",
+            "label": "Payment Icon 4",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_4",
+            "label": "Payment Link 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_5",
+            "label": "Payment Icon 5",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_5",
+            "label": "Payment Link 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_6",
+            "label": "Payment Icon 6",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_6",
+            "label": "Payment Link 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_7",
+            "label": "Payment Icon 7",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_7",
+            "label": "Payment Link 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "pay_icon_8",
+            "label": "Payment Icon 8",
+            "info": "36x24px"
+          },
+          {
+            "type": "url",
+            "id": "pay_url_8",
+            "label": "Payment Link 8"
+          }
+        ]
+      },
+      {
+        "type": "social_icons",
+        "name": "Social Icons",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon1",
+            "label": "Show Facebook",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon1",
+            "label": "Facebook Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon2",
+            "label": "Show Twitter",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon2",
+            "label": "Twitter Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon3",
+            "label": "Show Gmail",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon3",
+            "label": "Gmail Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon4",
+            "label": "Show Instagram",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon4",
+            "label": "Instagram Link"
+          }
+        ]
+      },
+      {
+        "type": "info_block",
+        "name": "Info Block",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "Work with \"Footer Design 1\""
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Item 1"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content1",
+            "label": "Show Item 1",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "link1",
+            "label": "Link 1",
+            "info": "Optional"
+          },
+          {
+            "type": "text",
+            "id": "item_title1",
+            "label": "Title 1",
+            "default": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "text1",
+            "label": "Text 1",
+            "default": "Free on all products"
+          },
+          {
+            "type": "text",
+            "id": "item_icon1",
+            "label": "Material Icon",
+            "default": "airplanemode_active",
+            "info": "[Material Icons](https:\/\/material.io\/icons\/#ic_desktop_mac)"
+          },
+          {
+            "type": "header",
+            "content": "Item 2"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content2",
+            "label": "Show Item 2",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "link2",
+            "label": "Link 2",
+            "info": "Optional"
+          },
+          {
+            "type": "text",
+            "id": "item_title2",
+            "label": "Title 2",
+            "default": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Text 2",
+            "default": "Free on all products"
+          },
+          {
+            "type": "text",
+            "id": "item_icon2",
+            "label": "Material Icon",
+            "default": "security",
+            "info": "[Material Icons](https:\/\/material.io\/icons\/#ic_desktop_mac)"
+          },
+          {
+            "type": "header",
+            "content": "Item 3"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content3",
+            "label": "Show Item 3",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "link3",
+            "label": "Link 3",
+            "info": "Optional"
+          },
+          {
+            "type": "text",
+            "id": "item_title3",
+            "label": "Title 3",
+            "default": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "text3",
+            "label": "Text 3",
+            "default": "Free on all products"
+          },
+          {
+            "type": "text",
+            "id": "item_icon3",
+            "label": "Material Icon",
+            "default": "assignment_return",
+            "info": "[Material Icons](https:\/\/material.io\/icons\/#ic_desktop_mac)"
+          },
+          {
+            "type": "header",
+            "content": "Item 4"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content4",
+            "label": "Show Item 4",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "link4",
+            "label": "Link 4",
+            "info": "Optional"
+          },
+          {
+            "type": "text",
+            "id": "item_title4",
+            "label": "Title 4",
+            "default": "Title"
+          },
+          {
+            "type": "textarea",
+            "id": "text4",
+            "label": "Text 4",
+            "default": "Free on all products"
+          },
+          {
+            "type": "text",
+            "id": "item_icon4",
+            "label": "Material Icon",
+            "default": "headset_mic",
+            "info": "[Material Icons](https:\/\/material.io\/icons\/#ic_desktop_mac)"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

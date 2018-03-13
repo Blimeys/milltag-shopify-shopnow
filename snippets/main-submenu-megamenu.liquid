@@ -1,0 +1,227 @@
+{% assign grid = section_block.grid %}
+{% assign widget = section_block.widget %}
+
+{% case grid %}
+{% when '2' %}
+{% assign img_url = '200x' %}
+{% when '3' %}
+{% assign img_url = '300x' %}
+{% else %}
+{% assign img_url = '400x' %}
+{% endcase %}
+
+{% case widget %}
+{% when 'gallery' %}
+{% assign maingrid1 = '7' %}
+{% assign maingrid2 = '5' %}
+{% when 'banner' %}
+{% assign maingrid1 = '7' %}
+{% assign maingrid2 = '5' %}
+{% else %}
+{% assign maingrid1 = '12' %}
+{% assign maingrid2 = '0' %}
+{% endcase %}
+
+{% assign imgs = section_block.megamenu_images %}
+{% if imgs != "" %}{% assign imgs = imgs | split: ',' %}{% endif %}
+
+{% assign banners_grid = section_block.banners_grid %}
+{% assign banners_btn = section_block.banners_btn %}
+{% assign banners_btnname = section_block.banners_btnname %}
+{% assign banners_tit1 = section_block.banners_tit1 %}
+{% assign banners_tit2 = section_block.banners_tit2 %}
+{% capture banners_img1 %}{% if banners_grid == '12' %}{{ section_block.bottombanners_img_1 | img_url: '1120x' }}{% else %}{{ section_block.bottombanners_img_1 | img_url: '560x' }}{% endif %}{% endcapture %}
+{% assign banners_img1alt = section_block.bottombanners_img_1.alt %}
+{% assign banners_img2 = section_block.bottombanners_img_2 | img_url: '560x' %}
+{% assign banners_img2alt = section_block.bottombanners_img_2.alt %}
+{% assign position1 = section_block.position1 %}
+{% assign position2 = section_block.position2 %}
+{% assign color11 = section_block.color_11 %}
+{% assign color12 = section_block.color_12 %}
+{% assign color21 = section_block.color_21 %}
+{% assign color22 = section_block.color_21 %}
+{% assign html = section_block.html %}
+
+{% assign widgetbanner_url = section_block.widgetbanner_url %}
+{% assign widgetbanner_title = section_block.widgetbanner_title %}
+{% assign widgetbanner_img = section_block.widgetbanner_img %}
+{% assign widgetbanner_imgalt = section_block.widgetbanner_img.alt %}
+{% assign widgetbanner_btn = section_block.widgetbanner_btn %}
+{% assign widgetbanner_btnname = section_block.widgetbanner_btnname %}
+{% assign widgetbanner_color = section_block.widgetbanner_color %}
+
+{% assign titlegall = section_block.widgetgallery_title %}
+{% assign titlegallurl = section_block.widgetgallery_url %}
+{% assign name_collection = section_block.collection %}
+{% assign collection_limit = section_block.collection_limit | plus:0 %}
+
+<div class="dropdown-menu">
+  <div class="row custom-layout-02">
+    <div class="col-sm-{{ maingrid1 }}">
+      <div class="row menu-list-col">
+        {% for child_level_2 in level_2.links %}
+        <div class="col-sm-{{ grid }}">
+          <a href="{{ child_level_2.url }}" class="title-underline">
+            <span>{{ child_level_2.title }}</span>
+            {%- assign image = 'image' | append: forloop.index -%}
+            {%- if section_block[image] != blank -%}
+            <span class="megamenu_category-image hidden-xs"><img class="img-responsive" src="{{ section_block[image] | img_url: img_url }}" alt="{{ section_block[image].alt }}"/></span>
+            {%- endif -%}
+          </a>
+          
+          {% capture return %}{% include "get_linklist_dropdown", link: child_level_2 %}{% endcapture %}{% assign return = return | split: "%%" %}{% assign has_drop_down = return | first | strip %}{% assign child_list_handle = return | last | strip %}
+
+          {% assign level_3 = linklists[child_list_handle] %}
+          {% if level_3.empty? %}
+          {% assign child_list_handle = child_level_2.title | handle %}
+          {% assign level_3 = linklists[child_list_handle] %}
+          {% endif %}
+
+          {% if level_3.links != blank %}
+          <ul class="megamenu-submenu">
+            {% for child_level_3 in level_3.links %}
+            <li>
+              <a href="{{ child_level_3.url }}">{{ child_level_3.title }}</a>
+              
+              {% capture return %}{% include "get_linklist_dropdown", link: child_level_3 %}{% endcapture %}{% assign return = return | split: "%%" %}{% assign has_drop_down = return | first | strip %}{% assign child_list_handle = return | last | strip %}
+
+              {% assign level_4 = linklists[child_list_handle] %}
+              {% if level_4.empty? %}
+              {% assign child_list_handle = child_level_3.title | handle %}
+              {% assign level_4 = linklists[child_list_handle] %}
+              {% endif %}
+              
+              {% if level_4.links != blank %}
+              <ul>
+                {% for child_level_4 in level_4.links %}
+                <li>
+                  <a href="{{ child_level_4.url | downcase }}">{{ child_level_4.title }}</a>
+                  
+                  {% capture return %}{% include "get_linklist_dropdown", link: child_level_4 %}{% endcapture %}{% assign return = return | split: "%%" %}{% assign has_drop_down = return | first | strip %}{% assign child_list_handle = return | last | strip %}
+
+                  {% if has_drop_down == "true" %}
+                  {% assign level_5 = linklists[child_list_handle] %}
+                  {% unless level_5.empty? %}
+                  <ul>
+                    {% for child_level_5 in level_5.links %}
+                    <li><a href="{{ child_level_5.url | downcase }}">{{ child_level_5.title }}</a></li>
+                    {% endfor %}
+                  </ul>
+                  {% endunless %}
+                  {% endif %}
+                </li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            </li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% if maingrid2 != '0' %}
+    <div class="col-sm-{{ maingrid2 }}">
+      {% case widget %}
+      {% when 'gallery' %}
+      {%- if name_collection == blank -%}{%- assign name_collection = "all" -%}{%- endif -%}
+      {%- assign collection = collections[name_collection] -%}
+      <a href="{{ titlegallurl }}" class="menu-title">{{ titlegall }}</a>
+      <div class="row">
+        <div class="carousel-menu-1 header-menu-product carouselTab slick-arrow-top">
+          {% for product in collection.products limit:collection_limit %}
+          {% assign product_meta = product.metafields.description %}
+          {% comment %} Price to show. {% endcomment %}
+          {% assign sale_on = false %}
+          {% assign shownewicon = false %}
+          {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+          {% assign sale_on = true %}
+          {% endif %}
+          <div>
+            <div class="product">
+              <div class="product_inside">
+                <a href="{{ product.url | within: collection }}">
+                  <div class="image-box">
+                    <img src="{{ product.featured_image | product_img_url: 'grande' }}" alt="{{ product.featured_image.alt | escape }}"/>
+                    {% if sale_on and product_meta.icon_sale != 'disable' %}
+                    <div class="label-sale left">{{ 'products.general.sale' | t }}</div>
+                    {% endif %}
+                  </div>
+                  <h2 class="title">{{ product.title }}</h2>
+                  {% if sale_on %}
+                  <div class="price"><span class="new-price">{{ product.selected_or_first_available_variant.price | money }}</span></div>
+                  {% else %}
+                  <div class="price">{{ product.selected_or_first_available_variant.price | money }}</div>
+                  {% endif %}
+                </a>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% when 'banner' %}
+      <a href="{{ widgetbanner_url }}" class="promo-box zoom-in design-13">
+        {% if widgetbanner_img == blank %}{% include "get_svg" type:'image' size:'404x433px' %}
+        {% else %}<img src="{{ widgetbanner_img | img_url: '410x' }}" alt="{{ widgetbanner_imgalt }}">
+        {% endif %}
+        <div class="description">
+          <div class="block-table">
+            <div class="block-table-cell">
+              <div class="title title-md" style="color:{{ widgetbanner_color }}">{{ widgetbanner_title }}</div>
+              {% if widgetbanner_btn %}<span class="btn ">{{ widgetbanner_btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endcase %}
+    </div>
+    {% endif %}
+  </div>
+  {% comment %}Banners{% endcomment %}
+  {% unless banners_grid == 'none' %}
+  <div class="row custom-layout-03">
+    {% if banners_grid == 'customhtml' %}
+    <div class="col-xs-12">{{ html }}</div>
+    {% else %}
+    <div class="col-xs-{{ banners_grid }}">
+      <a href="listing-left-column.html" class="promo-box zoom-in design-12">       
+        {% if section_block.bottombanners_img_1 == blank %}
+        {% if banners_grid == '12' %}{% include "get_svg" type:'image' size:'1094x160px' %}
+        {% else %}{% include "get_svg" type:'image' size:'542x160px' %}
+        {% endif %}
+        {% else %}<img src="{{ banners_img1 }}" alt="{{ banners_img1alt }}">
+        {% endif %}
+        <div class="description{% if position1 == 'left' or position1 == 'right' %} point-{{ position1 }}{% endif %}">
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if banners_tit1 %}<div class="title" style="color:{{ color11 }}">{{ banners_tit1 }}</div>{% endif %}
+              {% if banners_btn %}<span class="btn btn-underline" style="color:{{ color12 }}; border-color:{{ color12 }};">{{ banners_btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% unless banners_grid == '12' %}
+    <div class="col-xs-{{ banners_grid }}">
+      <a href="listing-left-column.html" class="promo-box zoom-in design-12">
+        {% if section_block.bottombanners_img_2 == blank %}
+        {% include "get_svg" type:'image' size:'542x160px' %}
+        {% else %}<img src="{{ banners_img2 }}" alt="{{ banners_img2alt }}">
+        {% endif %}
+        <div class="description{% if position2 == 'left' or position2 == 'right' %} point-{{ position2 }}{% endif %}">
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if banners_tit2 %}<div class="title" style="color:{{ color21 }}">{{ banners_tit2 }}</div>{% endif %}
+              {% if banners_btn %}<span class="btn btn-underline" style="color:{{ color22 }}; border-color:{{ color22 }}; ">{{ banners_btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      </a>
+    </div>
+    {% endunless %}
+    {% endif %}
+  </div>
+  {% endunless %}
+</div>

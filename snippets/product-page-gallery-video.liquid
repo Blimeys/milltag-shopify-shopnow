@@ -1,0 +1,11 @@
+{% unless product_meta.video == blank %}
+{{ tagopen }}
+  <div data-value="{{ product_meta.video }}" class="video-link-product" data-toggle="modal" data-target="#modalVideoProduct">
+    <img src="{{ 'product-small-empty.png' | asset_url }}" alt="Video Slide">
+    <div>
+      <span class="icon icon-videocam"></span>
+      {% if settings.slider_video_text != '' %}<span class="title">{{ settings.slider_video_text }}</span>{% endif %}
+    </div>
+  </div>
+{{ tagclose }}
+{% endunless %}

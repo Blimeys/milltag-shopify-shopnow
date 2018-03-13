@@ -1,0 +1,30 @@
+{% capture sidebars_toright_html %}{% if settings.listing_page_design == "left-right-sidebar" %} detach-rightCol{% endif %}{% endcapture %}
+<div class="collapse-block open collapse-block-mobile">
+  <h3 class="collapse-block_title hidden">{{ 'collections.toolbar.filter' | t }}:</h3>
+  <div class="collapse-block_content">
+    <div class="filters-mobile">
+
+    </div>
+  </div>
+</div>
+
+{% if settings.show_collectionstab %}{% include "collection-sidebar-collections" %}{% endif %}
+
+{% include "collection-sidebar-filter-shopping" %}
+
+{% comment %}Filters{% endcomment %}
+
+{% capture value %}{% include "collection-sidebar-filter-x" index:1 %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:2 %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:3 %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:4 %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:5 %}{% endcapture %}{{ value | strip }}
+
+{% capture value %}{% include "collection-sidebar-filter-x" index:6 sidebars_toright:sidebars_toright_html %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:7 sidebars_toright:sidebars_toright_html %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:8 sidebars_toright:sidebars_toright_html %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:9 sidebars_toright:sidebars_toright_html %}{% endcapture %}{{ value | strip }}
+{% capture value %}{% include "collection-sidebar-filter-x" index:10 sidebars_toright:sidebars_toright_html %}{% endcapture %}{{ value | strip }}
+
+{% if settings.show_sidebar_collection %}{% include "collection-sidebar-products" sidebars_toright:sidebars_toright_html %}{% endif %}
+{% if settings.show_sidebar_customhtml %}{% include "collection-sidebar-customhtml" sidebars_toright:sidebars_toright_html %}{% endif %}

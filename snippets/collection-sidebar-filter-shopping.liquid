@@ -1,0 +1,52 @@
+{% assign count = 0 %}
+{% capture data %}{% for i in (1..10) %}
+{% assign group_data = 'filtergroup' | append: i %}
+{% assign group_key = 'show_' | append: group_data %}
+{% assign group_title = 'title_' | append: group_data %}
+{% assign tag_lang = ',' | append: settings[group_data] | strip_newlines %}
+{% capture value %}{% include 'get_current_sidebar_filters' key_access:group_key key_data:group_data %}{% endcapture %}
+
+{% if value != '' %}
+{% assign value = value | replace: 'amp;', '' | split: ',' %}{% for d in value %}{% assign count = count | plus: 1 %}
+{% if forloop.first %}<li>{{ settings[group_title] }}:</li>{% endif %}
+
+<li class="padding-left-10">
+  {%- assign regexp = ',' | append: d | append: '__' -%}
+  {%- capture tag_translate -%}{%- if tag_lang contains regexp -%}{{ tag_lang | split: regexp | last | split: ',' | first }}{%- else -%}{{ d }}{%- endif -%}{%- endcapture -%}
+  {%- assign value = d | handle -%}
+  
+  {%- assign value = '~' | append: value | append: '~' -%}
+
+  {% comment %}
+  {%- assign search = current_tags | join: '~~' | append: '~' -%}
+  {%- assign search = '~' | append: search -%}
+  {% endcomment %}
+  
+  {%- assign search = '~' -%}
+  {%- for t in current_tags -%}
+  {%- assign _t = t | replace: '&amp;', '' | handle -%}
+  {%- assign search = search | append: _t -%}
+  {%- if forloop.last %}{%- assign search = search | append: '~' -%}
+  {%- else -%}{%- assign search = search | append: '~~' -%}
+  {%- endif -%}
+  {%- endfor -%}
+
+  {%- assign search = search | remove: value | replace: '~~', '+' | replace: ' ', '-' | remove:'~' -%}
+  <a href="/collections/{{ collection.handle }}{% if search != '' %}/{{ search }}{% endif %}" class="link-close icon icon-close" title="{{ 'collections.sidebar.text_remove_parameter' | t }} {{ tag_translate }}"></a><span class="color-base">{{ tag_translate }}</span>
+</li>
+{% endfor %}{% endif %}{% endfor %}
+{% endcapture %}
+{% assign data = data | strip %}
+
+{% if count < current_tags.size %}
+{%- assign t = 'collections.sidebar.empty_search_parameter' | t -%}
+{%- assign data = data | append:'<li><a href="/collections/' | append: collection.handle | append: '" style="color:red;">' | append: t | append: '</a></li>' -%}
+{% endif %}
+
+<div class="collapse-block open{% if data == '' %} hide{% endif %}">
+  <h3 class="collapse-block_title ">{{ 'collections.sidebar.filtres_title' | t }}</h3>
+  <div class="collapse-block_content filtres-remove-js">
+    <ul class="filter-list filtres-js clear-filters">{{ data }}</ul>
+    <a href="/collections/{{ collection.handle }}" class="btn btn-underline color-defaulttext2 filtres-remove-js clear_all">{{ 'collections.sidebar.clear_all' | t }}</a>
+  </div>
+</div>

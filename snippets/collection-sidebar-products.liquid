@@ -1,0 +1,42 @@
+{% assign open = '' %}{% if settings.open_sidebar_collection %}{% assign open = 'open' %}{% endif %}
+{% assign name_collection = settings.sidebar_collection %}
+{% assign selected_collection = collections[name_collection].products %}
+<div class="collapse-block {{ open }}{{ sidebars_toright }}">
+  <h3 class="collapse-block_title ">{{ settings.sidebar_collection_title }}</h3>
+  <div class="collapse-block_content">
+    <div class="vertical-carousel arrow-style-2">
+      {% if name_collection == blank %}"select collection"
+      {% else %}
+      {% for product in selected_collection limit: 6 %}
+
+      {% comment %} Price to show. {% endcomment %}
+      {% assign sale_on = false %}
+      {% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+      {% assign sale_on = true %}
+      {% endif %}
+
+      {% comment %} Main Image URL. {% endcomment %}
+      {% assign main_url_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+
+      <a href="{{ product.url | within: collection }}" class="aside-featured-product">
+        <div class="product-img">
+          <img src="{{ main_url_image | product_img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}">
+        </div>
+        <div class="product-content">
+          <div class="title">{{ product.title | truncate: 13 }}</div>
+          {% if sale_on %}
+          <div class="price"><span class="new-price">{{ product.selected_or_first_available_variant.price | money }}</span><br><span class="old-price">{{ product.selected_or_first_available_variant.compare_at_price | money }}</span></div>
+          {% else %}
+          <div class="price">{{ product.selected_or_first_available_variant.price | money }}</div>
+          {% endif %}
+          {% if settings.product_item_show_rating %}
+          <div class="rating">
+            <span class="shopify-product-reviews-badge" data-id="{{ product.id }}"></span>
+          </div>
+          {% endif %}
+        </div>
+      </a>
+      {% endfor %}{% endif %}
+    </div>
+  </div>
+</div>

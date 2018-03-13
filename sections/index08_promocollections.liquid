@@ -1,0 +1,117 @@
+<div class="container{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row custom-layout">
+    {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}{%- assign item = block.settings -%}
+    {%- assign collection = collections[item.collection] -%}
+    {%- assign links = linklists[item.linklist].links -%}
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6" {{ block.shopify_attributes }}>
+      <div class="box-product-info image-bg" style="{% unless item.image == blank %}background-image: url({{ item.image | img_url: 'grande' }});{% endunless %} background-color:{{ item.color_bg }}">
+        <div class="title" style="color:{{ item.color_title }}">{% if item.custom_name != ''%}{{ item.custom_name }}{% else %}{{ collection.title }}{% endif %}</div>
+        {% if links.size > 0 %}
+        <ul>
+          {% for link in links %}
+          <li><a href="{{ link.url }}" style="color:{{ item.color_title }}" data-c="{{ item.color_title }}" data-ac="{{ item.color_hover }}" data-hovercolors>{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        {% if section.settings.showtitle %}<a href="{{ collection.url }}" class="btn-link" style="color:{{ item.color_title }}" data-c="{{ item.color_title }}" data-ac="{{ item.color_hover }}" data-hovercolors>{{ section.settings.title }}</a>{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Layout 08 Promo",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "showtitle",
+      "label": "Show See All",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "See All",
+      "default": "SEE ALL PRODUCTS"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Collection",
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "custom_name",
+          "label": "Custom Name",
+          "info": "If \"Custom Name\" is empty, title = default collection name"
+        },
+        {
+          "type": "link_list",
+          "id": "linklist",
+          "label": "Links"
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_bg",
+          "label": "Background Color",
+          "default": "#f5f5f7"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "color_hover",
+          "label": "Text Hover Color",
+          "default": "#5fd179"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Layout 08 Promo",
+      "category": "Collection",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

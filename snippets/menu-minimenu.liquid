@@ -1,0 +1,15 @@
+{% if show_minimenu and linklist_minimenu != blank %}
+{% case design_type %}
+{% when 'mobile' %}
+  <div class="mini-menu-dropdown dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown">
+      <span class="icon icon-more_horiz"></span>
+    </a>
+    <div class="dropdown-menu">
+      {% include "menu-minimenu-items" %}
+    </div>
+  </div>
+{% else %}
+  {% include "menu-minimenu-items" %}
+{% endcase %}
+{% endif %}

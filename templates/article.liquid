@@ -1,0 +1,40 @@
+{% if article.comments.size > 0 %}{% assign comment_url = article.url | append: '#comments' %}{% else %}{% assign comment_url = article.url | append: '#addcomment' %}{% endif %}
+{% assign sbs = settings.show_blog_sidebar %}
+
+{% if sbs == 'left_two' or sbs == 'left_article' %}
+<div class="container offset-18">
+  <div class="row offset-36">
+    <div class="col-lg-9 col-lg-push-3 col-md-8 col-md-push-4 col-sm-8 col-sm-push-4  col-xs-12">
+      <div class="blog-single-post post text-left">
+        {% include 'article_page' %}
+      </div>
+    </div>
+    <div class="col-lg-3 col-lg-pull-9 col-md-4 col-md-pull-8 col-sm-4 col-sm-pull-8 col-xs-12 leftColumn">
+      {% include "blog-page-sidebar" %}
+    </div>
+  </div>
+</div>
+{% elsif sbs == 'right_two' or sbs == 'right_article' %}
+<div class="container offset-18">
+  <div class="row offset-36">
+    <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+      <div class="blog-single-post post text-left">
+        {% include 'article_page' %}
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 rightColumn">
+      {% include "blog-page-sidebar" %}
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="blog-single-post post">
+  <div class="container offset-17">
+    <div class="row blog-grid-col-2">
+      <div class="col-md-8 col-md-offset-2">
+        {% include 'article_page' %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}

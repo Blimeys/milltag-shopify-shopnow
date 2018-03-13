@@ -1,0 +1,160 @@
+{% assign arrow_block = '' %}
+{% for block in section.blocks %}
+{% if block.type == 'arrow_item' %}{% assign arrow_block = block %}{% endif %}
+{% endfor %}
+
+{% assign item = section.settings %}
+<div class="container-fluid{% unless item.topoffset %} no-margin{% endunless %}">
+  <div class="row">
+    <a href="{{ item.banner_link }}" class="home4_banner_big{% if section.settings.imagehover %} zoom-in{% endif %}" data-hovercolors>
+      {% if item.image == blank %}<img src="{{ 'template_bannerbig.png' | asset_url }}" alt="">
+      {% else %}<img src="{{ item.image | img_url: '2048x' }}" alt="{{ item.image.alt }}">
+      {% endif %}
+      <div class="description{% if item.position == "right" %} point-right{% elsif item.position == "center" %} text-center{% endif %}">
+        <div class="container">
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if item.title1 != '' %}<p style="color:{{ item.color_title }}">{{ item.title1 }}</p>{% endif %}
+              {% if item.title2 != '' %}<div class="title" style="color:{{ item.color_title2 }}">{{ item.title2 }}</div>{% endif %}
+              {% if item.showbutton %}<span class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ item.btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Fullwidth Banner",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Banner Image"
+    },
+    {
+      "type": "url",
+      "id": "banner_link",
+      "label": "Link",
+      "info": "Optional"
+    },
+	{
+	  "type": "select",
+	  "id": "position",
+	  "label": "Text Position",
+	  "default": "center",
+	  "options": [
+		{
+		  "value": "left",
+		  "label": "Left"
+		},
+		{
+		  "value": "center",
+		  "label": "Center"
+		},
+		{
+		  "value": "right",
+		  "label": "Right"
+		}
+	  ]
+	},
+    {
+      "type": "header",
+      "content": "Texts"
+    },
+    {
+      "type": "textarea",
+      "id": "title1",
+      "label": "Text 1",
+      "default": "Grow your business with"
+    },
+    {
+      "type": "textarea",
+      "id": "title2",
+      "label": "Text 2",
+      "default": "MyShop"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "checkbox",
+      "id": "showbutton",
+      "label": "Show Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    },
+	{
+	  "type": "header",
+	  "content": "Colors"
+	},
+	{
+	  "type": "color",
+	  "id": "color_title",
+	  "label": "Text 1 Color",
+	  "default": "#333333"
+	},
+	{
+	  "type": "color",
+	  "id": "color_title2",
+	  "label": "Text 2 Color",
+	  "default": "#333333"
+	},
+	{
+	  "type": "header",
+	  "content": "Button Colors"
+	},
+	{
+	  "type": "color",
+	  "id": "cbtnbg",
+	  "label": "Background Color",
+	  "default": "#5fd179"
+	},
+	{
+	  "type": "color",
+	  "id": "cbtntext",
+	  "label": "Text Color",
+	  "default": "#ffffff"
+	},
+	{
+	  "type": "color",
+	  "id": "acbtnbg",
+	  "label": "Active Background Color",
+	  "default": "#333333"
+	},
+	{
+	  "type": "color",
+	  "id": "acbtntext",
+	  "label": "Active Text Color",
+	  "default": "#ffffff"
+	}
+  ],
+  "presets": [
+    {
+      "name": "Fullwidth Banners",
+      "category": "Banner"
+    }
+  ]
+}
+{% endschema %}

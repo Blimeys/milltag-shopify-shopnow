@@ -1,0 +1,29 @@
+{% if pay_icons != '' or footer_address != '' %}
+{% assign position_center = section.settings.center_footer_address %}
+<div class="copyright{% if position_center %} text-center{% endif %}">
+
+  {% include 'footer_socialicons' holder: 'container visible-xs' %}
+
+  <div class="container">
+    {% if position_center %}
+      <div class="visible-xs">
+        {% include 'footer_paymant_list' %}
+      </div>
+      <div class="row">
+        <div class="box-copyright">{{ footer_address }}</div>
+      </div>
+    {% else %}
+      {% if pay_icons != '' and section.settings.show_payment_icons %}
+      <div class="pull-right">
+        {% include 'footer_paymant_list' %}
+      </div>
+      {% endif %}
+      {% if footer_address != '' %}
+      <div class="pull-left">
+        <div class="box-copyright">{{ footer_address }}</div>
+      </div>
+      {% endif %}
+    {% endif %}
+  </div>
+</div>
+{% endif %}

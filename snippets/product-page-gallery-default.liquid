@@ -1,0 +1,24 @@
+{% if settings.product_header_type == 'vertical' %}<div class="product-col-image">{% endif %}
+
+<div class="product-main-image{% unless settings.productpage_zoomenable %} no-zoom{% endunless %}" data-scrollzoom="{{ settings.productpage_scrollzoom }}">
+  <div class="product-main-image-item">
+    <img class="zoom-product" src='{{ main_url_image.src | product_img_url: '1024x1024' }}' data-zoom-image="{{ main_url_image | product_img_url: '2048x2048' }}" alt="{{ main_url_image.alt | escape }}" />
+  </div>
+</div>
+
+{% if product.images.size > 1 %}
+<div class="product-images-carousel{% if settings.product_header_type == 'vertical' %}-vertical{% endif %}">
+  <ul id="smallGallery">
+    {% for image in product.images %}
+    <li>
+      <a href="#"{% if forloop.first %} class="zoomGalleryActive"{% endif %} data-image="{{ image.src | product_img_url: '1024x1024' }}" data-zoom-image="{{ image.src | product_img_url: '2048x2048' }}" data-target="{{ image.id }}">
+        <img src="{{ image.src | product_img_url: 'medium' }}" alt="{{ image.alt }}">
+      </a>
+    </li>
+    {% endfor %}
+    {% include 'product-page-gallery-video' tagopen:'<li>' tagclose:'</li>' %}
+  </ul>
+</div>
+{% endif %}
+
+{% if settings.product_header_type == 'vertical' %}</div>{% endif %}

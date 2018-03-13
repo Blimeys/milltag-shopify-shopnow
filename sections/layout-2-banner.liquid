@@ -1,0 +1,80 @@
+{% assign item = section.settings %}
+{% if item.show_widget %}
+<div class="box-aside">
+  <div class="text-center-sm">
+    <a href="{{ item.link }}" class="promo-box-1" data-hovercolors>
+      {% if item.image == blank %}{% include "get_svg" type:'image' size:'265x456px' %}
+      {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}" class="img-responsive-inline">
+      {% endif %}
+      <div class="description">
+        {% if item.show_btn %}<span class="btn" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>{% endif %}
+      </div>
+    </a>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Aside Banner",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_widget",
+      "label": "Show Widget",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Link",
+      "info": "Optional"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_btn",
+      "label": "Show Button",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOW NOW!"
+    },
+	{
+	  "type": "header",
+	  "content": "Button Colors"
+	},
+	{
+	  "type": "color",
+	  "id": "cbtnbg",
+	  "label": "Background Color",
+	  "default": "#5fd179"
+	},
+	{
+	  "type": "color",
+	  "id": "cbtntext",
+	  "label": "Text Color",
+	  "default": "#ffffff"
+	},
+	{
+	  "type": "color",
+	  "id": "acbtnbg",
+	  "label": "Active Background Color",
+	  "default": "#333333"
+	},
+	{
+	  "type": "color",
+	  "id": "acbtntext",
+	  "label": "Active Text Color",
+	  "default": "#ffffff"
+	}
+  ]
+}
+{% endschema %}

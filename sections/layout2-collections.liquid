@@ -1,0 +1,152 @@
+{% if section.settings.show_block %}
+
+{%- assign grid = section.settings.items -%}
+{%- capture info_image_size -%}
+{%- case grid -%}
+{%- when '6' -%}600x600px
+{%- else -%}370x370px
+{%- endcase -%}
+{%- endcapture -%}
+
+<div>
+  <h1 class="block-title small">{{ section.settings.title }}</h1>
+  {% if section.blocks.size > 0 %}
+  <div class="row">
+    <div{% if section.settings.mobile_carousel %} class="carousel-products-mobile-md"{% endif %}>
+      {% for block in section.blocks %}{%- assign item = block.settings -%}
+      {%- assign collection = collections[item.collection] -%}
+      <div class="col-xs-6 col-md-{{ grid }} col-lg-{{ grid }}" {{ block.shopify_attributes }}>
+        <a href="{{ collection.url }}" class="subcategory-item zoom-in" data-hovercolors>
+          <span>
+            {% if item.image == blank and item.usecollectionimage == false or collection.image == blank %}
+            {% include "get_svg" type:'collection' size:info_image_size %}
+            {% else %}
+            {% unless item.usecollectionimage %}
+            <img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+            {% else %}
+            <img src="{{ collection.image | img_url: 'grande' }}" alt="{{ collection.image.alt }}">
+            {% endunless %}
+            {% endif %}
+          </span>
+          {% if section.settings.show_title %}
+          <span class="title" style="color:{{ section.settings.color_title }}" data-c="{{ section.settings.color_title }}" data-ac="{{ section.settings.color_hover }}">
+            {% if item.custom_name != ''%}{{ item.custom_name }}{% else %}{{ collection.title }}{% endif %}
+          </span>
+          {% endif %}
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+  {% endif %}
+</div>
+{% endif %}
+
+
+
+{% schema %}
+{
+  "name": "Collection list",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_block",
+      "label": "Show Widget",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+	  "default": "COLLECTIONS"
+    },
+    {
+      "type": "select",
+      "id": "items",
+      "label": "Items In Line",
+      "default": "4",
+      "options": [
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "3",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "center_title",
+      "label": "Center Title",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_title",
+      "label": "Show Titles",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color",
+      "id": "color_title",
+      "label": "Text Color",
+      "default": "#5fd179"
+    },
+    {
+      "type": "color",
+      "id": "color_hover",
+      "label": "Text Hover Color",
+      "default": "#333333"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Collection",
+      "settings": [
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "checkbox",
+          "id": "usecollectionimage",
+          "label": "Set Collection Image",
+          "default": false,
+		  "info": "Set image in collection settings. Default \"Custom Image\""
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Custom Image"
+        },
+        {
+          "type": "text",
+          "id": "custom_name",
+          "label": "Custom Name",
+          "info": "If \"Custom Name\" is empty, title = default collection name"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,33 @@
+<div class="footer-content-col no-padding-top">
+  {% include "footer_info_block" %}
+  <div class="container">
+    <div class="row">
+      {% assign show_logoblock = footer_design.settings.show_logoblock %}
+      {% capture gridmd %}{% if show_logoblock %}2{% else %}3{% endif %}{% endcapture %}
+      {% capture gridmdlast %}{% if show_logoblock %}3{% else %}3{% endif %}{% endcapture %}
+      {% if show_logoblock %}
+      <div class="col-md-3 col-sm-12 hidden-xs">
+        <div class="row">
+          <div class="col-sm-4 col-md-12">
+            <div class="footer-logo">
+              <a href="/">
+                {% if footerlogo contains "title_" %}<h2>{{ footerlogo | split:"title_" | last }}</h2>
+                {% else %}<img src="{{ footerlogo }}" alt="{{ footerlogoalt }}">
+                {% endif %}
+              </a>
+            </div>
+          </div>
+          <div class="col-sm-8 col-md-12">
+            {% if pay_icons != '' and section.settings.center_footer_address %}
+            	{% include 'footer_paymant_list' %}
+            {% endif %}
+            {% include 'footer_socialicons' %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      {% include 'footer_links' %}
+    </div>
+  </div>
+</div>

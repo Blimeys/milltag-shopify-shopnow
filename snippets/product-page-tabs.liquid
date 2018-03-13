@@ -1,0 +1,72 @@
+  <div class="tt-product-page__tabs tt-tabs">
+    <div class="tt-tabs__head{% if settings.product_tabs_work == 'center' %} text-center{% endif %}">
+      <ul>
+      {% assign active = true %}
+      {% for i in (1..5) %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+          {% if forloop.first and product.description == '' %}{% continue %}{% endif %}
+          <li {% if active %}data-active="true" {% assign active = false %} {% endif %}>
+            <span>{{ settings[product_tab_title] }}</span>
+          </li>
+        {% endif %}
+        {% if product_meta.tabs != blank and forloop.index == 1 %}
+          {% assign tabs = product_meta.tabs | strip | split: '[/tab]' %}
+          {% if tabs.size > 0 %}{% for _tab in tabs %}
+            <li {% if active %}data-active="true" {% assign active = false %} {% endif %}>
+              <span>{% include 'get-product_custom_tab_content' content: _tab key: 'name' %}</span>
+            </li>
+          {% endfor %}{% endif %}
+        {% endif %}
+      {% endfor %}
+      </ul>
+      <div class="tt-tabs__border"></div>
+    </div>
+
+	{% assign active = true %}
+    <div class="tt-tabs__body">
+      {% for i in (1..5) %}
+        {% capture current_class %}{% cycle 'product-description', 'html1', 'html2', 'tags', 'product-reviews' %}{% endcapture %}
+        {% assign show_product_tab	= "show_product_tab_" | append: forloop.index %}
+        {% assign product_tab_title	= "product_tab_title_" | append: forloop.index %}
+        {% assign product_tab_desc	= "product_tab_desc_" | append: forloop.index %}
+        {% if settings[show_product_tab] %}
+        {% if forloop.first and product.description == '' %}{% continue %}{% endif %}
+        <div>
+          <span class="tt-tabs__title">{{ settings[product_tab_title] }}</span>
+          <div class="tt-tabs__content">
+            {% comment %}tabs pages{% endcomment %}
+            {% case current_class %}
+              {% when 'product-description' %}
+            	<div itemprop="description">{{ product.description }}</div>
+              {% when 'html1' %}
+            	{{ settings[product_tab_desc] }}
+              {% when 'html2' %}
+            	{{ settings[product_tab_desc] }}
+              {% when 'tags' %}
+                {% assign collection = collections.all %}
+                {% assign custom_url = '/collections/all/' %}
+                {% include 'product-filter-tags' %}
+              {% when 'product-reviews' %}
+            	<div id="shopify-product-reviews" data-id="{{product.id}}">{{ product.metafields.spr.reviews }}</div>
+              {% else %}
+            {% endcase %}
+          </div>
+      	</div>
+        {% endif %}
+        
+        {% if product_meta.tabs != blank and forloop.index == 1 %}
+        {% assign tabs = product_meta.tabs | strip | split: '[/tab]' %}
+          {% if tabs.size > 0 %}{% for _tab in tabs %}
+          <div>
+            <span class="tt-tabs__title">{% include 'get-product_custom_tab_content' content: _tab key: 'name' %}</span>
+            <div class="tt-tabs__content">
+              {% include 'get-product_custom_tab_content' content: _tab %}
+            </div>
+          </div>
+          {% endfor %}{% endif %}
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>

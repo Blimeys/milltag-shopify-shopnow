@@ -1,0 +1,175 @@
+{%- assign grid = section.settings.items -%}
+{%- assign name_collection = section.settings.collection -%}
+{%- if name_collection == blank -%}{%- assign name_collection = "all" -%}{%- endif -%}
+{%- assign collection = collections[name_collection] -%}
+{%- assign length = section.settings.limit | plus: 0 -%}
+{%- assign schema = section.settings -%}
+<div class="container {% unless section.settings.top_indent %} offset-0{% endunless %}" data-sectionname="index_productsfeatured">
+  <h1 class="block-title{% unless section.settings.center_title %} text-left{% endunless %}">{{ section.settings.title }}</h1>
+  {% if section.settings.default_carousel %}
+  <div class="row">
+    <div class="carousel-products-1 carouselTab slick-arrow-top products-mobile-arrow" data-slick='{"slidesToShow": {{ schema.toshow }}, "slidesToScroll": {{ schema.step }}, "autoplay": {{ schema.module_autoplay }}, "autoplaySpeed": {{ schema.delay_time }}}'>
+      {% for product in collection.products limit: length %}
+      <div>
+        {% include "product-grid-item" %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% else %}
+  <div class="row product-listing products-mobile-arrow{% if section.settings.mobile_carousel %} carousel-products-mobile{% endif %}">
+    {% for product in collection.products limit: length %}
+    <div class="col-xs-6 col-sm-4 col-md-{{ grid }}">
+      {% include "product-grid-item" %}
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Products Grid",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "BY DEFAULT. SHOW ALL PRODUCTS. SELECT YOUR COLLECTION."
+    },
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type": "checkbox",
+      "id": "top_indent",
+      "label": "Top Indent",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "limit",
+      "label": "Items Length. Integer",
+      "default": "8"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "FEATURED PRODUCTS"
+    },
+    {
+      "type": "header",
+      "content": "Default Grid"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile Carousel",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "center_title",
+      "label": "Center Title",
+      "default": true
+    },
+    {
+      "label": "Collection",
+      "id": "collection",
+      "type": "collection"
+    },
+    {
+      "type": "select",
+      "id": "items",
+      "label": "Products In Row",
+      "options": [
+		{ "value": "6", "label": "2" },
+        { "value": "4", "label": "3" },
+        { "value": "3", "label": "4" }
+      ],
+      "default": "3",
+	  "info": "For screen size > 1024"
+    },
+    {
+      "type": "header",
+      "content": "Default Carousel"
+    },
+    {
+      "type": "checkbox",
+      "id": "default_carousel",
+      "label": "Default Carousel",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "toshow",
+      "label": "Products In Row",
+      "options": [
+		{ "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" }
+      ],
+      "default": "3",
+	  "info": "For screen size > 1024"
+    },
+    {
+      "type": "select",
+      "id": "step",
+      "label": "Slides To Scroll",
+      "default": "2",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "module_autoplay",
+      "label": "Auto-rotate slides",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "delay_time",
+      "label": "Change slides every",
+      "options": [
+        { "value": "5000", "label": "5 seconds" },
+        { "value": "6000", "label": "6 seconds" },
+        { "value": "7000", "label": "7 seconds" },
+        { "value": "8000", "label": "8 seconds" },
+        { "value": "9000", "label": "9 seconds" },
+        { "value": "10000", "label": "10 seconds" }
+      ],
+      "default": "7000"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Products Grid",
+      "category": "Products",
+      "settings": {
+      }
+    }
+  ]
+}
+{% endschema %}

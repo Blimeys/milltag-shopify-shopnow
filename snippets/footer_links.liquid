@@ -1,0 +1,44 @@
+{% assign count = 0 %}
+{% for i in (1..4) %}
+{% assign html_show = 'linklist_showhtml' | append: i %}{% assign html_show = footer_design.settings[html_show] %}
+{% assign _linklist = 'linklist' | append: i %}{% assign _linklist = footer_design.settings[_linklist] %}
+{% if _linklist != blank or html_show %}{% assign count = count | plus: 1 %}{% endif %}
+{% endfor %}
+
+{% case count %}
+{% when 3 %}
+{% capture gridmd %}{% if show_logoblock %}3{% else %}4{% endif %}{% endcapture %}
+{% when 2 %}
+{% capture gridmd %}{% if show_logoblock %}4{% else %}6{% endif %}{% endcapture %}
+{% capture gridmdlast %}{% if show_logoblock %}5{% else %}6{% endif %}{% endcapture %}
+{% when 1 %}
+{% assign gridmd = 9 %}
+{% endcase %}
+
+{% for i in (1..4) %}
+{% assign _linklist = 'linklist' | append: i %}
+{% assign _title = 'linklist_t' | append: i %}
+{% assign html_show = 'linklist_showhtml' | append: i %}
+{% assign html_content = 'linklist_html' | append: i %}
+{% assign _linklist = footer_design.settings[_linklist] %}
+{% assign html_show = footer_design.settings[html_show] %}
+{% if _linklist != blank or html_show %}
+<div class="col-sm-6 col-md-{% if forloop.last %}{{ gridmdlast }}{% else %}{{ gridmd }}{% endif %}">
+  <div class="mobile-collapse">
+    <h4 class="mobile-collapse_title text-uppercase">{{ footer_design.settings[_title] }}</h4>
+    <div class="mobile-collapse_content">
+      {% if _linklist != blank %}
+      <div class="v-links-list">
+        <ul>
+          {% for link in linklists[_linklist].links %}
+          <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+      {{ footer_design.settings[html_content] }}
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endfor %}

@@ -1,0 +1,49 @@
+{% assign sbs = settings.show_blog_sidebar %}
+{% if sbs == 'left_two' or sbs == 'left_blog' %}
+<div class="row offset-36">
+  <div class="col-lg-9 col-lg-push-3 col-md-8 col-md-push-4 col-sm-8 col-sm-push-4 col-xs-12">
+    <div class="row blog-grid-col-2 blog-with-aside">
+{% elsif sbs == 'right_two' or sbs == 'right_blog' %}
+<div class="row offset-36">
+  <div class="col-lg-9 col-md-8 col-sm-8 col-xs-12">
+    <div class="row blog-grid-col-2 blog-with-aside">
+{% else %}
+<div class="row blog-grid-col-2">
+{% endif %}
+    
+  {% for article in blog.articles %}
+  {% if article.comments.size > 0 %}{% assign comment_url = article.url | append: '#comments' %}{% else %}{% assign comment_url = article.url | append: '#addcomment' %}{% endif %}
+
+  <div class="{% if settings.show_blog_sidebar %}col-md-6{% else %}col-sm-6{% endif %}">
+    {% include "blog_item" designtype: 'type2' %}
+  </div>
+  
+  {% cycle '', '<div class="clearfix"></div>' %}
+
+  {% endfor %}
+
+  {% if paginate.pages > 1 %}
+  <div class="clearfix"></div>
+  <div class="col-sm-12 offset-16"><hr></div>
+  <div class="col-sm-12 offset-40 text-center">
+    {% include 'pagination' %}
+  </div>
+  {% endif %}
+
+{% if sbs == 'left_two' or sbs == 'left_blog' %}
+    </div>
+  </div>
+  <div class="col-lg-3 col-lg-pull-9 col-md-4 col-md-pull-8 col-sm-4 col-sm-pull-8 col-xs-12 leftColumn">
+    {% include "blog-page-sidebar" %}
+  </div>
+</div>
+{% elsif sbs == 'right_two' or sbs == 'right_blog' %}
+    </div>
+  </div>
+  <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 rightColumn">
+    {% include "blog-page-sidebar" %}
+  </div>
+</div>
+{% else %}
+</div>
+{% endif %}

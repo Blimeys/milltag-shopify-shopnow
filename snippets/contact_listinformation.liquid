@@ -1,0 +1,23 @@
+{% if listinformation != '' and listinformation.settings.show_content %}
+<ul class="list-information">
+  {% if listinformation.settings.show_field1 %}<li>
+    <span class="icon icon-home"></span>
+    {{ listinformation.settings.text1 }}
+  </li>{% endif %}
+  {% if listinformation.settings.show_field2 %}<li>
+    <span class="icon icon-call"></span>
+    {{ listinformation.settings.text2 }}
+  </li>{% endif %}
+  {% if listinformation.settings.show_field3 %}<li>
+    <span class="icon icon-schedule"></span>
+    {{ listinformation.settings.text3 }}
+  </li>{% endif %}
+  {% if listinformation.settings.show_field4 %}<li>
+    <span class="icon icon-mail"></span>
+    {{ listinformation.settings.text4 }} <a href="mailto:{{ listinformation.settings.email }}">{{ listinformation.settings.email }}</a>
+  </li>{% endif %}
+  {% if listinformation.settings.show_field5 %}<li>
+    {{ listinformation.settings.text5 }}
+  </li>{% endif %}
+</ul>
+{% endif %}

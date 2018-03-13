@@ -1,0 +1,97 @@
+<div class="container offset-14">
+  <h1 class="block-title large">{{ 'customer.login.title' | t }}</h1>
+  <div class="row">
+    {% if shop.customer_accounts_optional %}
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div class="login-form-box">
+        <h2>{{ 'customer.login.new_customer' | t }}</h2>
+        <div class="extra-indent-bottom">
+          <p>{{ 'customer.login.new_customer_description' | t }}</p>
+        </div>
+        <div class="extra-bottom">
+          <a class="btn btn-border color-default" href="/account/register">{{ 'customer.login.new_customer_continue' | t }}</a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    <div class="{% if shop.customer_accounts_optional %}col-sm-12 col-md-6 col-lg-6{% else %}col-sm-8 col-sm-push-2 col-lg-6 col-lg-push-3{% endif %}">
+      <div class="login-form-box" id="login">
+        <h2>{{ 'customer.login.title_login' | t }}</h2>
+        <p>{{ 'customer.login.description' | t }}</p>
+        {% form 'customer_login' %}
+        {{ form.errors | default_errors }}
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span class="icon icon-person_outline"></span>
+            </span>
+            <input type="email" name="customer[email]" id="LoginFormName1" class="form-control" placeholder="{{ 'customer.login.email' | t }}">
+          </div>
+        </div>
+        {% if form.password_needed %}
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span class="icon icon-lock_outline"></span>
+            </span>
+            <input type="password" name="customer[password]" id="LoginFormPass1" class="form-control" placeholder="{{ 'customer.login.password' | t }}">
+          </div>
+        </div>
+        {% endif %}
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <button type="submit" class="btn">{{ 'customer.login.sign_in' | t }}</button>
+          </div>
+          {% if form.password_needed %}
+          <div class="col-md-12 col-lg-9">
+            <ul class="additional-links">
+              <li><a href="#" onclick="showRecoverPasswordForm();return false;">{{ 'customer.login.forgot_password' | t }}</a></li>
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+        {% endform %}
+      </div>
+      
+      <div class="login-form-box" id="recover-password" style="display:none;">
+        <h2>{{ 'customer.login.reset_password' | t }}</h2>
+        <p class="note">{{ 'customer.login.reset_password_subtext' | t }}</p>
+        {% form 'recover_customer_password' %}
+        {{ form.errors | default_errors }}
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">
+              <span class="icon icon-person_outline"></span>
+            </span>
+            <input type="email" name="email" id="LoginFormName1" class="form-control" placeholder="{{ 'customer.login.email' | t }}" autocorrect="off" autocapitalize="off">
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12 col-lg-3">
+            <button type="submit" class="btn">{{ 'customer.login.submit_recover' | t }}</button>
+          </div>
+          <div class="col-md-12 col-lg-9">
+            <ul class="additional-links">
+              <li><a href="#" onclick="hideRecoverPasswordForm();return false;">{{ 'customer.general.or' | t }} {{ 'customer.login.cancel' | t }}</a></li>
+            </ul>
+          </div>
+        </div>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function showRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'block';
+    document.getElementById('login').style.display='none';
+  }
+
+  function hideRecoverPasswordForm() {
+    document.getElementById('recover-password').style.display = 'none';
+    document.getElementById('login').style.display = 'block';
+  }
+
+  if (window.location.hash == '#recover') { showRecoverPasswordForm() }
+</script>

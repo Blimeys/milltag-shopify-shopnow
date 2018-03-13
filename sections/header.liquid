@@ -1,0 +1,768 @@
+{% capture image_size %}{{ section.settings.logo_max_width }}x{% endcapture %}
+{% capture headerlogo %}{% if section.settings.logo != blank %}{{ section.settings.logo | img_url: image_size }}{% else %}title_{{ section.settings.logo_text }}{% endif %}{% endcapture %}
+{% capture headerlogoalt %}{{ section.settings.logo.alt }}{% endcapture %}
+
+{% if template == "index" and settings.header_position %}
+{% capture headerlogo %}{% if settings.show_static_logo %}{{ 'staticlogo.png' | asset_img_url: image_size }}{% else %}title_{{ section.settings.logo_text }}{% endif %}{% endcapture %}
+{% endif %}
+
+{% capture image_size %}{{ section.settings.logo_max_mobile_width }}x{% endcapture %}
+{% capture headerlogomobile %}{% if section.settings.logomobile != blank %}{{ section.settings.logomobile | img_url: image_size }}{% else %}title_{{ section.settings.logo_text }}{% endif %}{% endcapture %}
+{% capture headerlogomobilealt %}{{ section.settings.logomobile.alt }}{% endcapture %}
+
+{% assign showfixedbar = section.settings.showfixedbar %}
+{% assign show_minimenu = section.settings.show_minimenu %}
+{% assign header_slogan = section.settings.header_slogan %}
+{% assign linklist_minimenu = section.settings.linklist_minimenu %}
+
+{% assign str_blocks_title = '|' %}
+{% assign str_blocks_title_drag = '|' %}
+{% assign social_icons = '' %}
+
+{% for block in section.blocks %}
+{% assign str_blocks_title = str_blocks_title | append: block.settings.linklist | append: '_' | append: forloop.index0 %}
+{% unless forloop.last %}{% assign str_blocks_title = str_blocks_title | append: '|' %}{% endunless %}
+{% if block.type == 'social_icons' %}{% assign social_icons = block %}{% endif %}
+{% endfor %}
+
+{% for block in section.blocks %}
+{% assign str_blocks_title_drag = str_blocks_title_drag | append: block.settings.newnavigation_item | append: '_' | append: forloop.index0 %}
+{% unless forloop.last %}{% assign str_blocks_title_drag = str_blocks_title_drag | append: '|' %}{% endunless %}
+{% if block.type == 'social_icons' %}{% assign social_icons = block %}{% endif %}
+{% endfor %}
+
+{% capture shadow %}
+{%- if template == "index" and section.settings.showindexshadow == false -%}no-shadow
+{%- elsif template != "index" and section.settings.showshadow == false -%}no-shadow
+{%- endif -%}
+{% endcapture %}
+
+<div style="display:none;">[mainmenu]{{ section.settings.main_menu_selected }}[/mainmenu]</div>
+<header class="{% if settings.header_position and template == 'index' %} header-static{% endif %} {{ shadow }}">
+  <!-- mobile-header -->
+  <div class="mobile-header">
+    <div class="container-fluid">
+      <div class="pull-left">
+        <!-- language -->
+        <div class="mobile-parent-language"></div>
+        <!-- /language -->
+        <!-- currency -->
+        <div class="mobile-parent-currency"></div>
+        <!-- /currency -->
+        {% include "menu-minimenu" design_type:'mobile' %}
+      </div>
+      <div class="pull-right">
+        {% include "menu-customer" %}
+        <!-- cart -->
+        <div class="mobile-parent-cart"></div>
+        <!-- /cart -->
+      </div>
+    </div>
+    <div class="container-fluid text-center">
+      <!-- logo -->
+      <div class="logo">
+        <a href="/">
+          {% if headerlogomobile contains "title_" %}<h2>{{ headerlogomobile | split:"title_" | last }}</h2>
+          {% else %}<img src="{{ headerlogomobile }}" alt="{{ headerlogomobilealt }}"/>
+          {% endif %}
+        </a>
+      </div>
+      <!-- /logo -->
+    </div>
+    <div class="container-fluid top-line">
+      <div class="pull-left">
+        <div class="mobile-parent-menu">
+          <div class="mobile-menu-toggle">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="menu-text">
+              {{ "general.menu.title" | t }}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="pull-right">
+        {% include "menu-search" %}
+      </div>
+    </div>
+  </div>
+  <!-- /mobile-header -->
+
+  {% include section.settings.header_design %}
+
+  <!-- stuck nav -->
+  <div class="stuck-nav{% unless showfixedbar %} disabled{% endunless %}">
+    <div class="container">
+      <div class="pull-left">
+        <div class="stuck-menu-parent-box"></div>
+      </div>
+      <div class="pull-right">
+        <div class="stuck-cart-parent-box"></div>
+      </div>
+    </div>
+  </div>
+  <!-- /stuck nav -->
+</header>
+  
+{% schema %}
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "select",
+        "id": "header_design",
+        "label": "Select Header Design",
+        "options": [
+          {
+            "value": "header_design1",
+            "label": "Design 1"
+          },
+          {
+            "value": "header_design2",
+            "label": "Design 2"
+          },
+          {
+            "value": "header_design3",
+            "label": "Design 3"
+          },
+          {
+            "value": "header_design4",
+            "label": "Design 4"
+          },
+          {
+            "value": "header_design5",
+            "label": "Design 5"
+          },
+          {
+            "value": "header_design6",
+            "label": "Design 6"
+          },
+          {
+            "value": "header_design7",
+            "label": "Design 7"
+          },
+          {
+            "value": "header_design8",
+            "label": "Design 8"
+          }
+        ],
+        "default": "header_design1"
+      },
+      {
+        "type": "checkbox",
+        "id": "showfixedbar",
+        "label": "Show Sticky Header",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Shadow"
+      },
+      {
+        "type": "checkbox",
+        "id": "showindexshadow",
+        "label": "Show Shadow on The Index Page",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "showshadow",
+        "label": "Show Shadow",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "text",
+        "id": "logo_text",
+        "label": "Logo Text",
+        "default": "MyShop",
+		"info": "Work when logo image is empty."
+      },
+      {
+        "type": "image_picker",
+        "id": "logo",
+        "label": "Logo Main",
+		"info": "210x66px"
+      },
+      {
+        "type": "text",
+        "id": "logo_max_width",
+        "label": "Logo Main width (in pixels)",
+        "default": "210"
+      },
+      {
+        "type": "image_picker",
+        "id": "logomobile",
+        "label": "Logo Mobile",
+		"info": "390x122px"
+      },
+      {
+        "type": "text",
+        "id": "logo_max_mobile_width",
+        "label": "Logo Mobile width (in pixels)",
+        "default": "390"
+      },
+      {
+        "type": "header",
+        "content": "Slogan"
+      },
+      {
+        "type": "textarea",
+        "id": "header_slogan",
+        "label": "Slogan"
+      },
+      {
+        "type": "header",
+        "content": "Mini Menu"
+      },
+      {
+        "type": "checkbox",
+        "id": "show_minimenu",
+        "label": "Show Mini Menu",
+        "default": true
+      },
+      {
+        "type": "link_list",
+        "id": "linklist_minimenu",
+        "label": "Mini Menu Link List"
+      },
+      {
+        "type": "header",
+        "content": "Main Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "main_menu_selected",
+        "label": "Menu Menu",
+        "default": "main-menu"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Submenu Images",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Select Menu Item",
+			"info": "Work for old method with menu. Create navigations with documentation. Select item with mega menu. Not Use new drag admin panel menu. Drop-down limit=1"
+          },
+          {
+            "type": "textarea",
+            "id": "newnavigation_item",
+            "label": "Main Menu Item Full Name",
+			"info": "Work with new admil panel drag menu. Copy and paste full item name from main menu. Drop-down limit=1"
+          },
+          {
+            "type": "radio",
+            "id": "border",
+            "label": "Image Border",
+            "options": [
+              {
+                "value": "disable",
+                "label": "Disable"
+              },
+              {
+                "value": "enable",
+                "label": "Enable"
+              }
+            ],
+            "default": "disable"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "header",
+            "content": "Separate Item with Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image Item 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image Item 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image Item 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "image5",
+            "label": "Image Item 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "image6",
+            "label": "Image Item 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "image7",
+            "label": "Image Item 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "image8",
+            "label": "Image Item 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "image9",
+            "label": "Image Item 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "image10",
+            "label": "Image Item 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "image11",
+            "label": "Image Item 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "image12",
+            "label": "Image Item 12"
+          },
+		  {
+            "type": "image_picker",
+            "id": "image13",
+            "label": "Image Item 13"
+          },
+          {
+            "type": "image_picker",
+            "id": "image14",
+            "label": "Image Item 14"
+          },
+          {
+            "type": "image_picker",
+            "id": "image15",
+            "label": "Image Item 15"
+          },
+          {
+            "type": "image_picker",
+            "id": "image16",
+            "label": "Image Item 16"
+          },
+          {
+            "type": "image_picker",
+            "id": "image17",
+            "label": "Image Item 17"
+          },
+          {
+            "type": "image_picker",
+            "id": "image18",
+            "label": "Image Item 18"
+          },
+          {
+            "type": "image_picker",
+            "id": "image19",
+            "label": "Image Item 19"
+          },
+          {
+            "type": "image_picker",
+            "id": "image20",
+            "label": "Image Item 20"
+          }
+        ]
+      },
+      {
+        "type": "megamenu",
+        "name": "Megamenu",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Select Menu Item",
+			"info": "Work for old method with menu. Create navigations with documentation. Select item with mega menu. Not Use new drag admin panel menu. Drop-down limit=4"
+          },
+          {
+            "type": "textarea",
+            "id": "newnavigation_item",
+            "label": "Main Menu Item Full Name",
+			"info": "Work with new admil panel drag menu. Copy and paste full item name from main menu. Drop-down limit=2"
+          },
+          {
+            "type": "select",
+            "id": "grid",
+            "label": "Items In Row",
+            "options": [
+              {
+                "value": "2",
+                "label": "6"
+              },
+              {
+                "value": "3",
+                "label": "4"
+              },
+              {
+                "value": "4",
+                "label": "3"
+              }
+            ],
+            "default": "4"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Categorie Images"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image Item 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image Item 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image Item 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "image5",
+            "label": "Image Item 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "image6",
+            "label": "Image Item 6"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Widgets"
+          },
+          {
+            "type": "radio",
+            "id": "widget",
+            "label": "Widget In the Submenu",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "gallery",
+                "label": "Gallery"
+              },
+              {
+                "value": "banner",
+                "label": "Banner"
+              }
+            ],
+            "default": "banner"
+          },
+          {
+            "type": "header",
+            "content": "Widget > Gallery"
+          },
+          {
+            "type": "text",
+            "id": "widgetgallery_title",
+            "label": "Title",
+            "default": "SPECIALS"
+          },
+          {
+            "type": "url",
+            "id": "widgetgallery_url",
+			"label": "Title Link"
+          },
+          {
+            "label": "Collection",
+            "id": "collection",
+            "type": "collection"
+          },
+          {
+            "type": "text",
+            "id": "collection_limit",
+            "label": "Show Products",
+            "default": "4",
+            "info": "Integer"
+          },
+          {
+            "type": "header",
+            "content": "Widget > Banner"
+          },
+          {
+            "type": "url",
+            "id": "widgetbanner_url",
+            "label": "Banner Link"
+          },
+          {
+            "type": "image_picker",
+            "id": "widgetbanner_img",
+            "label": "Image",
+            "info": "Image must be JPG, 410 x 430 Px"
+          },
+          {
+            "type": "text",
+            "id": "widgetbanner_title",
+            "label": "Title",
+            "default": "PIXEL PERFECT<br>DESIGN"
+          },
+          {
+            "type": "color",
+            "id": "widgetbanner_color",
+            "label": "Title Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "checkbox",
+            "id": "widgetbanner_btn",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "widgetbanner_btnname",
+            "label": "Button Name",
+            "default": "Shop Now!"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Bottom Banners"
+          },
+          {
+            "type": "select",
+            "id": "banners_grid",
+            "label": "Show Banners",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "customhtml",
+                "label": "Custom Html"
+              },
+              {
+                "value": "12",
+                "label": "1"
+              },
+              {
+                "value": "6",
+                "label": "2"
+              }
+            ],
+            "default": "6"
+          },
+          {
+            "type": "textarea",
+            "id": "html",
+            "label": "Custom Html",
+            "info": "Paste your html code. Banners Off.",
+            "default": "Custom Html"
+          },
+          {
+            "type": "checkbox",
+            "id": "banners_btn",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "banners_btnname",
+            "label": "Button Name",
+            "default": "Shop Now!"
+          },
+          {
+            "type": "image_picker",
+            "id": "bottombanners_img_1",
+            "label": "Image 1",
+            "info": "Image must be JPG, 542 x 160 Px"
+          },
+          {
+            "type": "text",
+            "id": "banners_tit1",
+            "label": "Title 1",
+            "default": "ATTENTION TO<br>THE DETAILS"
+          },
+          {
+            "type": "select",
+            "id": "position1",
+            "label": "Title 1 Position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "default": "left"
+          },
+          {
+            "type": "color",
+            "id": "color_11",
+            "label": "Title 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_12",
+            "label": "Button 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "image_picker",
+            "id": "bottombanners_img_2",
+            "label": "Image 2",
+            "info": "Image must be JPG, 542 x 160 Px"
+          },
+          {
+            "type": "text",
+            "id": "banners_tit2",
+            "label": "Title 2",
+            "default": "BUILT<br>WITH LOVE"
+          },
+          {
+            "type": "select",
+            "id": "position2",
+            "label": "Title 2 Position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "default": "center"
+          },
+          {
+            "type": "color",
+            "id": "color_21",
+            "label": "Title 2 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_22",
+            "label": "Button 2 Color",
+            "default": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "social_icons",
+        "name": "Social Icons for Header 4",
+        "limit": 1,
+        "settings": [
+          {
+            "type": "paragraph",
+            "content": "All icons created with \"Mini Menu Link List\""
+          },
+          {
+            "type": "checkbox",
+            "id": "show_content",
+            "label": "Show Content",
+            "default": true
+          },
+          {
+            "type": "checkbox",
+            "id": "logo_left",
+            "label": "Logo Left",
+            "default": false,
+			"info": "Work when \"Show Content\" = uncheck"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon1",
+            "label": "Show Facebook",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon1",
+            "label": "Facebook Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon2",
+            "label": "Show Twitter",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon2",
+            "label": "Twitter Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon3",
+            "label": "Show Gmail",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon3",
+            "label": "Gmail Link"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_icon4",
+            "label": "Show Instagram",
+            "default": true
+          },
+          {
+            "type": "url",
+            "id": "url_icon4",
+            "label": "Instagram Link"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

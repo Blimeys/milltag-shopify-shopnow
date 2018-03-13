@@ -1,0 +1,28 @@
+{% assign product_meta = product.metafields.description %}
+
+{% assign sale_on = false %}
+{% if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price %}
+  {% assign sale_on = true %}
+{% endif %}
+
+{% comment %} Main Image URL. {% endcomment %}
+{% assign main_url_image = product.selected_or_first_available_variant.featured_image | default: product.featured_image %}
+
+{% include 'product-page-switcher' %}
+
+<div itemscope itemtype="http://schema.org/Product">
+  <meta itemprop="name" content="{{ product.title }}">
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: '800x' }}">
+
+  {% if settings.product_page_design == "product_page_description3" %}
+  {% include settings.product_page_design %}
+  {% else %}
+  {% include settings.product_page_design %}
+  {% include 'product-page-tabs-container' %}
+  {% include 'product-page-upsellcollection' %}
+  {% endif %}
+
+</div>
+
+{% include "modal-video" %}

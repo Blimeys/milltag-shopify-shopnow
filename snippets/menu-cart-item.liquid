@@ -1,0 +1,28 @@
+<li class="item">
+  <div class="img">
+    <a href="{{item.url}}"><img src="{{ item.image | product_img_url: 'small' }}" alt="Cart Image"/></a>
+  </div>
+  <div class="info">
+    <div class="title-col">
+      <h2 class="title">
+        <a href="{{item.url}}">{{item.product.title}}</a>
+      </h2>
+      {% if item.variant.title != 'Default Title' %}
+      <div class="details">
+        {{ item.variant.title | replace: ' / ', ', ' }}
+      </div>
+      {% endif %}
+    </div>
+    <div class="price">{{item.price | money}}</div>
+    <div class="qty">
+      <div class="qty-label">{{ 'cart.header.quantity' | t }}</div>
+      <div class="style-2 input-counter text-center">
+        <input type="text" value="{{ item.quantity }}" disabled/>
+      </div>
+    </div>
+  </div>
+  <div class="item-control">
+    <div class="delete"><a href="/cart/change?id={{ item.variant.id }}&quantity=0" class="icon icon-delete header_delete_cartitem_js" title="{{ 'cart.header.button_delete' | t }}"></a></div>
+    <div class="edit"><a href="{{item.url}}" class="icon icon-edit" title="{{ 'cart.header.button_edit' | t }}"></a></div>
+  </div>
+</li>

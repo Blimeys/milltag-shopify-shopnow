@@ -1,0 +1,111 @@
+{% assign item = section.settings %}
+{% if item.showbgimg and item.image != blank %}
+<div class="container-fluid{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row">
+    <div class="img-box">
+      <img src="{{ item.image | img_url: '2048x' }}" alt="{{ item.image.alt }}">
+      <div class="description">
+        <div class="block-table">
+          <div class="block-table-cell text-{{ item.position }}">
+            <div class="container">
+              {% include "index_subscribeform" %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="subscribe-box-center text-{{ item.position }}">
+        {% include "index_subscribeform" %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Subscribe Form",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "radio",
+      "id": "position",
+      "label": "Position",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title",
+      "default": "GET THE LATEST NEWS DELIVERED DAILY!"
+    },
+    {
+      "type": "textarea",
+      "id": "title2",
+      "label": "Content",
+      "default": "Give us your email and you will be daily updated with<br>  the latest events, in detail!"
+    },
+    {
+      "type": "textarea",
+      "id": "title3",
+      "label": "Button Name",
+      "default": "SUBSCRIBE"
+    },
+    {
+      "type": "textarea",
+      "id": "title4",
+      "label": "Form Text",
+      "default": "Enter please your e-mail"
+    },
+    {
+      "type": "checkbox",
+      "id": "showtitle",
+      "label": "Show See All",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "showbgimg",
+      "label": "Show Background Image",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background Image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Subscribe Form",
+      "category": "Subscribe"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,120 @@
+{% assign menu = footer_design.settings.linklist %}
+{% if footer_design.settings.position == 'position1' %}
+<div class="footer-content-center no-padding-top">
+  {% if footer_design.settings.show_logo %}
+  <div class="container hidden-xs">
+    <div class="footer-logo">
+      <a href="/">
+        {% if footerlogo contains "title_" %}<h2>{{ footerlogo | split:"title_" | last }}</h2>
+        {% else %}<img src="{{ footerlogo }}" alt="{{ footerlogoalt }}">
+        {% endif %}
+      </a>
+    </div>
+  </div>
+  {% endif %}
+
+  {% include "footer_menu" %}
+  
+  {% if footer_design.settings.show_customhtml %}
+  <div class="container">
+    <div class="mobile-collapse">
+      <h4 class="mobile-collapse_title visible-xs text-uppercase">{{ footer_design.settings.customhtml_title }}</h4>
+      <div class="mobile-collapse_content">
+        <div class="list-info-center">{{ footer_design.settings.customhtml }}</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% include 'footer_socialicons' holder: 'container hidden-xs' %}
+
+  {% if pay_icons != '' and section.settings.center_footer_address %}
+  <div class="container hidden-xs">
+    {% include 'footer_paymant_list' %}
+  </div>
+  {% endif %}
+</div>
+
+{% elsif footer_design.settings.position == 'position2' %}
+{% assign block2grid = 'pull-right col-xs-12 col-sm-8 col-md-8' %}
+
+<div class="footer-content-02 no-padding-top">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 center-layout hidden-xs">
+        {% include "footer_menu" %}
+        <br class="hidden-xs">
+      </div>
+      {% if footer_design.settings.show_logo or pay_icons != '' and section.settings.center_footer_address and pay_icons.settings.show_content %}
+      <div class="pull-left col-xs-12 col-sm-4 col-md-4 hidden-xs">
+        {% if footer_design.settings.show_logo %}
+        <div class="footer-logo hidden-xs">
+          <a href="/">
+            {% if footerlogo contains "title_" %}<h2>{{ footerlogo | split:"title_" | last }}</h2>
+            {% else %}<img src="{{ footerlogo }}" alt="{{ footerlogoalt }}">
+            {% endif %}
+          </a>
+        </div>
+        {% endif %}
+        {% if pay_icons != '' and section.settings.center_footer_address %}
+        {% include 'footer_paymant_list' class:' hidden-xs' %}
+        {% endif %}
+      </div>
+      {% else %}
+      {% assign block2grid = 'col-xs-12 center-layout' %}
+	  {% endif %}
+
+      <div class="{{ block2grid }}">
+        {% if footer_design.settings.show_customhtml %}
+        <div class="mobile-collapse">
+          <h4 class="mobile-collapse_title visible-xs text-uppercase">{{ footer_design.settings.customhtml_title }}</h4>
+          <div class="mobile-collapse_content">
+            <div class="list-info-center">{{ footer_design.settings.customhtml }}</div>
+          </div>
+        </div>
+        {% endif %}
+        
+    	{% include 'footer_socialicons' holder: 'hidden-xs' %}
+        
+        {% comment %}{% if pay_icons != '' and section.settings.center_footer_address %}
+        {% include 'footer_paymant_list' class:' visible-xs' %}
+        {% endif %}{% endcomment %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% elsif footer_design.settings.position == 'position3' %}
+<div class="footer-content-center1 no-padding-top">
+  {% if footer_design.settings.show_logo %}
+  <div class="container hidden-xs">
+    <div class="footer-logo">
+      <a href="/">
+        {% if footerlogo contains "title_" %}<h2>{{ footerlogo | split:"title_" | last }}</h2>
+        {% else %}<img src="{{ footerlogo }}" alt="{{ footerlogoalt }}">
+        {% endif %}
+      </a>
+    </div>
+  </div>
+  {% endif %}
+  
+  {% include "footer_menu" %}
+  
+  {% include 'footer_socialicons' holder: 'container hidden-xs' %}
+
+  {% if footer_design.settings.show_customhtml %}
+  <div class="container">
+    <div class="mobile-collapse">
+      <h4 class="mobile-collapse_title visible-xs text-uppercase">{{ footer_design.settings.customhtml_title }}</h4>
+      <div class="mobile-collapse_content">
+        <div class="list-info-center">{{ footer_design.settings.customhtml }}</div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if section.settings.center_footer_address %}<div class="hidden-xs">{% include 'footer_paymant_list' %}</div>{% endif %}
+  {% include 'footer_copyright' %}
+</div>
+
+{% endif %}

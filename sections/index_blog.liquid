@@ -1,0 +1,163 @@
+{%- assign blog = blogs[section.settings.blog] -%}
+{%- assign grid = section.settings.products_in_row | plus: 0 -%}
+
+<div class="container{% unless section.settings.top_indent %} offset-0{% endunless %}">
+  <h2 class="block-title{% unless section.settings.center_title %} text-left{% endunless %}">{{ section.settings.title }}</h2>
+  <div class="row">
+    {% unless blog.empty? %}
+    <div class="{% if section.settings.mobile_carousel %}carousel-products-mobile {% endif %}blog-thumb-listing">
+      {% for article in blog.articles limit: section.settings.post_limit %}
+      <div class="col-sm-{{ grid }} col-xs-6">
+        <div class="blog-thumb">
+          {% if article.image != blank %}
+          <a class="img" href="{{ article.url }}">
+            <img src="{{ article.image.src | img_url: '600x' }}" alt="{{ article.image.alt }}">
+          </a>
+          {% endif %}
+          <a class="title{% if article.image == blank %} no-margin{% endif %}" href="{{ article.url }}">{{ article.title }}</a>
+          {% if section.settings.blog_show_author or section.settings.blog_show_date %}
+          <p class="data">
+            {% if section.settings.blog_show_author %}{{ "blogs.general.author_by_html" | t: author: article.author }}{% endif %}
+            {% if section.settings.blog_show_date %} {{ "blogs.general.on" | t }} <span>{{ article.created_at | date: '%B' }}</span> <b>{{ article.created_at | date: '%d, %Y' }}</b>{% endif %}
+          </p>
+          {% endif %}
+          <p>{% if article.excerpt.size > 0 %}
+            {% if section.settings.truncate_excerpt %}{{ article.content | strip_html | truncatewords: section.settings.truncate, section.settings.truncate_last_symbols }}
+            {% else %}{{ article.excerpt }}
+            {% endif %}
+            {% else %}{{ article.content | strip_html | truncatewords: section.settings.truncate, section.settings.truncate_last_symbols }}{% endif %}</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endunless %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Blog posts",
+  "class": "index-section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "top_indent",
+      "label": "Top Indent",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "center_title",
+      "label": "Center Title",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "LATEST NEWS"
+    },
+    {
+      "id": "blog",
+      "type": "blog",
+      "label": "Blog"
+    },
+    {
+      "type": "select",
+      "id": "products_in_row",
+      "label": "Products In Row",
+      "options": [
+		{ "value": "6", "label": "2" },
+        { "value": "4", "label": "3" },
+        { "value": "3", "label": "4" }
+      ],
+      "default": "4"
+    },
+    {
+      "type": "select",
+      "id": "post_limit",
+      "label": "Posts Limit",
+      "default": "3",
+      "options": [
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "6"
+        },
+        {
+          "value": "9",
+          "label": "9"
+        },
+        {
+          "value": "12",
+          "label": "12"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "blog_show_date",
+      "label": "Show date",
+      "default": true
+    },
+    {
+      "type": "paragraph",
+      "content": "_____"
+    },
+    {
+      "type": "paragraph",
+      "content": "Work only for the field \"Content\". Field \"Excerpt\" will show full."
+    },
+    {
+      "type": "checkbox",
+      "id": "truncate_excerpt",
+      "label": "Truncate Excerpt",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "truncate",
+      "label": "Show Words",
+      "default": "15",
+	  "info": "Integer"
+    },
+    {
+      "type": "text",
+      "id": "truncate_last_symbols",
+      "label": "Last Symbols",
+      "default": "..."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog posts",
+      "category": "Blog",
+      "settings": {
+        "blog": "News",
+        "post_limit": "3"
+      }
+    }
+  ]
+}
+{% endschema %}

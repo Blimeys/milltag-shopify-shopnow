@@ -1,0 +1,518 @@
+{%- assign str_blocks_title = '|' -%}
+{%- assign str_blocks_title_drag = '|' -%}
+{%- for block in section.blocks -%}
+{%- assign str_blocks_title = str_blocks_title | append: block.settings.linklist | append: '_' | append: forloop.index0 -%}
+{%- unless forloop.last -%}{%- assign str_blocks_title = str_blocks_title | append: '|' -%}{%- endunless -%}
+{%- endfor -%}
+{%- for block in section.blocks -%}
+{%- assign str_blocks_title_drag = str_blocks_title_drag | append: block.settings.newnavigation_item | append: '_' | append: forloop.index0 -%}
+{%- unless forloop.last -%}{%- assign str_blocks_title_drag = str_blocks_title_drag | append: '|' -%}{%- endunless -%}
+{%- endfor -%}
+
+<div style="display:none;">
+[title]{{ section.settings.title }}[/title]
+[mainmenu]{{ section.settings.main_menu_selected }}[/mainmenu]
+</div>
+<div class="box-aside">
+  <div class="menu-vertical hidden-xs hidden-sm">
+    <h3 class="title">{{ section.settings.title }}</h3>
+    <nav>
+      <ul>
+        {% for link in linklists[section.settings.main_menu_selected].links %}
+          {% assign submenu_type = "" %}
+          {% capture return %}{% include "get_linklist_dropdown", customlink: link %}{% endcapture %}
+          {% assign return = return | split: "%%" %}
+          {% assign child_list_handle = return | last | strip %}
+
+          {% comment %} Check submenu type {% endcomment %}
+          {% assign title = child_list_handle %}
+          {% assign _title = title | append: '_' %}
+          {% assign checkval = '|' | append: _title %}
+          {% if str_blocks_title contains checkval %}
+            {% assign i = str_blocks_title | split: checkval | last | split: '|' | first | plus: 0 %}
+            {% assign section_block = section.blocks[i] %}
+            {% assign submenu_type = section_block.type %}
+            {% assign section_block = section_block.settings %}
+          {% endif %}
+
+          {% assign _title = link.title | append: '_' %}
+          {% assign checkval = '|' | append: _title %}
+          {% if str_blocks_title_drag contains checkval %}
+            {% assign i = str_blocks_title_drag | split: checkval | last | split: '|' | first | plus: 0 %}
+            {% assign section_block = section.blocks[i] %}
+            {% assign submenu_type = section_block.type %}
+            {% assign section_block = section_block.settings %}
+          {% endif %}
+
+          {% capture secondlevel %}{% if child_list_handle == 'false' %}{{ link.handle }}{% else %}{{ child_list_handle }}{% endif %}{% endcapture %}
+        
+        <li class="dropdown{% if submenu_type == '' %} multicolumn{% elsif submenu_type == 'megamenu' %} megamenu{% endif %}" {{ block.shopify_attributes }}>
+          <a href="{{ link.url }}"{% if link.active %} class="active"{% endif %}>{{ link.title }}</a>
+
+          {% assign level_2 = linklists[secondlevel] %}
+          {% if level_2.empty? %}
+          {% assign secondlevel = link.title | handle %}
+          {% assign level_2 = linklists[secondlevel] %}
+          {% endif %}
+
+          {% unless level_2.empty? %}
+
+          {% if submenu_type == '' %}
+            {% include 'main-submenu-simple' %}
+          {% endif %}
+
+          {% if submenu_type == 'image' %}
+            {% include 'main-submenu-image' %}
+          {% endif %}
+
+          {% if submenu_type == 'megamenu' %}
+            {% include 'main-submenu-megamenu' %}
+          {% endif %}
+
+          {% endunless %}
+        </li>
+        {% endfor %}
+      </ul>
+	</nav>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Aside Vertical Menu",
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title",
+        "default": "CATEGORIES"
+      },
+      {
+        "type": "header",
+        "content": "Main Menu"
+      },
+      {
+        "type": "link_list",
+        "id": "main_menu_selected",
+        "label": "Menu Menu",
+        "default": "main-menu"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "image",
+        "name": "Submenu Images",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Select Menu Item",
+			"info": "Work for old method with menu. Create navigations with documentation. Select item with mega menu. Not Use new drag admin panel menu. Drop-down limit=1"
+          },
+          {
+            "type": "textarea",
+            "id": "newnavigation_item",
+            "label": "Main Menu Item Full Name",
+			"info": "Work with new admil panel drag menu. Copy and paste full item name from main menu. Drop-down limit=1"
+          },
+          {
+            "type": "radio",
+            "id": "border",
+            "label": "Image Border",
+            "options": [
+              {
+                "value": "disable",
+                "label": "Disable"
+              },
+              {
+                "value": "enable",
+                "label": "Enable"
+              }
+            ],
+            "default": "disable"
+          },
+          {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Title"
+          },
+          {
+            "type": "header",
+            "content": "Separate Item with Image"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image Item 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image Item 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image Item 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "image5",
+            "label": "Image Item 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "image6",
+            "label": "Image Item 6"
+          },
+          {
+            "type": "image_picker",
+            "id": "image7",
+            "label": "Image Item 7"
+          },
+          {
+            "type": "image_picker",
+            "id": "image8",
+            "label": "Image Item 8"
+          },
+          {
+            "type": "image_picker",
+            "id": "image9",
+            "label": "Image Item 9"
+          },
+          {
+            "type": "image_picker",
+            "id": "image10",
+            "label": "Image Item 10"
+          },
+          {
+            "type": "image_picker",
+            "id": "image11",
+            "label": "Image Item 11"
+          },
+          {
+            "type": "image_picker",
+            "id": "image12",
+            "label": "Image Item 12"
+          }
+        ]
+      },
+      {
+        "type": "megamenu",
+        "name": "Megamenu",
+        "settings": [
+          {
+            "type": "link_list",
+            "id": "linklist",
+            "label": "Select Menu Item",
+			"info": "Work for old method with menu. Create navigations with documentation. Select item with mega menu. Not Use new drag admin panel menu. Drop-down limit=1"
+          },
+          {
+            "type": "textarea",
+            "id": "newnavigation_item",
+            "label": "Main Menu Item Full Name",
+			"info": "Work with new admil panel drag menu. Copy and paste full item name from main menu. Drop-down limit=1"
+          },
+          {
+            "type": "select",
+            "id": "grid",
+            "label": "Items In Row",
+            "options": [
+              {
+                "value": "2",
+                "label": "6"
+              },
+              {
+                "value": "3",
+                "label": "4"
+              },
+              {
+                "value": "4",
+                "label": "3"
+              }
+            ],
+            "default": "4"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Categorie Images"
+          },
+          {
+            "type": "image_picker",
+            "id": "image1",
+            "label": "Image Item 1"
+          },
+          {
+            "type": "image_picker",
+            "id": "image2",
+            "label": "Image Item 2"
+          },
+          {
+            "type": "image_picker",
+            "id": "image3",
+            "label": "Image Item 3"
+          },
+          {
+            "type": "image_picker",
+            "id": "image4",
+            "label": "Image Item 4"
+          },
+          {
+            "type": "image_picker",
+            "id": "image5",
+            "label": "Image Item 5"
+          },
+          {
+            "type": "image_picker",
+            "id": "image6",
+            "label": "Image Item 6"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Widgets"
+          },
+          {
+            "type": "radio",
+            "id": "widget",
+            "label": "Widget In the Submenu",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "gallery",
+                "label": "Gallery"
+              },
+              {
+                "value": "banner",
+                "label": "Banner"
+              }
+            ],
+            "default": "banner"
+          },
+          {
+            "type": "header",
+            "content": "Widget > Gallery"
+          },
+          {
+            "type": "text",
+            "id": "widgetgallery_title",
+            "label": "Title",
+            "default": "SPECIALS"
+          },
+          {
+            "type": "url",
+            "id": "widgetgallery_url",
+			"label": "Title Link"
+          },
+          {
+            "label": "Collection",
+            "id": "collection",
+            "type": "collection"
+          },
+          {
+            "type": "text",
+            "id": "collection_limit",
+            "label": "Show Products",
+            "default": "4",
+            "info": "Integer"
+          },
+          {
+            "type": "header",
+            "content": "Widget > Banner"
+          },
+
+          {
+            "type": "url",
+            "id": "widgetbanner_url",
+            "label": "Link to our best selling product"
+          },
+          {
+            "type": "image_picker",
+            "id": "widgetbanner_img",
+            "label": "Image",
+            "info": "Image must be JPG, 410 x 430 Px"
+          },
+          {
+            "type": "text",
+            "id": "widgetbanner_title",
+            "label": "Title",
+            "default": "PIXEL PERFECT<br>DESIGN"
+          },
+          {
+            "type": "color",
+            "id": "widgetbanner_color",
+            "label": "Title Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "checkbox",
+            "id": "widgetbanner_btn",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "widgetbanner_btnname",
+            "label": "Button Name",
+            "default": "Shop Now!"
+          },
+          {
+            "type": "header",
+            "content": "----------------"
+          },
+          {
+            "type": "header",
+            "content": "Bottom Banners"
+          },
+          {
+            "type": "select",
+            "id": "banners_grid",
+            "label": "Show Banners",
+            "options": [
+              {
+                "value": "none",
+                "label": "None"
+              },
+              {
+                "value": "customhtml",
+                "label": "Custom Html"
+              },
+              {
+                "value": "12",
+                "label": "1"
+              },
+              {
+                "value": "6",
+                "label": "2"
+              }
+            ],
+            "default": "6"
+          },
+          {
+            "type": "textarea",
+            "id": "html",
+            "label": "Custom Html",
+            "info": "Paste your html code. Banners Off.",
+            "default": "Custom Html"
+          },
+          {
+            "type": "checkbox",
+            "id": "banners_btn",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "text",
+            "id": "banners_btnname",
+            "label": "Button Name",
+            "default": "Shop Now!"
+          },
+          {
+            "type": "image_picker",
+            "id": "bottombanners_img_1",
+            "label": "Image 1",
+            "info": "Image must be JPG, 542 x 160 Px"
+          },
+          {
+            "type": "text",
+            "id": "banners_tit1",
+            "label": "Title 1",
+            "default": "ATTENTION TO<br>THE DETAILS"
+          },
+          {
+            "type": "select",
+            "id": "position1",
+            "label": "Title 1 Position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "default": "left"
+          },
+          {
+            "type": "color",
+            "id": "color_11",
+            "label": "Title 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_12",
+            "label": "Button 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "image_picker",
+            "id": "bottombanners_img_2",
+            "label": "Image 2",
+            "info": "Image must be JPG, 542 x 160 Px"
+          },
+          {
+            "type": "text",
+            "id": "banners_tit2",
+            "label": "Title 2",
+            "default": "BUILT<br>WITH LOVE"
+          },
+          {
+            "type": "select",
+            "id": "position2",
+            "label": "Title 2 Position",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              }
+            ],
+            "default": "center"
+          },
+          {
+            "type": "color",
+            "id": "color_21",
+            "label": "Title 2 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_22",
+            "label": "Button 2 Color",
+            "default": "#ffffff"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

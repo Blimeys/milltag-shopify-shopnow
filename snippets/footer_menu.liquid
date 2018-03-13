@@ -1,0 +1,11 @@
+{% unless menu == blank %}
+<div class="container hidden-xs">
+  <div class="footer-menu">
+    <ul>
+      {% for link in linklists[menu].links %}
+      <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endunless %}

@@ -1,0 +1,365 @@
+{% if section.settings.show_widget %}
+<div class="content offset-56"><hr></div>
+<div class="content offset-56">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    <div class="custom-layout{% if section.settings.mobile_carousel %} carousel-products-mobile{% endif %}">
+      {% for block in section.blocks %}{%- assign item = block.settings -%}
+      <div class="col-xs-{{ section.settings.items }} col-sm-6 col-md-{{ section.settings.items }}" {{ block.shopify_attributes }}>
+        {% if block.type == 'item' %}
+        
+        <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-01" data-hovercolors>
+          {% if item.image == blank %}{% include "get_svg" type:'image' size:'600x600px' %}
+          {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          {% if item.showdescription %}
+          <div class="description">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% if item.title %}<div class="title" style="color:{{ item.color_title }}">{{ item.title }}</div>{% endif %}
+                {% if item.showbtn %}<span class="btn btn-sm btn-underline" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtntext }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtntext }}" data-aborc="{{ item.acbtntext }}">{{ section.settings.btnname }}</span>{% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </a>
+        {% elsif block.type == 'item2' %}
+        <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-02" data-hovercolors>
+          {% if item.image == blank %}{% include "get_svg" type:'image' size:'600x600px' %}
+          {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          {% if item.showdescription %}
+          <div class="description small-indent">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% unless item.image2 == blank %}
+                <img class="img-responsive" src="{{ item.image2 | img_url: '200x' }}" alt="{{ item.image2.alt }}">
+                {% endunless %}
+                {% if item.title %}<div class="title" style="color:{{ item.color_title }}">{{ item.title }}</div>{% endif %}
+                {% if item.title2 %}<p style="color:{{ item.color_title2 }}">{{ item.title2 }}</p>{% endif %}
+                {% if item.showbtn %}<span class="btn btn-sm btn-underline" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtntext }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtntext }}" data-aborc="{{ item.acbtntext }}">{{ section.settings.btnname }}</span>{% endif %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </a>
+        {% elsif block.type == 'item3' %}
+        <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-03" data-hovercolors>
+          {% if item.image == blank %}{% include "get_svg" type:'image' size:'600x600px' %}
+          {% else %}<img src="{{ item.image | img_url: 'grande' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          {% if item.showdescription %}
+          <div class="description point-{{ item.position }}">
+            {% if item.title %}<div class="title" style="color:{{ item.color_title }}">{{ item.title }}</div>{% endif %}
+            {% if item.showbtn %}<span class="btn" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>{% endif %}
+          </div>
+          {% endif %}
+        </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+
+{% schema %}
+{
+  "name": "Bottom Banners",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_widget",
+      "label": "Show Widget",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "imagehover",
+      "label": "Image Hover",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_carousel",
+      "label": "Mobile carousel",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "items",
+      "label": "Items In Line",
+      "default": "4",
+      "options": [
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "3",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "topoffset",
+      "label": "Top Offset",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "topoffsetsmall",
+      "label": "Top Offset Small",
+      "default": true
+    },
+    {
+      "type": "textarea",
+      "id": "btnname",
+      "label": "Button Name",
+      "default": "SHOP NOW!"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Banner Type 1",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+		  "info": "600x600px"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "Built<br>with Love"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "color_title2",
+          "label": "Small Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "item2",
+      "name": "Banner Type 2",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+		  "info": "600x600px"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Icon Image"
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "MyShop"
+        },
+        {
+          "type": "textarea",
+          "id": "title2",
+          "label": "Small Text",
+          "default": "is Dedicated Ecommerce Theme"
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    },
+    {
+      "type": "item3",
+      "name": "Banner Type 3",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+		  "info": "600x600px"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link",
+          "info": "Optional"
+        },
+        {
+          "type": "checkbox",
+          "id": "showdescription",
+          "label": "Show Description",
+          "default": true
+        },
+        {
+          "type": "select",
+          "id": "position",
+          "label": "Description Position",
+          "default": "left",
+          "options": [
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "textarea",
+          "id": "title",
+          "label": "Title",
+          "default": "It Does not<br>Matter - what<br>Kind of Products<br>do You Want<br>to Sell."
+        },
+        {
+          "type": "checkbox",
+          "id": "showbtn",
+          "label": "Show Button",
+          "default": true
+        },
+        {
+          "type": "header",
+          "content": "Colors"
+        },
+        {
+          "type": "color",
+          "id": "color_title",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Button Colors"
+        },
+        {
+          "type": "color",
+          "id": "cbtnbg",
+          "label": "Background Color",
+          "default": "#fe4135"
+        },
+        {
+          "type": "color",
+          "id": "cbtntext",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "acbtnbg",
+          "label": "Active Background Color",
+          "default": "#333333"
+        },
+        {
+          "type": "color",
+          "id": "acbtntext",
+          "label": "Active Text Color",
+          "default": "#ffffff"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

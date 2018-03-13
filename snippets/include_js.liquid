@@ -1,0 +1,72 @@
+{{ 'bootstrap.min.js' | asset_url | script_tag }}
+{{ 'slick.min.js' | asset_url | script_tag }}
+
+{{ 'api.jquery.js' | shopify_asset_url | script_tag }}
+{{ 'cart.api.js' | asset_url | script_tag }}
+
+{% if content_for_layout contains 'revolution' %}
+<div class="revolution_included"></div>
+{{ 'jquery.themepunch.tools.min.js' | asset_url | script_tag }}
+{{ 'jquery.themepunch.revolution.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if template contains 'customers' %}
+{{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+{{ 'customer_area.js'  | shopify_asset_url | script_tag }}
+{% endif %}
+
+{% if template contains 'gallery' %}
+{{ 'jquery.magnific-popup.min.js' | asset_url | script_tag }}
+{% endif %}
+{% if template contains 'gallery' or content_for_layout contains 'grid' %}
+{{ 'isotope.pkgd.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if content_for_layout contains "countdown" or template contains 'collection' or settings.home_page_layout == "home-page_layout-2" and template == "index" %}
+  {% if settings.use_countdown_timezone %}
+  {{ 'moment-momenttimezone.min.js' | asset_url | script_tag }}
+  {% endif %}
+  {{ 'jquery.plugin.min.js' | asset_url | script_tag }}
+  {{ 'jquery.countdown.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if template contains 'collection' %}
+{{ 'jquery.history.js' | asset_url | script_tag }}
+{{ 'collection-filtres.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if content_for_layout contains 'slider-scroll-product' %}
+{{ 'jquery.mousewheel.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if content_for_layout contains 'id="instafeed-' %}
+{{ 'instafeed.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if content_for_layout contains 'data-target="#ModalquickView"' or template contains 'product' %}
+{{ 'swatches.js' | asset_url | script_tag }}
+{{ 'swatches_and_quickview.js' | asset_url | script_tag }}
+{% elsif template == "index" and settings.home_page_layout == 'home-page_layout-2' and settings.product_item_show_quickview %}
+{{ 'swatches.js' | asset_url | script_tag }}
+{{ 'swatches_and_quickview.js' | asset_url | script_tag }}
+{% endif %}
+{% if template contains 'product' %}
+{{ 'imagesloaded.pkgd.min.js' | asset_url | script_tag }}{% comment %}Уточнить к удалению{% endcomment %}
+{{ 'jquery.elevatezoom.js' | asset_url | script_tag }}
+{% endif %}
+
+{% if settings.product_page_design == "product_page_description3" %}
+{{ 'airStickyBlock.min.js' | asset_url | script_tag }}
+{% endif %}
+
+{{ 'panelmenu.js' | asset_url | script_tag }}
+{{ 'main.js' | asset_url | script_tag }}
+
+{% if content_for_layout contains "addthis_toolbox" %}
+<script type='text/javascript'>
+  var addthis_product = 'sfy-2.0.2';
+  var addthis_plugin_info = {"info_status":"enabled","cms_name":"Shopify","cms_version":null,"plugin_name":"AddThis Sharing Tool","plugin_version":"2.0.2","plugin_mode":"AddThis"};
+  var addthis_config     = {/*AddThisShopify_config_begins*/pubid:'xa-525fbbd6215b4f1a', button_style:'style3', services_compact:'', ui_delay:0, ui_click:false, ui_language:'', data_track_clickback:true, data_ga_tracker:'', custom_services:'', custom_services_size:true/*AddThisShopify_config_ends*/};
+</script>
+<script type='text/javascript' src='//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-525fbbd6215b4f1a'></script>
+{% endif %}

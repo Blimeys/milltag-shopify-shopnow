@@ -1,0 +1,45 @@
+{% assign noline = '' %}
+{% assign sbs = settings.show_blog_sidebar %}
+<div class="row offset-36">
+  <div {% if sbs == 'left_two' or sbs == 'left_blog' %}class="col-lg-9 col-lg-push-3 col-md-8 col-md-push-4 col-sm-8 col-sm-push-4 col-xs-12"
+       {% elsif sbs == 'right_two' or sbs == 'right_blog' %}class="col-lg-9 col-md-8 col-sm-8 col-xs-12"
+       {% else %}class="col-xs-12"{% endif %}>
+    {% for article in blog.articles %}
+    {% if article.comments.size > 0 %}{% assign comment_url = article.url | append: '#comments' %}{% else %}{% assign comment_url = article.url | append: '#addcomment' %}{% endif %}
+
+    {% if forloop.last %}{% assign noline = ' no-line' %}{% endif %}
+    {% include "blog_item" %}
+
+    {% endfor %}
+
+    {% if paginate.pages > 1 %}
+    <div class="offset-16"><hr></div>
+    <div class="offset-40 text-center">
+      <div class="pagination">
+        <ul>
+          {% for part in paginate.parts %}
+          {% if part.title != paginate.current_page %}
+          {% if part.is_link %}<li>{{ part.title | link_to: part.url}}</li>
+          {% else %}<li><a href="#">{{ part.title }}</a></li>
+          {% endif %}
+          {% else %}<li class="active"><a href="#">{{ part.title }}</a></li>
+          {% endif %}
+          {% endfor %}								
+        </ul>
+        {% if paginate.next.is_link and paginate.pages > 3 %}
+        <a class="btn" href="{{ paginate.next.url }}">{{ 'general.pagination.next' | t }}<span class="icon icon-chevron_right"></span></a>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+  {% if sbs == 'left_two' or sbs == 'left_blog' %}<div class="col-lg-3 col-lg-pull-9 col-md-4 col-md-pull-8 col-sm-4 col-sm-pull-8 col-xs-12 leftColumn">
+  {% include "blog-page-sidebar" %}
+  </div>{% endif %}
+  
+  {% if sbs == 'right_two' or sbs == 'right_blog' %}<div class="col-lg-3 col-md-4 col-sm-4 col-xs-12 rightColumn">
+  {% include "blog-page-sidebar" %}
+  </div>{% endif %}
+
+</div>

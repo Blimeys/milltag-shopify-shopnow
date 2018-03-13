@@ -1,0 +1,371 @@
+<div class="container-fluid{% unless section.settings.topoffset %} offset-0{% endunless %}" data-sectionname="slider_withbanners">
+  <div class="row indent-col-none custom-layout">
+    {% if section.blocks.size > 0 %}
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      <div class="slick-slider-content" data-slick='{"autoplay": {{ section.settings.module_autoplay }}, "autoplaySpeed": {{ section.settings.delay_time }}}'>
+        {% for block in section.blocks %}{% if block.type == 'slider' %}{% assign item = block.settings %}
+        <div {{ block.shopify_attributes }}>
+          {% if item.image == blank %}{% include "get_svg" type:'image' size:'960x900px' %}
+          {% else %}<img src="{{ item.image | img_url: '1024x' }}" alt="{{ item.image.alt }}">
+          {% endif %}
+          <div class="description">
+            <div class="block-table">
+              <div class="block-table-cell">
+                {% if item.text1 != '' %}<p style="color:{{ item.color_title }}">{{ item.text1 }}</p>{% endif %}
+                {% if item.text2 != '' %}<div class="title{% unless item.text2_small %} font-size80{% endunless %}" style="color:{{ item.color_title2 }}">{{ item.text2 }}</div>{% endif %}
+                {% if item.show_item_button %}{% if item.buttontype == "background" %}
+                <a href="{{ item.link }}" class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}" data-hovercolors>{{ section.settings.btnname }}</a>
+                {% else %}
+                <a href="{{ item.link }}" class="btn btn-lg btn-border" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtnbg }}" data-aborc="rgba(0,0,0,0)" data-bgc="rgba(0,0,0,0)" data-abgc="{{ item.acbtnbg }}" data-hovercolors>{{ section.settings.btnname }}</a>
+                {% endif %}{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endif %}{% endfor %}
+      </div>
+    </div>
+    <div class="col-sm-12 col-md-6 col-lg-6">
+      {% assign count = 0 %}{% for block in section.blocks %}{% if block.type == 'banner' %}{% assign count = count | plus: 1 %}{% endif %}{% endfor %}
+      {% for block in section.blocks %}{% if block.type == 'banner' %}{% assign item = block.settings %}
+      {% assign _size = 900 | divided_by: count %}
+      {% assign _size = '960x' | append: _size | append: 'px'  %}
+      <a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-06" {{ block.shopify_attributes }} data-hovercolors>
+        {% if item.image == blank %}{% include "get_svg" type:'image' size:_size %}
+        {% else %}<img src="{{ item.image | img_url: '1024x' }}" alt="{{ item.image.alt }}">
+        {% endif %}
+        <div class="description{% if item.position == 'left' %} point-left{% elsif item.position == 'right' %} right-offset{% endif %}">
+          <div class="block-table">
+            <div class="block-table-cell">
+              {% if item.text1 != '' %}<p class="text-xl" style="color:{{ item.color_title }}">{{ item.text1 }}</p>{% endif %}
+              {% if item.text2 != '' %}<div class="title" style="color:{{ item.color_title2 }}">{{ item.text2 }}</div>{% endif %}
+              {% if item.show_item_button %}<span class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>{% endif %}
+            </div>
+          </div>
+        </div>
+      </a>
+      {% endif %}{% endfor %}
+    </div>
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+
+
+{% schema %}
+  {
+    "name": "Slider With Banners 1",
+    "class": "index-section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "topoffset",
+        "label": "Top Offset",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "imagehover",
+        "label": "Image Hover",
+        "default": true
+      },
+      {
+        "type": "textarea",
+        "id": "btnname",
+        "label": "Button Name",
+        "default": "SHOP NOW!"
+      },
+      {
+        "type": "header",
+        "content": "Slider Settings"
+      },
+      {
+        "type": "checkbox",
+        "id": "module_autoplay",
+        "label": "Auto-rotate slides",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "delay_time",
+        "label": "Change slides every",
+        "options": [
+          { "value": "5000", "label": "5 seconds" },
+          { "value": "6000", "label": "6 seconds" },
+          { "value": "7000", "label": "7 seconds" },
+          { "value": "8000", "label": "8 seconds" },
+          { "value": "9000", "label": "9 seconds" },
+          { "value": "10000", "label": "10 seconds" }
+        ],
+        "default": "7000"
+      }
+	],
+  	"blocks": [
+      {
+        "type": "slider",
+        "name": "Slide",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link",
+            "info": "Optional"
+          },
+          {
+            "type": "textarea",
+            "id": "text1",
+            "label": "Text 1",
+            "default": "Season sale!",
+            "info": "Empty field delete text"
+          },
+          {
+            "type": "checkbox",
+            "id": "text2_small",
+            "label": "Text 2 Small",
+            "default": false,
+			"info": "Screen size > 1676px"
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Text 2",
+            "default": "Ecommerce Theme with<br>Increadible Features",
+            "info": "Empty field delete text"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_item_button",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "radio",
+            "id": "buttontype",
+            "label": "Button Design",
+            "default": "background",
+            "options": [
+              {
+                "value": "background",
+                "label": "Background"
+              },
+              {
+                "value": "border",
+                "label": "Border"
+              }
+            ]
+          },
+          {
+            "type": "header",
+            "content": "Colors"
+          },
+          {
+            "type": "color",
+            "id": "color_title",
+            "label": "Text 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_title2",
+            "label": "Text 2 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "header",
+            "content": "Button Colors"
+          },
+          {
+            "type": "color",
+            "id": "cbtnbg",
+            "label": "Background Color",
+            "default": "#5fd179"
+          },
+          {
+            "type": "color",
+            "id": "cbtntext",
+            "label": "Text Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "acbtnbg",
+            "label": "Active Background Color",
+            "default": "#333333"
+          },
+          {
+            "type": "color",
+            "id": "acbtntext",
+            "label": "Active Text Color",
+            "default": "#ffffff"
+          }
+        ]
+      },
+      {
+        "type": "banner",
+        "name": "Banner",
+		"limit": 3,
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Image"
+          },
+          {
+            "type": "url",
+            "id": "link",
+            "label": "Link",
+            "info": "Optional"
+          },
+          {
+            "type": "radio",
+            "id": "position",
+            "label": "Position",
+            "default": "left",
+            "options": [
+              {
+                "value": "left",
+                "label": "Left"
+              },
+              {
+                "value": "right",
+                "label": "Right"
+              },
+              {
+                "value": "center",
+                "label": "Center"
+              }
+            ]
+          },
+          {
+            "type": "textarea",
+            "id": "text1",
+            "label": "Text 1",
+            "default": "MyShop is Dedicated",
+            "info": "Empty field delete text"
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Text 2",
+            "default": "Get huge savings!",
+            "info": "Empty field delete text"
+          },
+          {
+            "type": "checkbox",
+            "id": "show_item_button",
+            "label": "Show Button",
+            "default": true
+          },
+          {
+            "type": "header",
+            "content": "Colors"
+          },
+          {
+            "type": "color",
+            "id": "color_title",
+            "label": "Text 1 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "color_title2",
+            "label": "Text 2 Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "header",
+            "content": "Button Colors"
+          },
+          {
+            "type": "color",
+            "id": "cbtnbg",
+            "label": "Background Color",
+            "default": "#5fd179"
+          },
+          {
+            "type": "color",
+            "id": "cbtntext",
+            "label": "Text Color",
+            "default": "#ffffff"
+          },
+          {
+            "type": "color",
+            "id": "acbtnbg",
+            "label": "Active Background Color",
+            "default": "#333333"
+          },
+          {
+            "type": "color",
+            "id": "acbtntext",
+            "label": "Active Text Color",
+            "default": "#ffffff"
+          }
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Slider With Banners 1",
+        "category": "Sliders",
+        "blocks": [
+          {
+            "type": "slider",
+            "settings": {
+              "text1": "Our Experience Gives us the Ability to",
+              "text2": "Create Stunning<br>Webstore"
+            }
+          },
+          {
+            "type": "slider",
+            "settings": {
+              "text1": "Get Ready for Website Creation Unlike",
+              "text2": "Anything You<br>Have Ever Seen",
+              "cbtnbg": "#fe4135"
+            }
+          },
+          {
+            "type": "slider",
+            "settings": {
+              "text1": "We'll Help to Manage",
+              "text2": "Your Online<br>Business"
+            }
+          },
+          {
+            "type": "slider",
+            "settings": {
+              "text1": "There is no other theme<br>with that amount of",
+              "text2_small": true,
+              "text2": "Features as You See <br>in MyShop",
+              "buttontype": "border",
+              "cbtnbg": "#ffffff"
+            }
+          },
+          {
+            "type": "banner",
+            "settings": {
+              "text1": "MyShop is Dedicated",
+              "text2": "Ecommerce Theme with<br>Increadible Features"
+            }
+          },
+          {
+            "type": "banner",
+            "settings": {
+              "position": "right",
+              "text1": "No Matter Which Web Experience do You have,",
+              "text2": "Your Website will be <br>Modern and Functional",
+              "color_title": "#333333",
+              "color_title2": "#333333",
+              "cbtnbg": "#fe4135"
+            }
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

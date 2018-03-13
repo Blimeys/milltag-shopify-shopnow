@@ -1,0 +1,145 @@
+{% if section.settings.show_block %}
+<div class="hidden-mobile">
+  <hr class="hr-offset-1">
+</div>
+<div class="offset-56" data-sectionname="index_horizontaltabs">
+  <div class="tabs-wrapper">
+    {% if section.settings.show_lefttitle %}<h2 class="block-title text-left small"></h2>{% endif %}
+
+    {% if section.blocks.size > 0 %}
+
+    <ul class="nav nav-tabs nav-tabs--carusel text-center" role="tablist">
+      {% for block in section.blocks %}
+      <li{% if forloop.first %} class="active"{% endif %}>
+        <a href="#{{ section.id }}{{ forloop.index }}" role="tab" data-toggle="tab">{{ block.settings.tab_name }}</a>
+      </li>
+      {% endfor %}
+    </ul>
+    <div class="tab-content tab-content-carusel">
+      {% for block in section.blocks %}
+      <div role="tabpanel" class="tab-pane{% if forloop.first %} active{% endif %}" id="{{ section.id }}{{ forloop.index }}"></div>
+      {% endfor %}
+    </div>
+    {% for block in section.blocks %}
+    {%- assign name_collection = block.settings.collection -%}
+    {%- if name_collection == blank -%}{%- assign name_collection = "all" -%}{%- endif -%}
+    {%- assign collection = collections[name_collection] -%}
+    <div id="{{ section.id }}{{ forloop.index }}-clone" style="display:none" {{ block.shopify_attributes }}>
+      <div class="carousel-products carouselTab-col-4 slick-arrow-top slick-arrow-top1 products-mobile-arrow row"  data-slick='{"slidesToShow": {{ block.settings.toshow }}, "slidesToScroll": {{ block.settings.step }}, "autoplay": {{ block.settings.module_autoplay }}, "autoplaySpeed": {{ block.settings.delay_time }}}'>
+        {% for product in collection.products limit: block.settings.limit %}
+        <div>
+          {% include "product-grid-item" %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <span style="display: flex; justify-content: center;">This section doesn’t currently include any content. Add content to this section using the sidebar.</span>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+
+
+
+{% schema %}
+{
+  "name": "Tabs Horizontal 2",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_block",
+      "label": "Show Widget",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_lefttitle",
+      "label": "Show Current Tag Title",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Tab",
+      "settings": [
+        {
+          "type": "text",
+          "id": "tab_name",
+          "label": "Tab Name",
+          "default": "Tab"
+        },
+        {
+          "label": "Collection",
+          "id": "collection",
+          "type": "collection"
+        },
+        {
+          "type": "text",
+          "id": "limit",
+          "label": "Items Length. Integer",
+          "default": "8"
+        },
+        {
+          "type": "header",
+          "content": "Slider Settings"
+        },
+        {
+          "type": "select",
+          "id": "toshow",
+          "label": "Products In Row",
+          "options": [
+            { "value": "2", "label": "2" },
+            { "value": "3", "label": "3" }
+          ],
+          "default": "3",
+          "info": "For screen size > 1024"
+        },
+        {
+          "type": "select",
+          "id": "step",
+          "label": "Slides To Scroll",
+          "default": "1",
+          "info": "Max = Products In Row",
+          "options": [
+            {
+              "value": "1",
+              "label": "1"
+            },
+            {
+              "value": "2",
+              "label": "2"
+            },
+            {
+              "value": "3",
+              "label": "3"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "module_autoplay",
+          "label": "Auto-rotate slides",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "delay_time",
+          "label": "Change slides every",
+          "options": [
+            { "value": "5000", "label": "5 seconds" },
+            { "value": "6000", "label": "6 seconds" },
+            { "value": "7000", "label": "7 seconds" },
+            { "value": "8000", "label": "8 seconds" },
+            { "value": "9000", "label": "9 seconds" },
+            { "value": "10000", "label": "10 seconds" }
+          ],
+          "default": "7000"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

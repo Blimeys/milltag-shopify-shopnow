@@ -1,0 +1,18 @@
+{%- assign title = section_block.title -%}
+{%- assign border = section_block.border -%}
+<div class="dropdown-menu">
+  {%- if title != '' -%}<h2 class="title-submenu">{{ title }}</h2>{%- endif -%}
+  <ul class="image-links-layout{% if border == 'enable' %} border{% endif %}">
+    {%- for child_level_2 in level_2.links -%}
+    <li>
+      <a href="{{ child_level_2.url }}">
+        {%- assign image = 'image' | append: forloop.index -%}
+        {%- if section_block[image] != blank -%}
+        <span class="figure"><img src="{{ section_block[image] | img_url: '240x' }}" alt="{{ section_block[image].alt }}"></span>
+        {%- endif -%}
+        <span class="figcaption">{{ child_level_2.title }}</span>
+      </a>
+    </li>
+    {%- endfor -%}
+  </ul>
+</div>

@@ -1,0 +1,90 @@
+<div class="container-fluid{% unless section.settings.topoffset %} offset-0{% endunless %}">
+  <div class="row">
+    {% if section.blocks.size > 0 %}
+    {% for block in section.blocks %}
+    <!-- parallax-img -->
+    <div class="content-parallax-instagram offset-0" style="background-image: url({{ block.settings.image | img_url: '2048x2048' }});">
+      <div class="parallax-text">
+        <div class="text-decoration" style="color: {{ block.settings.text1color }}">
+          {{ block.settings.text1 }}
+        </div>
+        <div class="tt-title" style="color: {{ block.settings.text2color }}">{{ block.settings.text2 }}</div>
+      </div>
+    </div>
+    <!-- /parallax-img -->
+    {% endfor %}
+    {% endif %}
+    {{ section.settings.instjs }}
+  </div>
+</div>
+
+{{ 'instagram_shop.css' | asset_url | stylesheet_tag }}
+
+{% schema %}
+  {
+    "name": "Instagram Shop",
+    "settings": [
+        {
+          "type": "checkbox",
+          "id": "topoffset",
+          "label": "Top Offset",
+          "default": false
+        },
+        {
+          "type": "textarea",
+          "id": "instjs",
+          "label": "Instagram js",
+		  "info": "[Snapppt](http:\/\/www.getsnapppt.com\/)"
+        }
+	],
+    "blocks": [
+      {
+        "type": "item",
+		"limit": 1,
+        "name": "Top Image Banner",
+        "settings": [
+          {
+            "type": "image_picker",
+            "id": "image",
+            "label": "Custom Image"
+          },
+          {
+            "type": "textarea",
+            "id": "text1",
+            "label": "Small Text",
+			"default": "Sale Your Products Over<br>Your Instagram Feed."
+          },
+          {
+            "type": "textarea",
+            "id": "text2",
+            "label": "Big Text",
+			"default": "Instagram Shop"
+          },
+          {
+            "type": "color",
+            "id": "text1color",
+            "label": "Text 1 Color",
+            "default": "#333333"
+          },
+          {
+            "type": "color",
+            "id": "text2color",
+            "label": "Text 2 Color",
+            "default": "#5fd179"
+          }
+		]
+	  }
+	],
+    "presets": [
+      {
+        "name": "Instagram Shop",
+      	"category": "Instagram",
+        "blocks": [
+          {
+            "type": "item"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

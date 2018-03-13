@@ -1,0 +1,8 @@
+{% assign open = '' %}{% if settings.open_sidebar_customhtml %}{% assign open = 'open' %}{% endif %}
+<!-- featured block -->
+<div class="collapse-block {{ open }}{{ sidebars_toright }}">
+  <h3 class="collapse-block_title">{{ settings.sidebar_customhtml_title }}</h3>
+  <div class="collapse-block_content">
+    <div class="aside-custom-block">{{ settings.sidebar_customhtml }}</div>
+  </div>
+</div>

@@ -1,0 +1,36 @@
+{% if info_block != '' and info_block.settings.show_content %}
+{% assign info_block = info_block.settings %}
+
+{% assign count = 1 %}
+{% for i in (2..4) %}
+{% assign index = 'show_content' | append: forloop.index %}
+{% if info_block[index] %}{% assign count = count | plus: 1 %}{% endif %}
+{% endfor %}
+{% assign grid = 12 | divided_by: count %}
+
+<div class="container">
+  <div class="row">
+    {% for i in (1..4) %}
+    {% assign index = 'show_content' | append: forloop.index %}
+    {% if info_block[index] %}
+    {% assign link = 'link' | append: forloop.index %}
+    {% assign title = 'item_title' | append: forloop.index %}
+    {% assign text = 'text' | append: forloop.index %}
+    {% assign item_icon = 'item_icon' | append: forloop.index %}
+    <div class="col-sm-6 col-md-{{ grid }}">
+      <div class="mobile-collapse">
+        <h4 class="mobile-collapse_title visible-xs text-uppercase">{{ info_block[title] }}</h4>
+        <div class="mobile-collapse_content">
+          <a href="{{ info_block[link] }}" class="services-block">
+            <span class="icon icon-{{ info_block[item_icon] }}"></span>
+            <div class="title">{{ info_block[title] }}</div>
+            <p>{{ info_block[text] }}</p>
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endif %}

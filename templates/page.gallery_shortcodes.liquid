@@ -1,0 +1,55 @@
+{% assign value = page.content %}
+
+{% capture grid %}{% include 'get_property' data:value name:'[settings' property:'grid' default:'3' %}{% endcapture %}
+{% capture title %}{% include 'get_property' data:value name:'[settings' property:'title' default:'Title' %}{% endcapture %}
+{% capture categories %}{% include 'get_property' data:value name:'[settings' property:'categories' default:'' %}{% endcapture %}
+
+{% capture _grid %}{% case grid %}{% when '3' %}3{% else %}2{% endcase %}{% endcapture %}
+
+<div class="container-fluid offset-18">
+  <h1 class="block-title large">{{ title }}</h1>
+  <div class="row">
+    <div class="gallery-masonry">
+      {% if categories != '' and categories contains ',' %}
+      {% assign categories = categories | split: ',' %}
+      <div class="filter-nav">
+        {% for cat in categories %}
+        <div class="button{% if forloop.first %} current{% endif %}" data-filter="{% if forloop.first %}*{% else %}.{{ cat | handle }}{% endif %}">{{ cat | strip }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <div class="grid-gallery-masonry effect-1 gallery-content grid-gallery-masonry-col-{{ grid }}">
+      {% assign images = value | split: '[images]' | last %}
+      {% assign images = images | replace: '[image', '[[[image' %}
+      {% assign images = images | split: '[[' %}
+      {% for content in images offset: 1 %}
+        {% capture src %}{% include 'get_property' data:content name:'[image' property:'src' default:'' %}{% endcapture %}
+        {% capture alt %}{% include 'get_property' data:content name:'[image' property:'alt' default:'' %}{% endcapture %}
+        {% capture href %}{% include 'get_property' data:content name:'[image' property:'href' default:'' %}{% endcapture %}
+        {% capture cat %}{% include 'get_property' data:content name:'[image' property:'categorie' default:'' %}{% endcapture %}
+        {% capture titl %}{% include 'get_property' data:content name:'[image' property:'title' default:'' %}{% endcapture %}
+        {% capture cont %}{% include 'get_property' data:content name:'[image' property:'content' default:'' %}{% endcapture %}
+        {% capture tag %}{% include 'get_property' data:content name:'[image' property:'tag' default:'' %}{% endcapture %}
+        <div class="element-item {{ cat | downcase | strip | replace: ' ', '-' | replace: ',-', ' ' | replace: ',', ' ' }}" >
+          <figure>
+            <img src="{{ src }}" alt="{{ alt }}" />
+            <figcaption>
+              <div class="block-table">
+                <div class="block-table-cell">
+                  {% if tag != '' %}<a href="{% if href != '' %}{{ href }}{% else %}#{% endif %}" class="tag">{{ tag }}</a>{% endif %}
+                  {% if titl != '' %}<h6 class="title">{% if href != '' %}<a href="{{ href }}">{{ titl }}</a>{% else %}{{ titl }}{% endif %}</h6>{% endif %}
+                  {% if cont != '' %}<p>{{ cont }}</p>{% endif %}
+                  <div class="btn-icon">
+                    <a href="{{ src }}" class="zomm-gallery"  title="{{ titl }}"></a>
+                  </div>
+                </div>
+              </div>
+            </figcaption>
+          </figure>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="clear-gap"></div>

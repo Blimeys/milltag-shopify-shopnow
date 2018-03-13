@@ -1,0 +1,20 @@
+<a href="{{ item.link }}" class="promo-box{% if section.settings.imagehover %} zoom-in{% endif %} design-0{{ item.textdesign }}" data-hovercolors>
+  {% if item.image == blank %}{% include "get_svg" type:'image' size:"960x450px" %}
+  {% else %}<img src="{{ item.image | img_url: '1024x' }}" alt="{{ item.image.alt }}">
+  {% endif %}
+  {% if item.showdescription %}
+  <div class="description{% if item.align == "left" %} point-left{% elsif item.align == "right" %} point-right{% endif %}">
+    <div class="block-table">
+      <div class="block-table-cell">
+        {% if item.content != '' %}<p class="text-xl" style="color:{{ item.color_title }}">{{ item.content }}</p>{% endif %}
+        {% if item.title != '' %}<div class="title" style="color:{{ item.color_title2 }}">{{ item.title }}</div>{% endif %}
+        {% if item.showbtn %}
+        {% if item.buttondesign == "default" %}<span class="btn btn-lg" style="color:{{ item.cbtntext }}; background:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-bgc="{{ item.cbtnbg }}" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>
+        {% elsif item.buttondesign == "border" %}<span class="btn btn-lg btn-border" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtnbg }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtnbg }}" data-aborc="rgba(0,0,0,0)" data-bgc="rgba(0,0,0,0)" data-abgc="{{ item.acbtnbg }}">{{ section.settings.btnname }}</span>
+        {% else %}<span class="btn btn-lg btn-underline" style="color:{{ item.cbtntext }}; border-color:{{ item.cbtntext }};" data-c="{{ item.cbtntext }}" data-ac="{{ item.acbtntext }}" data-borc="{{ item.cbtntext }}" data-aborc="{{ item.acbtntext }}">{{ section.settings.btnname }}</span>
+        {% endif %}{% endif %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</a>

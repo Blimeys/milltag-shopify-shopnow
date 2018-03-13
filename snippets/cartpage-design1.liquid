@@ -1,0 +1,118 @@
+<div class="container  offset-18">
+  <h1 class="block-title large">{{ 'cart.general.title' | t }}</h1>
+  <!-- Shopping cart table -->
+  <form action="/cart" method="post" novalidate id="updateform">
+    <table class="shopping-cart-table">
+      <tbody>
+        {% for item in cart.items %}
+        {% assign inv_man = item.variant.inventory_management %}{% assign inv_qua = item.variant.inventory_quantity %}{% unless inv_man %}{% assign inv_qua = 100000 %}{% endunless %}{% if item.variant.available and inv_qua == 0 %}{% assign inv_qua = 100000 %}{% endif %}
+        <tr>
+          <td>
+            <div class="product-image">
+              <a href="{{ item.url }}">
+                <img src="{{ item | img_url: 'medium' }}" alt="{{ item.alt | escape }}">
+              </a>
+            </div>
+          </td>
+          <td>
+            <h5 class="product-title">
+              <a href="{{ item.url }}">{{ item.product.title }}<br>{{ item.variant.title | replace: ' / ', ', ' }}</a>
+            </h5>
+            <ul class="list-parameters">
+              <li class="visible-xs visible-sm">
+                <div class="product-price unit-price">{{item.price | money}}</div>
+              </li>
+              <li class="visible-xs visible-sm">
+                <div class="detach-quantity-mobile">
+
+                </div>
+              </li>
+              <li class="visible-xs visible-sm">
+                <div class="product-price subtotal">{{item.line_price | money}}</div>
+              </li>
+            </ul>
+          </td>
+          <td>
+            <div class="product-price unit-price">
+              {{item.price | money}}
+            </div>
+          </td>
+          <td>
+            <div class="detach-quantity-desctope">
+              <div class="input">
+                <label>{{ 'cart.label.quantity' | t }}</label>
+                <div class="style-2 input-counter">
+                  <span class="minus-btn"></span>
+                  <input type="text" name="updates[]" id="updates_{{ item.id }}" value="{{ item.quantity }}" size="{{ inv_qua }}" title="{% if inv_qua < 100000 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}">
+                  <span class="plus-btn" title="{% if inv_qua < 100000 %}{{inv_qua}} {{ 'products.product.in_stock' | t }}{% else %}{{ 'products.product.many_in_stock' | t }}{% endif %}"></span>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+            <div class="product-price subtotal">
+              {{item.line_price | money}}
+            </div>
+          </td>
+          <td>
+            <a class="product-delete icon icon-delete" href="/cart/change?line={{ forloop.index }}&quantity=0" title="{{ 'cart.header.button_delete' | t }}"></a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <!-- /Shopping cart table -->
+    <div class="shopping-cart-btns">
+      <div class="pull-right">
+        <a href='#' class="btn-link" name="update"><span class="icon icon-cached color-base"></span> {{ 'cart.general.update' | t }}</a>
+        <div class="clearfix visible-xs visible-sm"></div>
+        <a class="btn-link" href="/cart/clear"><span class="icon icon-delete"></span> {{ 'cart.general.clear_cart' | t }}</a>
+      </div>
+      <div class="pull-left">
+        <a class="btn-link" href="/"><span class="icon icon-keyboard_arrow_left"></span> {{ 'cart.general.continue_shopping' | t }}</a>
+      </div>
+    </div>
+    <hr class="hr-large hr-offset-5">
+    <div class="row">
+      {% if settings.shipping_calculator %}
+      <div class="col-md-{% if settings.show_cart_notes %}4{% else %}8{% endif %}">
+        <div class="shopping-cart-box">
+          {% include 'shipping-calculator' %}
+        </div>
+      </div>
+      {% endif %}
+      {% if settings.show_cart_notes %}
+      <div class="col-md-{% if settings.shipping_calculator %}4{% else %}8{% endif %}">
+        <div class="shopping-cart-box">
+          <h4>{{ 'cart.label.note' | t }}</h4>
+          <p>{{ 'cart.label.note_text' | t }}</p>
+          <textarea id="note" name="note" class="form-control" rows="6">{{ cart.note }}</textarea>
+        </div>
+      </div>
+      {% endif %}
+      <div class="col-md-4">
+        <div class="shopping-cart-box">
+          <table class="table-total">
+            <tbody>
+              <tr id="subtotal">
+                <th class="text-left">{{ 'cart.general.subtotal' | t }}</th>
+                <td class="text-right">{{ cart.total_price | money }}</td>
+              </tr>
+              <tr id="tax" style="display:none">
+                <th class="text-left">{{ 'cart.general.shipping_total' | t }}</th>
+                <td class="text-right">{{ 0 | money }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr id="grandtotal">
+                <th>{{ 'cart.general.total' | t }}</th>
+                <td>{{ cart.total_price | money }}</td>
+              </tr>
+            </tfoot>
+          </table>
+          <button type="submit" name="checkout" class="btn btn-full icon-btn-left"><span class="icon icon-check_circle"></span>{{ 'cart.general.checkout' | t }}</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
