@@ -3,12 +3,17 @@ Documentation - http://docs.shopify.com/support/your-website/navigation/creating
 {% endcomment %}
 
 {% unless template == 'index' %}
+{% if template == 'blog'%}
+<div class="hide">
+
+</div>
+{% else %}
 <div class="breadcrumb">
   <div class="container">
     <ul>
       <li><a href="/">Home</a></li>
       {% if template contains 'product' %}
-      {% if collection %}            
+      {% if collection %}
       {% if collection.handle %}
       {% capture url %}/collections/{{ collection.handle }}{% endcapture %}
       <li>{{ collection.title | link_to: url }}</li>
@@ -26,8 +31,7 @@ Documentation - http://docs.shopify.com/support/your-website/navigation/creating
       {% endif %}
 
       {% elsif template == 'article' %}
-      <li><a href="{{ blog.url }}">{{ blog.title }}</a></li>
-      <li>{{ article.title }}</li>
+      <span></span>
       {% elsif template contains 'customers' and template != "customers/account" %}
       {% assign account = 'customer.account.title_main' | t %}
       <li>{{ account | capitalize | link_to: "/account" }}</li>
@@ -42,4 +46,5 @@ Documentation - http://docs.shopify.com/support/your-website/navigation/creating
     </ul>
   </div>
 </div>
+{% endif %}
 {% endunless %}
