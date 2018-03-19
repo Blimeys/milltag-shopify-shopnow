@@ -19,7 +19,7 @@
   {% if section.settings.slogan != '' %}<div class="information-block">{{ section.settings.slogan }}</div>{% endif %}
   <div class="row">
     {% if listinformation != '' or social_icons != '' %}
-    <div class="col-sm-{{ grid1 }} offset-98">
+    <div class="col-sm-{{ grid1 }} offset-10">
       <h2 class="block-title big text-left text-capitalize">{{ section.settings.title2 }}</h2>
       <div class="contact-layout-02">
         {% include "contact_listinformation" %}
@@ -28,7 +28,7 @@
     </div>
     {% endif %}
     {% if contactform != '' %}
-    <div class="col-sm-{{ grid2 }} offset-98">
+    <div class="col-sm-{{ grid2 }} offset-30">
       {% include 'contact_form' %}
     </div>
     {% endif %}
@@ -96,12 +96,12 @@ https://developers.google.com/maps/documentation/javascript/get-api-key
 
       scrollwheel:  false,
 
-      // How you would like to style the map. 
+      // How you would like to style the map.
       // This is where you would paste any style found on Snazzy Maps.
       styles: [{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#abd0fa"}]},{"featureType":"transit","stylers":[{"color":"#808080"},{"visibility":"off"}]},{"featureType":"road.highway","elementType":"geometry.stroke","stylers":[{"visibility":"on"},{"color":"#e1d9c6"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#eee9da"}]},{"featureType":"road.local","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"000"},{"weight":1.8}]},{"featureType":"road.local","elementType":"geometry.stroke","stylers":[{"color":"#d7d7d7"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#ebebeb"}]},{"featureType":"administrative","elementType":"geometry","stylers":[{"color":"#eee9da"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#fffbf8"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#fffbf8"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#fbf7ee"}]},{"featureType":"road","elementType":"labels.text.fill","stylers":[{"color":"#d6d6d6"}]},{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"visibility":"on"},{"color":"#3c3424"}]},{"featureType":"poi","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.arterial","elementType":"geometry.stroke","stylers":[{"color":"#d6d6d6"}]},{"featureType":"road","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"color":"#aee9c6"}]}]
     };
 
-    // Get the HTML DOM element that will contain your map 
+    // Get the HTML DOM element that will contain your map
     // We are using a div with id="map" seen below in the <body>
     var mapElement = document.getElementById('map');
 
@@ -112,7 +112,7 @@ https://developers.google.com/maps/documentation/javascript/get-api-key
 
     var marker = new google.maps.Marker({
       position: new google.maps.LatLng(x, y),
-      map: map,           
+      map: map,
       icon : image,
       title: '{{ map.text2 }}'
     });

@@ -270,7 +270,7 @@ $header_cart_dropdown_toggle_icon_hover:            $header_icon_hover;
 $header_cart_dropdown_toggle_label:                 $header_default_color2;
 $header_cart_dropdown_toggle_label_hover:           $header_default_color;
 $header_cart_top_title:                             $header_default_title_color;
-$header_cart_btn_close:                             $header_icon;
+$header_cart_btn_close:                             #777777;
 $header_cart_btn_close_hover:                       $header_icon_hover;
 $header_cart_border:                                $header_border;
 $header_cart_item_title:                            $header_default_title_color;
@@ -3127,12 +3127,10 @@ header .search{
         font-size: 14px;
         border: none;
         padding: 0 0 0 57px;
-        color:  $header_search_input_text;
         background: $header_search_input_bg;
       }
       button{
         border: none;
-        color: $header_search_btn_search;
         font-weight: 500;
         position: absolute;
         right: 0px;
@@ -12711,7 +12709,6 @@ input[type=checkbox]:checked ~ label .check{
   }
   li{
     display: inline-block;
-    border:1px solid $social_icon_round_border;
     text-align: center;
     cursor: position;
     margin: 5px;
@@ -12741,7 +12738,7 @@ input[type=checkbox]:checked ~ label .check{
     margin-right: 0;
   }
   li:hover{
-    border-color:$social_icon_round_border_hover;
+
     a{
       color: $social_icon_round_text_hover;
       border-color:$social_icon_round_border_hover;

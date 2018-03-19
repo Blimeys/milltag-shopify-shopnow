@@ -3,7 +3,8 @@ Documentation - http://docs.shopify.com/support/your-website/navigation/creating
 {% endcomment %}
 
 {% unless template == 'index' %}
-{% if template == 'blog'%}
+
+{% if template == 'blog' or template == "article" or page.handle == "contact" %}
 <div class="hide">
 
 </div>

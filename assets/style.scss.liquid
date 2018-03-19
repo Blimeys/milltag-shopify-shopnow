@@ -270,7 +270,7 @@ $header_cart_dropdown_toggle_icon_hover:            $header_icon_hover;
 $header_cart_dropdown_toggle_label:                 $header_default_color2;
 $header_cart_dropdown_toggle_label_hover:           $header_default_color;
 $header_cart_top_title:                             $header_default_title_color;
-$header_cart_btn_close:                             $header_icon;
+$header_cart_btn_close:                             #777777;
 $header_cart_btn_close_hover:                       $header_icon_hover;
 $header_cart_border:                                $header_border;
 $header_cart_item_title:                            $header_default_title_color;
@@ -3127,7 +3127,6 @@ header .search{
         font-size: 14px;
         border: none;
         padding: 0 0 0 57px;
-        color:  $header_search_input_text;
         background: $header_search_input_bg;
       }
       button{
@@ -3166,7 +3165,7 @@ header .search{
         line-height: 24px;
         font-family: 'Material Icons';
         z-index: 7;
-        color: $header_search_open_icon;
+
         pointer-events: none;
       }
     }
@@ -12718,9 +12717,10 @@ input[type=checkbox]:checked ~ label .check{
   }
   li{
     display: inline-block;
-    border:1px solid $social_icon_round_border;
     text-align: center;
     cursor: position;
+    border: 1px solid #242424;
+    background-color: #242424;
     margin: 5px;
     @include animation(0);
     @include border-radius(50%);
@@ -12730,7 +12730,7 @@ input[type=checkbox]:checked ~ label .check{
       line-height: 20px;
       width: 42px;
       height: 42px;
-      color: $social_icon_round_text;
+      color: white;
       border:1px solid transparent;
       @include animation(0);
       backface-visibility: hidden;
@@ -12748,10 +12748,9 @@ input[type=checkbox]:checked ~ label .check{
     margin-right: 0;
   }
   li:hover{
-    border-color:$social_icon_round_border_hover;
+
     a{
       color: $social_icon_round_text_hover;
-      border-color:$social_icon_round_border_hover;
 
     }
   }
